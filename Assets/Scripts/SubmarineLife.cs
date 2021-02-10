@@ -7,8 +7,15 @@ public class SubmarineLife : MonoBehaviour
 {
     [Header("Submarine Life")]
     public float maxLife;
+    private int numberSteps;
+    private float stepDistance;
     public float damageCoef;
     public float currentLife;
+
+    [Space]
+    public float[] timeDecreaseEachStep;
+    private int indexStep;
+    private float timer;
 
     [Header("Feedback")]
     public float maxDistance;
@@ -20,6 +27,9 @@ public class SubmarineLife : MonoBehaviour
 
     [Header("UI")]
     public Image lifeBar;
+    public GameObject UIParent;
+    public RectTransform startBarPoint;
+    public GameObject line;
 
     private float distanceFromFregate;
     private SubmarineTriggerZone submarineTriggerScript;
@@ -31,13 +41,32 @@ public class SubmarineLife : MonoBehaviour
         submarineTriggerScript = GetComponentInChildren<SubmarineTriggerZone>();
 
         currentLife = maxLife;
+
+        numberSteps = timeDecreaseEachStep.Length;
+
+        float stepRange = 290f / numberSteps;
+        stepDistance = stepRange;
+
+        for (int i = 0; i < numberSteps - 1; i++)
+        {
+            GameObject lineObject =  Instantiate(line, new Vector3(startBarPoint.position.x + stepDistance, startBarPoint.position.y), startBarPoint.rotation);
+            stepDistance += stepRange;
+            lineObject.transform.SetParent(UIParent.transform);
+        }
     }
 
     private void Update()
     {
         if (submarineTriggerScript.fregateIsAbove)
         {
-            DamageOverTime();
+            timer += Time.deltaTime;
+
+            if (indexStep != timeDecreaseEachStep.Length && timer >= timeDecreaseEachStep[indexStep])
+            {
+                DamageOverTime();
+                timer = 0;
+                indexStep++;
+            }
 
             lifeBar.fillAmount = currentLife / maxLife;
 
@@ -50,6 +79,10 @@ public class SubmarineLife : MonoBehaviour
                 currentLife = 0;
             }
         }
+        else
+        {
+            timer = 0;
+        }
 
         distanceFromFregate = Vector3.Distance(transform.position, fregate.transform.position);
 
@@ -61,7 +94,7 @@ public class SubmarineLife : MonoBehaviour
 
     private void DamageOverTime()
     {
-        currentLife -= damageCoef * Time.deltaTime;
+        currentLife -= (maxLife / numberSteps);
     }
 
     private void ChangeColorOverDistance()

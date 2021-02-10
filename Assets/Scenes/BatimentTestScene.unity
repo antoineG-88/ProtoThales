@@ -469,8 +469,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610429892}
   m_LocalRotation: {x: -0, y: 0.28622437, z: -0, w: 0.95816267}
-  m_LocalPosition: {x: 0.52, y: 0, z: 0.07999992}
-  m_LocalScale: {x: 1.0365863, y: 0.18188, z: 0.44541296}
+  m_LocalPosition: {x: 0.34068, y: 0, z: 0.052412}
+  m_LocalScale: {x: 0.6791195, y: 0.11915868, z: 0.2918123}
   m_Children: []
   m_Father: {fileID: 575451762}
   m_RootOrder: 1
@@ -563,7 +563,7 @@ Transform:
   m_GameObject: {fileID: 618829090}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.40186122, y: 0.8071571, z: 0.40186125}
+  m_LocalScale: {x: 0.26327938, y: 0.52880895, z: 0.2632794}
   m_Children: []
   m_Father: {fileID: 575451762}
   m_RootOrder: 0
@@ -653,7 +653,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684795550}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.84, y: 0, z: -1.47}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 706193039}
@@ -1163,8 +1163,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213120322}
   m_LocalRotation: {x: -0, y: -0.2862236, z: -0, w: 0.9581629}
-  m_LocalPosition: {x: -0.52, y: 0, z: 0.07999992}
-  m_LocalScale: {x: 1.036586, y: 0.18188, z: 0.44541287}
+  m_LocalPosition: {x: -0.34068, y: 0, z: 0.052412}
+  m_LocalScale: {x: 0.67911935, y: 0.11915868, z: 0.29181224}
   m_Children: []
   m_Father: {fileID: 575451762}
   m_RootOrder: 2
@@ -1412,7 +1412,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396398116}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.41, y: 0, z: -1.36}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1008081858}
@@ -6314,7 +6314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1698774019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6328,10 +6328,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destPreview: {fileID: 1396398116}
-  distanceToStop: 0
+  distanceToStop: 3
   currentDestination: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   currentDirection: {x: 0, y: 0}
+  speed: 4
+  turnSpeed: 80
 --- !u!4 &1698774020
 Transform:
   m_ObjectHideFlags: 0

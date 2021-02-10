@@ -7,6 +7,8 @@ public class SubmarineMovement : MonoBehaviour
     [Header("Submarine Movement")]
     public float submarineSpeed;
     public int submarineWaypoints;
+    public float waitTimeAtPoint;
+    [Space]
     public Transform[] allWaypoints;
 
     private List<int> randomWaypoints;
@@ -14,9 +16,14 @@ public class SubmarineMovement : MonoBehaviour
     
     private Transform nextPosition;
     private int nextPointIndex;
+    private float timer;
+
+    private SubmarineTriggerZone submarineTriggerScript;
 
     private void Start()
     {
+        submarineTriggerScript = GetComponentInChildren<SubmarineTriggerZone>();
+
         randomWaypoints = new List<int>(new int[allWaypoints.Length]);
         waypointsToGo = new List<Transform>();
 
@@ -43,15 +50,34 @@ public class SubmarineMovement : MonoBehaviour
     {
         if (transform.position == nextPosition.position)
         {
-            nextPointIndex++;
-            if (nextPointIndex >= waypointsToGo.Count)
+            if (!submarineTriggerScript.fregateIsAbove)
             {
-                nextPointIndex = 0;
+                timer += Time.fixedDeltaTime;
+
+                if (timer >= waitTimeAtPoint)
+                {
+                    nextPointIndex++;
+                    if (nextPointIndex >= waypointsToGo.Count)
+                    {
+                        nextPointIndex = 0;
+                    }
+                    nextPosition = waypointsToGo[nextPointIndex];
+                }
             }
-            nextPosition = waypointsToGo[nextPointIndex];
+            else
+            {
+                nextPointIndex++;
+                if (nextPointIndex >= waypointsToGo.Count)
+                {
+                    nextPointIndex = 0;
+                }
+                nextPosition = waypointsToGo[nextPointIndex];
+            }
         }
         else
         {
+            timer = 0;
+
             transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.fixedDeltaTime * submarineSpeed);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputDuo : MonoBehaviour
 {
@@ -43,7 +44,6 @@ public class InputDuo : MonoBehaviour
 
 
         touchHits = Physics.RaycastAll(screenRay, 200f, mask);
-
         if (touchHits.Length > 0)
         {
             return touchHits[0];

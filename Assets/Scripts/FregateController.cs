@@ -14,7 +14,7 @@ public class FregateController : MonoBehaviour
     public LayerMask surfaceLayer;
     public ParticleSystem thrustParticle;
 
-    private FregateHandler fregateHandler;
+    private OldFregateHandler fregateHandler;
     private Camera mainCamera;
     private float currentSpeed;
     [HideInInspector] public Vector2 currentDirection;
@@ -24,9 +24,10 @@ public class FregateController : MonoBehaviour
     private int currentTurnSide;
     private bool touchTag;
     private Touch touch;
+
     private void Start()
     {
-        fregateHandler = GetComponent<FregateHandler>();
+        fregateHandler = GetComponent<OldFregateHandler>();
         mainCamera = Camera.main;
         currentDirection = Vector2.one;
         currentAngle = 45;

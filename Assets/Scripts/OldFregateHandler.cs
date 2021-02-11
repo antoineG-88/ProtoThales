@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FregateHandler : MonoBehaviour
+public class OldFregateHandler : MonoBehaviour
 {
     public float timeBeforeSonar;
     public float timeBeforeBigSonar;

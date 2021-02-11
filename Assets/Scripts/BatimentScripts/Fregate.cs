@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class Fregate : Batiment
 {
-    public int manualPerformance;
-
     public float[] maxSpeeds;
     public float[] accelerationForces;
     public float turnSpeed;
     public ParticleSystem thrustParticle;
-    [HideInInspector] public int speedPerformance;
+    [HideInInspector] public int unitsOnControl;
 
     private int currentTurnSide;
 
@@ -18,7 +16,6 @@ public class Fregate : Batiment
     {
         base.Start();
         currentSpeed = 0;
-        speedPerformance = manualPerformance;
     }
 
     public override void Update()
@@ -30,26 +27,26 @@ public class Fregate : Batiment
     {
         if(!reachedDest)
         {
-            if(currentSpeed <= maxSpeeds[speedPerformance])
+            if(currentSpeed <= maxSpeeds[unitsOnControl])
             {
-                if(currentSpeed < maxSpeeds[speedPerformance] - accelerationForces[speedPerformance] * Time.fixedDeltaTime)
+                if(currentSpeed < maxSpeeds[unitsOnControl] - accelerationForces[unitsOnControl] * Time.fixedDeltaTime)
                 {
-                    currentSpeed += accelerationForces[speedPerformance] * Time.fixedDeltaTime;
+                    currentSpeed += accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentSpeed = maxSpeeds[speedPerformance];
+                    currentSpeed = maxSpeeds[unitsOnControl];
                 }
             }
             else
             {
-                if (currentSpeed > maxSpeeds[speedPerformance] + accelerationForces[speedPerformance] * Time.fixedDeltaTime)
+                if (currentSpeed > maxSpeeds[unitsOnControl] + accelerationForces[unitsOnControl] * Time.fixedDeltaTime)
                 {
-                    currentSpeed -= accelerationForces[speedPerformance] * Time.fixedDeltaTime;
+                    currentSpeed -= accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentSpeed = maxSpeeds[speedPerformance];
+                    currentSpeed = maxSpeeds[unitsOnControl];
                 }
             }
 
@@ -68,7 +65,7 @@ public class Fregate : Batiment
         }
         else if(currentSpeed > 0)
         {
-            currentSpeed -= accelerationForces[speedPerformance] * Time.fixedDeltaTime;
+            currentSpeed -= accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
             if(currentSpeed < 0)
             {
                 currentSpeed = 0;

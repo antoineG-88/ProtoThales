@@ -34,7 +34,14 @@ public class Batiment : MonoBehaviour
 
         if(!reachedDest)
         {
-            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination);
+            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
+            destinationLine.enabled = true;
+            destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
+            destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f);
+        }
+        else
+        {
+            destinationLine.enabled = false;
         }
     }
 

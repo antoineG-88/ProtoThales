@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class BatimentController : MonoBehaviour
 {
     public GameObject selectionHighlighter;
@@ -9,8 +9,9 @@ public class BatimentController : MonoBehaviour
     public LayerMask elementsLayer;
     public LayerMask surfaceLayer;
     public GameObject destinationPreview;
+    public PatMarHandler patMarHandler;
 
-    private Batiment batimentSelected;
+    [HideInInspector] public Batiment batimentSelected;
     private Touch touch;
     private LineRenderer movementLine;
 
@@ -38,7 +39,7 @@ public class BatimentController : MonoBehaviour
 
     private void Selection()
     {
-        if (InputDuo.tapDown)
+        if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/) && !patMarHandler.isWaitingForReleasePosChoice)
         {
             RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
             if (touchHit.collider != null)

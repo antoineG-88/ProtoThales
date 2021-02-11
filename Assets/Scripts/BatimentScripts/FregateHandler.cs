@@ -27,6 +27,16 @@ public class FregateHandler : MonoBehaviour
     private Color hullSonarBaseColor;
     private Fregate fregate;
 
+    [Header("HullSonar")]
+    public float maxDetectionDistanceSubmarine;
+    public Color colorFar;
+    public Color colorClose;
+    [Space]
+    public GameObject colorFeedback;
+
+    private float submarineDistance;
+    
+
     void Start()
     {
         fregate = GetComponent<Fregate>();
@@ -35,6 +45,7 @@ public class FregateHandler : MonoBehaviour
         unitEngagedOnHullSonar = 0;
         unitsAvailable = maxUnitAvailable;
         hullSonarBaseColor = hullSonarImage.color;
+        colorFeedback.SetActive(false);
     }
 
     void Update()
@@ -61,8 +72,27 @@ public class FregateHandler : MonoBehaviour
             }
             deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
         }
+
+        submarineDistance = Vector2.Distance(fregate.currentPosition, SeaCoord.Planify(submarine.position));
+
+        if (submarineDistance <= maxDetectionDistanceSubmarine && unitEngagedOnHullSonar == 1)
+        {
+            ChangeColorOverDistance();
+        }
+        else
+        {
+            colorFeedback.SetActive(false);
+        }
     }
 
+    private void ChangeColorOverDistance()
+    {
+        colorFeedback.SetActive(true);
+
+        colorFeedback.transform.position = new Vector3(fregate.transform.position.x + 2, fregate.transform.position.y + 2, fregate.transform.position.z + 2);
+
+        colorFeedback.GetComponent<SpriteRenderer>().color = Color.Lerp(colorClose, colorFar, submarineDistance / maxDetectionDistanceSubmarine);
+    }
 
     private void UseSonar()
     {

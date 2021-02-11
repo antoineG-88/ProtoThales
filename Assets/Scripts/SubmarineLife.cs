@@ -17,13 +17,10 @@ public class SubmarineLife : MonoBehaviour
     private int indexStep;
     private float timer;
 
-    [Header("Feedback")]
-    public float maxDistance;
-    public Color colorFar;
-    public Color colorClose;
-    [Space]
-    public GameObject colorFeedback;
+    [Header("Damage")]
+    public float damageDistance;
     public GameObject fregate;
+    private float fregateDistance;
 
     [Header("UI")]
     public Image lifeBar;
@@ -36,8 +33,6 @@ public class SubmarineLife : MonoBehaviour
 
     private void Start()
     {
-        colorFeedback.SetActive(false);
-
         submarineTriggerScript = GetComponentInChildren<SubmarineTriggerZone>();
 
         currentLife = maxLife;
@@ -57,7 +52,9 @@ public class SubmarineLife : MonoBehaviour
 
     private void Update()
     {
-        if (submarineTriggerScript.fregateIsAbove)
+        fregateDistance = Vector3.Distance(transform.position, fregate.transform.position);
+
+        if (fregateDistance <= damageDistance && fregate.GetComponent<FregateHandler>().isUsingHullSonar)
         {
             timer += Time.deltaTime;
 
@@ -83,26 +80,10 @@ public class SubmarineLife : MonoBehaviour
         {
             timer = 0;
         }
-
-        distanceFromFregate = Vector3.Distance(transform.position, fregate.transform.position);
-
-        if (distanceFromFregate <= maxDistance)
-        {
-            ChangeColorOverDistance();
-        }
     }
 
     private void DamageOverTime()
     {
         currentLife -= (maxLife / numberSteps);
-    }
-
-    private void ChangeColorOverDistance()
-    {
-        colorFeedback.SetActive(true);
-
-        colorFeedback.transform.position = new Vector3(fregate.transform.position.x + 2, fregate.transform.position.y + 2, fregate.transform.position.z + 2);
-
-        colorFeedback.GetComponent<SpriteRenderer>().color = Color.Lerp(colorClose, colorFar, distanceFromFregate / maxDistance);
     }
 }

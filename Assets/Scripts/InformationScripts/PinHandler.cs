@@ -9,6 +9,9 @@ public class PinHandler : MonoBehaviour
     public RectTransform deepSonarInfoPanelRectTransform;
     public GameObject mapPinPrefab;
     public float minScreenDistancePinOpen;
+    public FregateHandler fregateHandler;
+    public Image deepSonarDistanceImage;
+    public Text deepSonarDirectionText;
 
     private List<Pin> pinPlaced;
     private Pin currentPinOpened;
@@ -52,6 +55,7 @@ public class PinHandler : MonoBehaviour
 
     public void UpdatePinOpen()
     {
+        bool atLeastOnePinOpened = false;
         if(InputDuo.tapDown)
         {
             foreach (Pin pin in pinPlaced)
@@ -60,6 +64,7 @@ public class PinHandler : MonoBehaviour
                 {
                     if (Vector2.Distance(mainCamera.ScreenToViewportPoint(Input.mousePosition), pin.viewPortPos) < minScreenDistancePinOpen)
                     {
+                        atLeastOnePinOpened = true;
                         OpenPin(pin);
                     }
                 }
@@ -68,9 +73,15 @@ public class PinHandler : MonoBehaviour
                     touch = Input.GetTouch(0);
                     if (Vector2.Distance(mainCamera.ScreenToViewportPoint(touch.position), pin.viewPortPos) < minScreenDistancePinOpen)
                     {
+                        atLeastOnePinOpened = true;
                         OpenPin(pin);
                     }
                 }
+            }
+
+            if(!atLeastOnePinOpened)
+            {
+                ClosePin();
             }
         }
     }
@@ -81,9 +92,19 @@ public class PinHandler : MonoBehaviour
         switch (newPin.type)
         {
             case Pin.Type.DeepSonar:
+                deepSonarInfoPanelRectTransform.gameObject.SetActive(true);
+                deepSonarInfoPanelRectTransform.anchoredPosition = new Vector2((newPin.viewPortPos.x - 0.5f) * pinPanelRectTransform.sizeDelta.x,
+                (newPin.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
                 DeepSonarPin sonarPin = newPin as DeepSonarPin;
+                deepSonarDistanceImage.sprite = fregateHandler.deepSonarDistanceStepImages[sonarPin.submarineDistanceStep - 1];
+                deepSonarDirectionText.text = sonarPin.submarineDirection;
                 break;
         }
+    }
+
+    private void ClosePin()
+    {
+        deepSonarInfoPanelRectTransform.gameObject.SetActive(false);
     }
 
     [System.Serializable]

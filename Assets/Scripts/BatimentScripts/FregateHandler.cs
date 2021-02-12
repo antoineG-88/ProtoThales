@@ -7,6 +7,7 @@ public class FregateHandler : MonoBehaviour
     public int maxUnitAvailable;
     public float deepSonarChargeTime;
     public float[] deepSonarDistanceSteps;
+    public Sprite[] deepSonarDistanceStepImages;
     public GameObject sonarEffectPrefab;
     public Image deepSonarCharge;
     public Text unitsControlNumberText;

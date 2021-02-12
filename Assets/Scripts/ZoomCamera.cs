@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ZoomCamera : MonoBehaviour
 {
@@ -15,29 +13,60 @@ public class ZoomCamera : MonoBehaviour
     public float MouseZoomSpeed;
     public float touchZoomSpeed;
 
+    private Touch touch;
+    private Camera mainCamera;
+    private Vector3 touchMovement;
+
+    private bool downTag;
+    private bool startTouchRegistered;
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
 
     void Update()
     {
         if(batimentControllerScript.batimentSelected == null)
         {
-            if (Input.GetMouseButtonDown(0))
+            if(Input.touchCount < 2)
             {
-                //startTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (downTag)
+                {
+                    downTag = false;
+                    startTouchRegistered = true;
+                    startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+                }
 
-                startTouch = GetWorldPoisition(0);
+                if (InputDuo.tapDown)
+                {
+                    downTag = true;
+                }
+
+                if (InputDuo.tapHold)
+                {
+                    if (startTouchRegistered)
+                    {
+                        touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                        mainCamera.transform.position += touchMovement;
+
+                        //Limit Camera movement 
+                        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
+                    }
+                }
+                else
+                {
+                    startTouchRegistered = false;
+                }
+            }
+            else
+            {
+                startTouchRegistered = false;
             }
 
-            if (Input.GetMouseButton(0))
-            {
-                //Vector3 direction = startTouch - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
 
-                Vector3 direction = startTouch - GetWorldPoisition(0);
-                Camera.main.transform.position += direction;
 
-                //Limit Camera movement 
-                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
-            }
-            else if (Input.touchCount == 2)
+            if (Input.touchCount == 2)
             {
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);
@@ -50,31 +79,37 @@ public class ZoomCamera : MonoBehaviour
 
                 float difference = currentMagnitude - previousMagnitude;
 
-                zoom(difference * touchZoomSpeed);
+                Zoom(difference * touchZoomSpeed);
             }
-
-            zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
+        }
+        else
+        {
+            downTag = false;
+            startTouchRegistered = false;
         }
     }
 
-    //ortographic cam
-    void Zoom(float increment)
-    {
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, zoomMin, zoomMax);
-    }
-
     //perspective cam
-    void zoom(float increment)
+    void Zoom(float increment)
     {
         Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView - increment, zoomMin, zoomMax);
     }
 
-    private Vector3 GetWorldPoisition(float z)
+    private Vector3 GetSeaPosition(bool isTouch)
     {
-        Ray mousePos = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane ground = new Plane(Camera.main.transform.forward, new Vector3(0, 0, z));
+        Ray touchRay;
+        if(isTouch && Input.touchCount > 0)
+        {
+            touch = Input.GetTouch(0);
+            touchRay = mainCamera.ScreenPointToRay(touch.position);
+        }
+        else
+        {
+           touchRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        }
+        Plane ground = new Plane(Vector3.up, new Vector3(0, 0, 0));
         float distance;
-        ground.Raycast(mousePos, out distance);
-        return mousePos.GetPoint(distance);
+        ground.Raycast(touchRay, out distance);
+        return touchRay.GetPoint(distance);
     }
 }

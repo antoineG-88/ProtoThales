@@ -16,6 +16,7 @@ public class FregateHandler : MonoBehaviour
     public Image hullSonarImage;
     public Color hullSonarActivatedColor;
     public Transform submarine;
+    public PinHandler pinHandler;
 
     [HideInInspector] public bool isUsingHullSonar;
     private int unitsAvailable;
@@ -129,7 +130,7 @@ public class FregateHandler : MonoBehaviour
             }
         }
 
-        //documentHandler.GenerateSonarReport(distanceStep, 0, direction);
+        pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
         Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
         unitsAvailable++;
         unitEngagedOnDeepSonar--;

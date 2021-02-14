@@ -39,7 +39,7 @@ public class BatimentController : MonoBehaviour
 
     private void Selection()
     {
-        if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && !patMarHandler.isWaitingForReleasePosChoice)
+        if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/) && !patMarHandler.isWaitingForReleasePosChoice)
         {
             RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
             if (touchHit.collider != null)

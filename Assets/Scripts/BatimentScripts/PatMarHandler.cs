@@ -67,7 +67,7 @@ public class PatMarHandler : MonoBehaviour
             }
             else
             {
-                if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/))
                 {
                     RaycastHit touchHit = InputDuo.SeaRaycast(surfaceMask, !Input.GetButton("LeftClick"));
                     if (touchHit.collider != null)

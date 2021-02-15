@@ -26,9 +26,26 @@ public class ZoomCamera : MonoBehaviour
 
     void Update()
     {
-        if(batimentControllerScript.batimentSelected == null)
+        if (batimentControllerScript.batimentSelected == null)
         {
-            if(Input.touchCount < 2)
+            /// for keyboard
+            if (InputDuo.tapDown)
+            {
+                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+            }
+
+            if (InputDuo.tapHold)
+            {
+                touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                mainCamera.transform.position += touchMovement;
+
+                //Limit Camera movement 
+                //transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
+            }
+            /// 
+
+
+            /*if (Input.touchCount < 2)
             {
                 if (downTag)
                 {
@@ -61,7 +78,7 @@ public class ZoomCamera : MonoBehaviour
             else
             {
                 startTouchRegistered = false;
-            }
+            }*/
 
             Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
 
@@ -92,7 +109,9 @@ public class ZoomCamera : MonoBehaviour
     //perspective cam
     void Zoom(float increment)
     {
-        Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView - increment, zoomMin, zoomMax);
+        //Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView - increment, zoomMin, zoomMax);
+        Camera.main.transform.position += new Vector3(0, -1, 0) * increment;
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Mathf.Clamp(Camera.main.transform.position.y, zoomMin, zoomMax), Camera.main.transform.position.z);
     }
 
     private Vector3 GetSeaPosition(bool isTouch)

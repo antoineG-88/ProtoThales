@@ -8,10 +8,13 @@ public class ZoomCamera : MonoBehaviour
     [Header("Zoom Settings")]
     public float zoomMin;
     public float zoomMax;
+    public float rotateMin;
+    public float rotateMax;
 
     [Space]
     public float MouseZoomSpeed;
     public float touchZoomSpeed;
+    public float rotationSpeed;
 
     private Touch touch;
     private Camera mainCamera;
@@ -19,6 +22,7 @@ public class ZoomCamera : MonoBehaviour
 
     private bool downTag;
     private bool startTouchRegistered;
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -26,73 +30,87 @@ public class ZoomCamera : MonoBehaviour
 
     void Update()
     {
-        if(batimentControllerScript.batimentSelected == null)
-        {
-            if(Input.touchCount < 2)
+        /// for keyboard
+            /*
+            if (InputDuo.tapDown)
             {
-                if (downTag)
-                {
-                    downTag = false;
-                    startTouchRegistered = true;
-                    startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
-                }
+                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+            }
 
-                if (InputDuo.tapDown)
-                {
-                    downTag = true;
-                }
+            if (InputDuo.tapHold)
+            {
+                touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                mainCamera.transform.position += touchMovement;
 
-                if (InputDuo.tapHold)
-                {
-                    if (startTouchRegistered)
-                    {
-                        touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
-                        mainCamera.transform.position += touchMovement;
+                //Limit Camera movement 
+                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
+            }
+            */
+            /// 
 
-                        //Limit Camera movement 
-                        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
-                    }
-                }
-                else
+        if (Input.touchCount < 2 && !batimentControllerScript.isDragingDest)
+        {
+            if (downTag)
+            {
+                downTag = false;
+                startTouchRegistered = true;
+                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+            }
+
+            if (InputDuo.tapDown)
+            {
+                downTag = true;
+            }
+
+            if (InputDuo.tapHold)
+            {
+                if (startTouchRegistered)
                 {
-                    startTouchRegistered = false;
+                    touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                    mainCamera.transform.position += touchMovement;
+
+                    //Limit Camera movement 
+                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
                 }
             }
             else
             {
                 startTouchRegistered = false;
             }
-
-            Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
-
-
-            if (Input.touchCount == 2)
-            {
-                Touch touchZero = Input.GetTouch(0);
-                Touch touchOne = Input.GetTouch(1);
-
-                Vector2 touchZeroPreviousPos = touchZero.position - touchZero.deltaPosition;
-                Vector2 touchOnePreviousPos = touchOne.position - touchOne.deltaPosition;
-
-                float previousMagnitude = (touchZeroPreviousPos - touchOnePreviousPos).magnitude;
-                float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-
-                float difference = currentMagnitude - previousMagnitude;
-
-                Zoom(difference * touchZoomSpeed);
-            }
         }
         else
         {
-            downTag = false;
             startTouchRegistered = false;
+        }
+
+        Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
+
+
+        if (Input.touchCount == 2)
+        {
+            Touch touchZero = Input.GetTouch(0);
+            Touch touchOne = Input.GetTouch(1);
+
+            Vector2 touchZeroPreviousPos = touchZero.position - touchZero.deltaPosition;
+            Vector2 touchOnePreviousPos = touchOne.position - touchOne.deltaPosition;
+
+            float previousMagnitude = (touchZeroPreviousPos - touchOnePreviousPos).magnitude;
+            float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+
+            float difference = currentMagnitude - previousMagnitude;
+
+            Zoom(difference * touchZoomSpeed);
         }
     }
 
     //perspective cam
     void Zoom(float increment)
     {
-        Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView - increment, zoomMin, zoomMax);
+        mainCamera.transform.position += new Vector3(0, -1, 0) * increment;
+        mainCamera.transform.eulerAngles += new Vector3(-1, 0, 0) * increment * rotationSpeed;
+
+        mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, Mathf.Clamp(mainCamera.transform.position.y, zoomMin, zoomMax), mainCamera.transform.position.z);
+        mainCamera.transform.eulerAngles = new Vector3(Mathf.Clamp(mainCamera.transform.eulerAngles.x, rotateMin, rotateMax), mainCamera.transform.eulerAngles.y, mainCamera.transform.eulerAngles.z);
     }
 
     private Vector3 GetSeaPosition(bool isTouch)

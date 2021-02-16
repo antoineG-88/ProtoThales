@@ -15,7 +15,11 @@ public class BatimentController : MonoBehaviour
     private Touch touch;
     private LineRenderer movementLine;
 
-    private bool isDragingDest;
+    [HideInInspector] public bool isDragingDest;
+    private TouchPhase lastTouchPhase;
+    private Vector2 startTouchPos;
+    private Vector2 touchMovement;
+    private bool isOverUI;
 
     void Start()
     {
@@ -28,6 +32,17 @@ public class BatimentController : MonoBehaviour
 
     void Update()
     {
+        if (InputDuo.tapDown)
+        {
+            startTouchPos = InputDuo.touch.position;
+            isOverUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+        }
+        if (InputDuo.tapHold)
+        {
+            lastTouchPhase = InputDuo.touch.phase;
+            touchMovement = InputDuo.touch.position - startTouchPos;
+        }
+
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
@@ -39,7 +54,7 @@ public class BatimentController : MonoBehaviour
 
     private void Selection()
     {
-        if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/) && !patMarHandler.isWaitingForReleasePosChoice)
+        if (InputDuo.tapUp && !isOverUI && touchMovement.magnitude < 10f && !patMarHandler.isWaitingForReleasePosChoice)
         {
             RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
             if (touchHit.collider != null)

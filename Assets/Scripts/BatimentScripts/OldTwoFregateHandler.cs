@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class FregateHandler : MonoBehaviour
+public class OldTwoFregateHandler : MonoBehaviour
 {
     public int maxUnitAvailable;
     public float deepSonarChargeTime;
@@ -19,7 +19,6 @@ public class FregateHandler : MonoBehaviour
     public Transform submarine;
     public PinHandler pinHandler;
 
-    [HideInInspector] public Zone currentZone;
     [HideInInspector] public bool isUsingHullSonar;
     private int unitsAvailable;
     private int unitEngagedOnControl;
@@ -53,8 +52,6 @@ public class FregateHandler : MonoBehaviour
 
     void Update()
     {
-        currentZone = ZoneHandler.GetCurrentZone(fregate.currentPosition);
-
         fregate.unitsOnControl = unitEngagedOnControl;
 
         isUsingHullSonar = unitEngagedOnHullSonar >= 1;

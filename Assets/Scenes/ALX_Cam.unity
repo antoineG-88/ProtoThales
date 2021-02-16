@@ -2748,7 +2748,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.6000366, y: -158}
+  m_AnchoredPosition: {x: -1.6000366, y: -1485}
   m_SizeDelta: {x: -49.971558, y: 315.96674}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1321777362
@@ -9691,6 +9691,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SubmarineLife
+      objectReference: {fileID: 0}
+    - target: {fileID: 8583605233093913727, guid: dfe9bd577747c2d4f9d167b59f165eac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfe9bd577747c2d4f9d167b59f165eac, type: 3}

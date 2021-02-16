@@ -4,53 +4,71 @@ using UnityEngine;
 using UnityEngine.UI;
 public class FregateHandler : MonoBehaviour
 {
+    public float hullSonarActivationTime;
+    public float hullSonarCooldown;
     public float deepSonarChargeTime;
+    public float deepSonarCooldown;
     public float[] deepSonarDistanceSteps;
     public Sprite[] deepSonarDistanceStepImages;
+    public Color equipmentEnable;
+    public Color equipmentCooldown;
     public GameObject sonarEffectPrefab;
     public Image deepSonarCharge;
-    public Image hullSonarImage;
-    public Color hullSonarActivatedColor;
+    public Image hullSonarActivation;
     public Transform submarine;
     public PinHandler pinHandler;
 
     [HideInInspector] public Zone currentZone;
     private float currentSonarCharge;
-    private BatimentController batimentController;
-    private Color hullSonarBaseColor;
+    private float currentActivationTime;
     private Fregate fregate;
 
-    private bool deepSonar;
-    private bool isUsinghullSonar;
+    private bool isUsingDeepSonar;
+    private bool isUsingHullSonar;
     
 
     void Start()
     {
         fregate = GetComponent<Fregate>();
-        hullSonarBaseColor = hullSonarImage.color;
     }
 
     void Update()
     {
         currentZone = ZoneHandler.GetCurrentZone(fregate.currentPosition);
 
-        if (!deepSonar)
+        //Hull Sonar
+        if (!isUsingHullSonar)
+        {
+            hullSonarActivation.fillAmount = 0;
+        }
+        else if (isUsingHullSonar)
+        {
+            currentActivationTime += Time.deltaTime;
+            if (currentActivationTime > hullSonarActivationTime)
+            {
+                UseHullSonar();
+            }
+            hullSonarActivation.fillAmount = currentActivationTime / hullSonarActivationTime;
+        }
+
+        //Deep Sonar
+        if (!isUsingDeepSonar)
         {
             deepSonarCharge.fillAmount = 0;
         }
-        else if (deepSonar)
+        else if (isUsingDeepSonar)
         {
             currentSonarCharge += Time.deltaTime;
             if (currentSonarCharge > deepSonarChargeTime)
             {
-                UseSonar();
+                UseDeepSonar();
             }
             deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
-        }
+        }  
     }
 
 
-    private void UseSonar()
+    private void UseDeepSonar()
     {
         int distanceStep = 1;
         float distance = Vector3.Distance(transform.position, submarine.transform.position);
@@ -87,28 +105,31 @@ public class FregateHandler : MonoBehaviour
 
         pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
         Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
+        
         currentSonarCharge = 0;
+        isUsingDeepSonar = false;
+    }
 
-        deepSonar = false;
+    public void UseHullSonar()
+    {
+        //put hull sonar behavior here
+
+        currentActivationTime -= Time.deltaTime;
+        if (currentActivationTime > hullSonarCooldown)
+        {
+            currentActivationTime = 0;
+            isUsingHullSonar = false;
+        }
+        hullSonarActivation.fillAmount = currentActivationTime / hullSonarCooldown;
     }
 
     public void ActivateDeepSonar()
     {
-        deepSonar = true;
+        isUsingDeepSonar = true;
     }
 
     public void ActivateHullSonar()
     {
-        if (!isUsinghullSonar)
-        {
-            isUsinghullSonar = true;
-            hullSonarImage.color = hullSonarActivatedColor;
-
-        }
-        else if (isUsinghullSonar)
-        {
-            isUsinghullSonar = false;
-            hullSonarImage.color = hullSonarBaseColor;
-        }
+        isUsingHullSonar = true;
     }
 }

@@ -4,31 +4,100 @@ using UnityEngine;
 
 public class Zone : MonoBehaviour
 {
-    public Color zoneEdgeColor;
-    public Transform element;
+    public enum Relief { Flat, Hilly};
+    public enum Depth { Land, Coast, Deep};
+    public enum Weather { ClearSky, Wind, Storm};
 
-    private List<Transform> edges = new List<Transform>();
+    public Relief relief;
+    public Depth depth;
+    public Weather currentWeather;
+    public Color zoneEdgeColor;
+    public float innerEdgesOffset;
+    public float outlineSeaOffset;
+
+    private List<Transform> edges;
     private Transform edgesParent;
-    private bool isInside;
     private Vector2 testVector;
+    private LineRenderer edgeLine;
 
     void Start()
     {
         testVector = Vector2.one;
+
+        GetEdges();
+        CreateEdgeLine();
+    }
+
+    void Update()
+    {
+
+    }
+
+    private void GetEdges()
+    {
         edges = new List<Transform>();
         edgesParent = transform.GetChild(0);
-        for(int i = 0; i < edgesParent.childCount; i++)
+        for (int i = 0; i < edgesParent.childCount; i++)
         {
             edges.Add(edgesParent.GetChild(i));
         }
     }
 
-    void Update()
+    private void CreateEdgeLine()
     {
-        isInside = IsElementInZone(SeaCoord.Planify(element.position));
+        edgeLine = GetComponent<LineRenderer>();
+        edgeLine.positionCount = edges.Count + 1;
+        Vector3[] lineEdgePos = new Vector3[edges.Count + 1];
+        for (int i = 0; i < edges.Count; i++)
+        {
+            lineEdgePos[i] = GetInnerEdge(i) + Vector3.up * outlineSeaOffset;
+        }
+        lineEdgePos[edges.Count] = GetInnerEdge(0) + Vector3.up * outlineSeaOffset;
+        edgeLine.SetPositions(lineEdgePos);
+        edgeLine.endColor = zoneEdgeColor;
+        edgeLine.startColor = zoneEdgeColor;
     }
 
-    private bool IsElementInZone(Vector2 elementPosition)
+    private Vector3 GetInnerEdge(int edgeIndex)
+    {
+        int previousIndex = edgeIndex - 1;
+        if(previousIndex < 0)
+        {
+            previousIndex = edges.Count - 1;
+        }
+        int nextIndex = edgeIndex + 1;
+        if(nextIndex > edges.Count - 1)
+        {
+            nextIndex = 0;
+        }
+        Vector2 firstVector = SeaCoord.Planify(edges[previousIndex].position) - SeaCoord.Planify(edges[edgeIndex].position);
+        Vector2 secondVector = SeaCoord.Planify(edges[nextIndex].position) - SeaCoord.Planify(edges[edgeIndex].position);
+
+        float angle = Vector2.SignedAngle(firstVector, secondVector);
+        float firstPointAngle = Vector2.SignedAngle(Vector2.right, firstVector) + angle / 2;
+        float secondPointAngle = Vector2.SignedAngle(Vector2.right, firstVector) - (360 - angle) / 2;
+        Vector2 pointVector1 = new Vector2(Mathf.Cos(Mathf.Deg2Rad * firstPointAngle), Mathf.Sin(Mathf.Deg2Rad * firstPointAngle));
+        Vector2 pointVector2 = new Vector2(Mathf.Cos(Mathf.Deg2Rad * secondPointAngle), Mathf.Sin(Mathf.Deg2Rad * secondPointAngle));
+
+        Vector2 point1 = SeaCoord.Planify(edges[edgeIndex].position) + pointVector1 * innerEdgesOffset;
+        Vector2 point2 = SeaCoord.Planify(edges[edgeIndex].position) + pointVector2 * innerEdgesOffset;
+
+        if(IsElementInZone(point1))
+        {
+            return SeaCoord.GetFlatCoord(point1);
+        }
+        else
+        {
+            return SeaCoord.GetFlatCoord(point2);
+        }
+    }
+
+    public void ChangeWeather(Weather newWeather)
+    {
+        currentWeather = newWeather;
+    }
+
+    public bool IsElementInZone(Vector2 elementPosition)
     {
         int numberOfIntersection = 0;
         float scalar1;
@@ -60,6 +129,13 @@ public class Zone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        edges = new List<Transform>();
+        edgesParent = transform.GetChild(0);
+        for (int i = 0; i < edgesParent.childCount; i++)
+        {
+            edges.Add(edgesParent.GetChild(i));
+        }
+
         Gizmos.color = zoneEdgeColor;
         for(int i = 0; i < edges.Count; i++)
         {
@@ -72,9 +148,5 @@ public class Zone : MonoBehaviour
                 Gizmos.DrawLine(edges[i].position, edges[i + 1].position);
             }
         }
-
-        Gizmos.color = isInside ? Color.cyan : Color.red;
-        Gizmos.DrawSphere(element.position, 0.5f);
-
     }
 }

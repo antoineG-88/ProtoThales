@@ -8,10 +8,13 @@ public class ZoomCamera : MonoBehaviour
     [Header("Zoom Settings")]
     public float zoomMin;
     public float zoomMax;
+    public float rotateMin;
+    public float rotateMax;
 
     [Space]
     public float MouseZoomSpeed;
     public float touchZoomSpeed;
+    public float rotationSpeed;
 
     private Touch touch;
     private Camera mainCamera;
@@ -109,9 +112,11 @@ public class ZoomCamera : MonoBehaviour
     //perspective cam
     void Zoom(float increment)
     {
-        //Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView - increment, zoomMin, zoomMax);
         Camera.main.transform.position += new Vector3(0, -1, 0) * increment;
+        Camera.main.transform.eulerAngles += new Vector3(-1, 0, 0) * increment * rotationSpeed;
+
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Mathf.Clamp(Camera.main.transform.position.y, zoomMin, zoomMax), Camera.main.transform.position.z);
+        Camera.main.transform.eulerAngles = new Vector3(Mathf.Clamp(Camera.main.transform.eulerAngles.x, rotateMin, rotateMax), Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
     }
 
     private Vector3 GetSeaPosition(bool isTouch)

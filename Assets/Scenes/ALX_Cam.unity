@@ -2812,8 +2812,11 @@ MonoBehaviour:
   batimentControllerScript: {fileID: 1361004100}
   zoomMin: 20
   zoomMax: 42
+  rotateMin: 58
+  rotateMax: 78
   MouseZoomSpeed: 15
   touchZoomSpeed: 0.1
+  rotationSpeed: 1
 --- !u!1 &967870313
 GameObject:
   m_ObjectHideFlags: 0

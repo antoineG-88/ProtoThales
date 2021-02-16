@@ -2810,9 +2810,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batimentControllerScript: {fileID: 1361004100}
-  zoomMin: 20
+  zoomMin: 10
   zoomMax: 42
-  rotateMin: 58
+  rotateMin: 48
   rotateMax: 78
   MouseZoomSpeed: 15
   touchZoomSpeed: 0.1
@@ -3486,6 +3486,7 @@ MonoBehaviour:
   destinationPreview: {fileID: 139584079}
   patMarHandler: {fileID: 1698774022}
   batimentSelected: {fileID: 0}
+  isDragingDest: 0
 --- !u!4 &1361004101
 Transform:
   m_ObjectHideFlags: 0

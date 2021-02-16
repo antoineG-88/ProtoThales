@@ -22,6 +22,7 @@ public class ZoomCamera : MonoBehaviour
 
     private bool downTag;
     private bool startTouchRegistered;
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -29,9 +30,8 @@ public class ZoomCamera : MonoBehaviour
 
     void Update()
     {
-        if (batimentControllerScript.batimentSelected == null)
-        {
-            /// for keyboard
+        /// for keyboard
+            /*
             if (InputDuo.tapDown)
             {
                 startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
@@ -43,80 +43,74 @@ public class ZoomCamera : MonoBehaviour
                 mainCamera.transform.position += touchMovement;
 
                 //Limit Camera movement 
-                //transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
+                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
             }
+            */
             /// 
 
-
-            /*if (Input.touchCount < 2)
+        if (Input.touchCount < 2 && !batimentControllerScript.isDragingDest)
+        {
+            if (downTag)
             {
-                if (downTag)
-                {
-                    downTag = false;
-                    startTouchRegistered = true;
-                    startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
-                }
+                downTag = false;
+                startTouchRegistered = true;
+                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+            }
 
-                if (InputDuo.tapDown)
-                {
-                    downTag = true;
-                }
+            if (InputDuo.tapDown)
+            {
+                downTag = true;
+            }
 
-                if (InputDuo.tapHold)
+            if (InputDuo.tapHold)
+            {
+                if (startTouchRegistered)
                 {
-                    if (startTouchRegistered)
-                    {
-                        touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
-                        mainCamera.transform.position += touchMovement;
+                    touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                    mainCamera.transform.position += touchMovement;
 
-                        //Limit Camera movement 
-                        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), Mathf.Clamp(transform.position.y, 33, 47), Mathf.Clamp(transform.position.z, -46, 14));
-                    }
-                }
-                else
-                {
-                    startTouchRegistered = false;
+                    //Limit Camera movement 
+                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
                 }
             }
             else
             {
                 startTouchRegistered = false;
-            }*/
-
-            Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
-
-
-            if (Input.touchCount == 2)
-            {
-                Touch touchZero = Input.GetTouch(0);
-                Touch touchOne = Input.GetTouch(1);
-
-                Vector2 touchZeroPreviousPos = touchZero.position - touchZero.deltaPosition;
-                Vector2 touchOnePreviousPos = touchOne.position - touchOne.deltaPosition;
-
-                float previousMagnitude = (touchZeroPreviousPos - touchOnePreviousPos).magnitude;
-                float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-
-                float difference = currentMagnitude - previousMagnitude;
-
-                Zoom(difference * touchZoomSpeed);
             }
         }
         else
         {
-            downTag = false;
             startTouchRegistered = false;
+        }
+
+        Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
+
+
+        if (Input.touchCount == 2)
+        {
+            Touch touchZero = Input.GetTouch(0);
+            Touch touchOne = Input.GetTouch(1);
+
+            Vector2 touchZeroPreviousPos = touchZero.position - touchZero.deltaPosition;
+            Vector2 touchOnePreviousPos = touchOne.position - touchOne.deltaPosition;
+
+            float previousMagnitude = (touchZeroPreviousPos - touchOnePreviousPos).magnitude;
+            float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+
+            float difference = currentMagnitude - previousMagnitude;
+
+            Zoom(difference * touchZoomSpeed);
         }
     }
 
     //perspective cam
     void Zoom(float increment)
     {
-        Camera.main.transform.position += new Vector3(0, -1, 0) * increment;
-        Camera.main.transform.eulerAngles += new Vector3(-1, 0, 0) * increment * rotationSpeed;
+        mainCamera.transform.position += new Vector3(0, -1, 0) * increment;
+        mainCamera.transform.eulerAngles += new Vector3(-1, 0, 0) * increment * rotationSpeed;
 
-        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Mathf.Clamp(Camera.main.transform.position.y, zoomMin, zoomMax), Camera.main.transform.position.z);
-        Camera.main.transform.eulerAngles = new Vector3(Mathf.Clamp(Camera.main.transform.eulerAngles.x, rotateMin, rotateMax), Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
+        mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, Mathf.Clamp(mainCamera.transform.position.y, zoomMin, zoomMax), mainCamera.transform.position.z);
+        mainCamera.transform.eulerAngles = new Vector3(Mathf.Clamp(mainCamera.transform.eulerAngles.x, rotateMin, rotateMax), mainCamera.transform.eulerAngles.y, mainCamera.transform.eulerAngles.z);
     }
 
     private Vector3 GetSeaPosition(bool isTouch)

@@ -43,7 +43,7 @@ public class ZoomCamera : MonoBehaviour
                 mainCamera.transform.position += touchMovement;
 
                 //Limit Camera movement 
-                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
+                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -43, 14));
             }
             */
             /// 
@@ -70,7 +70,7 @@ public class ZoomCamera : MonoBehaviour
                     mainCamera.transform.position += touchMovement;
 
                     //Limit Camera movement 
-                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
+                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -43, 14));
                 }
             }
             else

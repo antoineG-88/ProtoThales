@@ -3069,7 +3069,7 @@ MonoBehaviour:
   mapPinPrefab: {fileID: 7043584412687740154, guid: 41c18dc589ab2794da6df298a0196192,
     type: 3}
   minScreenDistancePinOpen: 0.04
-  fregateHandler: {fileID: 0}
+  fregateHandler: {fileID: 2117067380}
   deepSonarDistanceImage: {fileID: 126251597}
   deepSonarDirectionText: {fileID: 615039012}
 --- !u!1 &1395201971
@@ -12947,7 +12947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &8453990873047089892
 GameObject:
   m_ObjectHideFlags: 0

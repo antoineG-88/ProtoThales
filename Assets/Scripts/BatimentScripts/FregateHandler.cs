@@ -25,7 +25,9 @@ public class FregateHandler : MonoBehaviour
 
     private bool isUsingDeepSonar;
     private bool isUsingHullSonar;
-    
+    private bool deepSonarCoolingDown;
+    private bool hullSonarCoolingDown;
+
 
     void Start()
     {
@@ -43,12 +45,31 @@ public class FregateHandler : MonoBehaviour
         }
         else if (isUsingHullSonar)
         {
-            currentActivationTime += Time.deltaTime;
-            if (currentActivationTime > hullSonarActivationTime)
+            if (!hullSonarCoolingDown)
             {
                 UseHullSonar();
+                currentActivationTime += Time.deltaTime;
+
+                if (currentActivationTime > hullSonarActivationTime)
+                {                  
+                    hullSonarCoolingDown = true;
+                }
+
+                hullSonarActivation.fillAmount = currentActivationTime / hullSonarActivationTime;
+                hullSonarActivation.color = equipmentEnable;
             }
-            hullSonarActivation.fillAmount = currentActivationTime / hullSonarActivationTime;
+            else
+            {             
+                if (hullSonarActivation.fillAmount <= 0)
+                {
+                    currentActivationTime = 0;
+                    isUsingHullSonar = false;
+                    hullSonarCoolingDown = false;
+                }
+
+                hullSonarActivation.fillAmount -= 1f / hullSonarCooldown * Time.deltaTime;
+                hullSonarActivation.color = equipmentCooldown;
+            }        
         }
 
         //Deep Sonar
@@ -58,12 +79,32 @@ public class FregateHandler : MonoBehaviour
         }
         else if (isUsingDeepSonar)
         {
-            currentSonarCharge += Time.deltaTime;
-            if (currentSonarCharge > deepSonarChargeTime)
+            if (!deepSonarCoolingDown)
             {
-                UseDeepSonar();
+                currentSonarCharge += Time.deltaTime;
+
+                if (currentSonarCharge > deepSonarChargeTime)
+                {
+                    UseDeepSonar();
+                    deepSonarCoolingDown = true;
+                }
+
+                deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
+                deepSonarCharge.color = equipmentEnable;
             }
-            deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
+            else
+            {
+                if (deepSonarCharge.fillAmount <= 0)
+                {
+                    currentSonarCharge = 0;
+                    isUsingDeepSonar = false;
+                    deepSonarCoolingDown = false;
+                }
+
+                deepSonarCharge.fillAmount -= 1f / deepSonarCooldown * Time.deltaTime;
+                deepSonarCharge.color = equipmentCooldown;
+            }
+            
         }  
     }
 
@@ -104,23 +145,12 @@ public class FregateHandler : MonoBehaviour
         }
 
         pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
-        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
-        
-        currentSonarCharge = 0;
-        isUsingDeepSonar = false;
+        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);    
     }
 
     public void UseHullSonar()
     {
         //put hull sonar behavior here
-
-        currentActivationTime -= Time.deltaTime;
-        if (currentActivationTime > hullSonarCooldown)
-        {
-            currentActivationTime = 0;
-            isUsingHullSonar = false;
-        }
-        hullSonarActivation.fillAmount = currentActivationTime / hullSonarCooldown;
     }
 
     public void ActivateDeepSonar()

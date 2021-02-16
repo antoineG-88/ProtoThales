@@ -34,13 +34,27 @@ public class BatimentController : MonoBehaviour
     {
         if (InputDuo.tapDown)
         {
-            startTouchPos = InputDuo.touch.position;
-            isOverUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+            if (Input.GetButtonDown("LeftClick"))
+            {
+                startTouchPos = Input.mousePosition;
+            }
+            else
+            {
+                startTouchPos = InputDuo.touch.position;
+            }
+            isOverUI = EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/);
         }
         if (InputDuo.tapHold)
         {
-            lastTouchPhase = InputDuo.touch.phase;
-            touchMovement = InputDuo.touch.position - startTouchPos;
+            if(Input.GetButton("LeftClick"))
+            {
+                touchMovement = (Vector2)Input.mousePosition - startTouchPos;
+            }
+            else
+            {
+                lastTouchPhase = InputDuo.touch.phase;
+                touchMovement = InputDuo.touch.position - startTouchPos;
+            }
         }
 
         if (Input.touchCount > 0)

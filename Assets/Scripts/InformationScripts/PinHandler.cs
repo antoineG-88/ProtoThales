@@ -12,6 +12,7 @@ public class PinHandler : MonoBehaviour
     public FregateHandler fregateHandler;
     public Image deepSonarDistanceImage;
     public Text deepSonarDirectionText;
+    public float timeBeforeClose;
 
     private List<Pin> pinPlaced;
     private Pin currentPinOpened;
@@ -40,6 +41,8 @@ public class PinHandler : MonoBehaviour
         deepSonarPin.mapPosition = mapPosition;
         deepSonarPin.rectTransform = Instantiate(mapPinPrefab, pinPanelRectTransform).GetComponent<RectTransform>();
         pinPlaced.Add(deepSonarPin);
+        StartCoroutine(AutoDestroyPin(deepSonarPin));
+        
     }
 
     private void UpdatePinPos()
@@ -125,5 +128,12 @@ public class PinHandler : MonoBehaviour
         public int submarineDistanceStep;
         public string submarineDirection;
         public Vector2 fregateDirection;
+    }
+
+    public IEnumerator AutoDestroyPin(DeepSonarPin sonarPin)
+    {
+        yield return new WaitForSeconds(timeBeforeClose);
+        Destroy(sonarPin.rectTransform.gameObject);
+        pinPlaced.Remove(sonarPin);
     }
 }

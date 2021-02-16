@@ -3678,6 +3678,7 @@ MonoBehaviour:
   fregateHandler: {fileID: 0}
   deepSonarDistanceImage: {fileID: 126251597}
   deepSonarDirectionText: {fileID: 615039012}
+  timeBeforeClose: 7
 --- !u!1 &1395201971
 GameObject:
   m_ObjectHideFlags: 0

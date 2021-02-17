@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ALX_Cam.unity
-    guid: af79e034d3a025b408e8d6407172879f
+    path: Assets/Scenes/NewSubmarineIA.unity
+    guid: 71dde1e2faa45504ea005e2022af2e24
   m_configObjects: {}

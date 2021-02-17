@@ -9,10 +9,10 @@ public class PinHandler : MonoBehaviour
     public RectTransform deepSonarInfoPanelRectTransform;
     public GameObject mapPinPrefab;
     public float minScreenDistancePinOpen;
-    public FregateHandler fregateHandler;
+    public OldTwoFregateHandler fregateHandler;
     public Image deepSonarDistanceImage;
     public Text deepSonarDirectionText;
-    public float timeBeforeClose;
+    public float timeBeforePinAutoDestroy;
 
     private List<Pin> pinPlaced;
     private Pin currentPinOpened;
@@ -59,7 +59,7 @@ public class PinHandler : MonoBehaviour
     public void UpdatePinOpen()
     {
         bool atLeastOnePinOpened = false;
-        if(InputDuo.tapDown)
+        if(InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/))
         {
             foreach (Pin pin in pinPlaced)
             {
@@ -87,6 +87,12 @@ public class PinHandler : MonoBehaviour
                 ClosePin();
             }
         }
+
+        if(currentPinOpened != null)
+        {
+            deepSonarInfoPanelRectTransform.anchoredPosition = new Vector2((currentPinOpened.viewPortPos.x - 0.5f) * pinPanelRectTransform.sizeDelta.x,
+                   (currentPinOpened.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
+        }
     }
 
     private void OpenPin(Pin newPin)
@@ -108,6 +114,13 @@ public class PinHandler : MonoBehaviour
     private void ClosePin()
     {
         deepSonarInfoPanelRectTransform.gameObject.SetActive(false);
+    }
+
+    public void DestroyOpenedPin()
+    {
+        ClosePin();
+        Destroy(currentPinOpened.rectTransform.gameObject);
+        pinPlaced.Remove(currentPinOpened);
     }
 
     [System.Serializable]
@@ -132,7 +145,7 @@ public class PinHandler : MonoBehaviour
 
     public IEnumerator AutoDestroyPin(DeepSonarPin sonarPin)
     {
-        yield return new WaitForSeconds(timeBeforeClose);
+        yield return new WaitForSeconds(timeBeforePinAutoDestroy);
         Destroy(sonarPin.rectTransform.gameObject);
         pinPlaced.Remove(sonarPin);
     }

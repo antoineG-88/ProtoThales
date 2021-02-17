@@ -70,7 +70,7 @@ public class BatimentController : MonoBehaviour
     {
         if (InputDuo.tapUp && !isOverUI && touchMovement.magnitude < 10f && !patMarHandler.isWaitingForReleasePosChoice)
         {
-            RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
+            RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, touch.phase == TouchPhase.Ended);
             if (touchHit.collider != null)
             {
                 batimentSelected = touchHit.collider.transform.GetComponentInParent<Batiment>();

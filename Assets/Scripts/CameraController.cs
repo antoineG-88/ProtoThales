@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 
-public class ZoomCamera : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     private Vector3 startTouch;
     public BatimentController batimentControllerScript;
 
     [Header("Zoom Settings")]
-    public float zoomMin;
-    public float zoomMax;
-    public float rotateMin;
-    public float rotateMax;
+    public float camMinVerticalDistance;
+    public float camMaxVerticalDistance;
+    public float camIsometricMaxOffset;
+    public float camIsometricMinOffset;
 
     [Space]
-    public float MouseZoomSpeed;
+    public float mouseZoomSpeed;
     public float touchZoomSpeed;
-    public float rotationSpeed;
+    public float lerpMoveRatio;
 
     private Touch touch;
     private Camera mainCamera;
@@ -22,32 +22,19 @@ public class ZoomCamera : MonoBehaviour
 
     private bool downTag;
     private bool startTouchRegistered;
+    private Vector2 camSeaFocusPoint;
+    private float currentZoom;
+    private Vector2 currentFocusPoint;
 
     private void Start()
     {
         mainCamera = Camera.main;
+        camSeaFocusPoint = Vector2.zero;
+        currentZoom = camMaxVerticalDistance;
     }
 
     void Update()
     {
-        /// for keyboard
-            /*
-            if (InputDuo.tapDown)
-            {
-                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
-            }
-
-            if (InputDuo.tapHold)
-            {
-                touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
-                mainCamera.transform.position += touchMovement;
-
-                //Limit Camera movement 
-                transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
-            }
-            */
-            /// 
-
         if (Input.touchCount < 2 && !batimentControllerScript.isDragingDest)
         {
             if (downTag)
@@ -67,7 +54,7 @@ public class ZoomCamera : MonoBehaviour
                 if (startTouchRegistered)
                 {
                     touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
-                    mainCamera.transform.position += touchMovement;
+                    camSeaFocusPoint += SeaCoord.Planify(touchMovement);
 
                     //Limit Camera movement 
                     transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
@@ -83,7 +70,7 @@ public class ZoomCamera : MonoBehaviour
             startTouchRegistered = false;
         }
 
-        Zoom(Input.GetAxis("Mouse ScrollWheel") * MouseZoomSpeed);
+        Zoom(Input.GetAxis("Mouse ScrollWheel") * mouseZoomSpeed);
 
 
         if (Input.touchCount == 2)
@@ -99,18 +86,24 @@ public class ZoomCamera : MonoBehaviour
 
             float difference = currentMagnitude - previousMagnitude;
 
-            Zoom(difference * touchZoomSpeed);
+            Zoom(difference * touchZoomSpeed * 0.001f);
         }
     }
 
-    //perspective cam
     void Zoom(float increment)
     {
-        mainCamera.transform.position += new Vector3(0, -1, 0) * increment;
-        mainCamera.transform.eulerAngles += new Vector3(-1, 0, 0) * increment * rotationSpeed;
 
-        mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, Mathf.Clamp(mainCamera.transform.position.y, zoomMin, zoomMax), mainCamera.transform.position.z);
-        mainCamera.transform.eulerAngles = new Vector3(Mathf.Clamp(mainCamera.transform.eulerAngles.x, rotateMin, rotateMax), mainCamera.transform.eulerAngles.y, mainCamera.transform.eulerAngles.z);
+        currentZoom -= increment;
+
+        currentZoom = Mathf.Clamp(currentZoom, 0f, 1f);
+
+
+        //currentFocusPoint = Vector3.Lerp(currentFocusPoint, camSeaFocusPoint, lerpMoveRatio * Time.deltaTime);
+
+        mainCamera.transform.position = SeaCoord.GetFlatCoord(camSeaFocusPoint) + Vector3.up * (camMinVerticalDistance + (currentZoom * (camMaxVerticalDistance - camMinVerticalDistance))) + new Vector3(0,0, -(camIsometricMinOffset + (currentZoom * (camIsometricMaxOffset - camIsometricMinOffset))));
+
+
+        mainCamera.transform.LookAt(SeaCoord.GetFlatCoord(camSeaFocusPoint));
     }
 
     private Vector3 GetSeaPosition(bool isTouch)

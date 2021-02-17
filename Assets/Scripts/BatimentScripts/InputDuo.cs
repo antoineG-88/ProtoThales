@@ -17,6 +17,7 @@ public class InputDuo : MonoBehaviour
     {
         mainCamera = Camera.main;
         touch.phase = TouchPhase.Canceled;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     void Update()

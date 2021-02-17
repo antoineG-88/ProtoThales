@@ -8,6 +8,8 @@ public class FregateHandler : MonoBehaviour
     public float hullSonarCooldown;
     public float deepSonarChargeTime;
     public float deepSonarCooldown;
+    public float helicopterDestinationTime;
+    public float helicopterCooldown;
     public float[] deepSonarDistanceSteps;
     public Sprite[] deepSonarDistanceStepImages;
     public Color equipmentEnable;
@@ -15,8 +17,15 @@ public class FregateHandler : MonoBehaviour
     public GameObject sonarEffectPrefab;
     public Image deepSonarCharge;
     public Image hullSonarActivation;
+    public Image helicopterDestination;
+
+    public GameObject releaseInfo;
+    public GameObject standardActionInfo;
+    public GameObject helicopter;
+    public GameObject selectionHelicopter;
     public Transform submarine;
     public PinHandler pinHandler;
+    public BatimentController batimentScript;
 
     [HideInInspector] public Zone currentZone;
     private float currentSonarCharge;
@@ -25,8 +34,12 @@ public class FregateHandler : MonoBehaviour
 
     private bool isUsingDeepSonar;
     private bool isUsingHullSonar;
+    private bool isUsingHelicopter;
     private bool deepSonarCoolingDown;
     private bool hullSonarCoolingDown;
+    private bool helicopterCoolingDown;
+
+    private bool resetSelect;
 
 
     void Start()
@@ -103,9 +116,53 @@ public class FregateHandler : MonoBehaviour
 
                 deepSonarCharge.fillAmount -= 1f / deepSonarCooldown * Time.deltaTime;
                 deepSonarCharge.color = equipmentCooldown;
+            }  
+        }
+
+        //Helicopter
+        if (!isUsingHelicopter)
+        {
+            helicopterDestination.fillAmount = 0;
+        }
+        else
+        {
+            if (helicopter.GetComponent<Helicopter>().inMovement)
+            {
+                if (!resetSelect)
+                {
+                    resetSelect = true;
+                    batimentScript.batimentSelected = GetComponent<Fregate>();
+                    selectionHelicopter.SetActive(false);
+                }
+
+                if (!helicopterCoolingDown)
+                {
+                    releaseInfo.SetActive(false);
+                    standardActionInfo.SetActive(true);
+                    helicopterDestination.color = equipmentEnable;
+
+                    if (helicopterDestination.fillAmount >= 1)
+                    {
+                        helicopterCoolingDown = true;
+                    }
+
+                    helicopterDestination.fillAmount += 1f / helicopter.GetComponent<Helicopter>().timeBetweenPoints * Time.deltaTime;
+                }               
             }
-            
-        }  
+            if (helicopterCoolingDown)
+            {
+                if (helicopterDestination.fillAmount <= 0)
+                {
+                    helicopterCoolingDown = false;
+                    isUsingHelicopter = false;
+                    resetSelect = false;
+                }
+
+                helicopterDestination.fillAmount -= 1f / helicopterCooldown * Time.deltaTime;
+                helicopterDestination.color = equipmentCooldown;
+
+            }
+        }
     }
 
 
@@ -161,5 +218,27 @@ public class FregateHandler : MonoBehaviour
     public void ActivateHullSonar()
     {
         isUsingHullSonar = true;
+    }
+
+    public void StartHelicopterRelease()
+    {
+        isUsingHelicopter = true;
+
+        batimentScript.batimentSelected = helicopter.GetComponent<Helicopter>();
+        selectionHelicopter.SetActive(true);
+
+        releaseInfo.SetActive(true);
+        standardActionInfo.SetActive(false);
+    }
+
+    public void StopHelicopterRelease()
+    {
+        isUsingHelicopter = false;
+
+        batimentScript.batimentSelected = GetComponent<Fregate>();
+        selectionHelicopter.SetActive(false);
+
+        releaseInfo.SetActive(false);
+        standardActionInfo.SetActive(true);
     }
 }

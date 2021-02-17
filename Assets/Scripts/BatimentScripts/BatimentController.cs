@@ -11,7 +11,7 @@ public class BatimentController : MonoBehaviour
     public GameObject destinationPreview;
     public PatMarHandler patMarHandler;
 
-    [HideInInspector] public Batiment batimentSelected;
+    public Batiment batimentSelected;
     private Touch touch;
     private LineRenderer movementLine;
 

@@ -10966,7 +10966,7 @@ MonoBehaviour:
     type: 3}
   sonobuoyReleaseChargeImage: {fileID: 1171346034}
   sonobuoyRemainingText: {fileID: 940683089}
-  submarine: {fileID: 0}
+  submarine: {fileID: 996447734}
   releaseInfo: {fileID: 1830393873}
   standardActionInfo: {fileID: 95953192}
   distanceToRelease: 0.2
@@ -12592,7 +12592,7 @@ PrefabInstance:
     - target: {fileID: 8299712061436245940, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81edcdd227ec3474199a4c82995dc2f8, type: 3}

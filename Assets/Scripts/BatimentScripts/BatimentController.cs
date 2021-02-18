@@ -43,7 +43,7 @@ public class BatimentController : MonoBehaviour
             {
                 startTouchPos = InputDuo.touch.position;
             }
-            isOverUI = EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/);
+            isOverUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
         }
         if (InputDuo.tapHold)
         {

@@ -52,7 +52,7 @@ public class OldTwoFregateHandler : MonoBehaviour
 
     void Update()
     {
-        fregate.unitsOnControl = unitEngagedOnControl;
+        //fregate.unitsOnControl = unitEngagedOnControl;
 
         isUsingHullSonar = unitEngagedOnHullSonar >= 1;
 

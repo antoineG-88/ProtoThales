@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Fregate : Batiment
 {
-    public float[] maxSpeeds;
-    public float[] accelerationForces;
+    public float movementSpeed;
+    public float accelerationForce;
     public float turnSpeed;
     public ParticleSystem thrustParticle;
-    [HideInInspector] public int unitsOnControl;
 
     private int currentTurnSide;
 
@@ -27,26 +26,26 @@ public class Fregate : Batiment
     {
         if(!reachedDest)
         {
-            if(currentSpeed <= maxSpeeds[unitsOnControl])
+            if(currentSpeed <= movementSpeed)
             {
-                if(currentSpeed < maxSpeeds[unitsOnControl] - accelerationForces[unitsOnControl] * Time.fixedDeltaTime)
+                if(currentSpeed < movementSpeed - accelerationForce * Time.fixedDeltaTime)
                 {
-                    currentSpeed += accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
+                    currentSpeed += accelerationForce * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentSpeed = maxSpeeds[unitsOnControl];
+                    currentSpeed = movementSpeed;
                 }
             }
             else
             {
-                if (currentSpeed > maxSpeeds[unitsOnControl] + accelerationForces[unitsOnControl] * Time.fixedDeltaTime)
+                if (currentSpeed > movementSpeed + accelerationForce * Time.fixedDeltaTime)
                 {
-                    currentSpeed -= accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
+                    currentSpeed -= accelerationForce * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentSpeed = maxSpeeds[unitsOnControl];
+                    currentSpeed = movementSpeed;
                 }
             }
 
@@ -63,10 +62,10 @@ public class Fregate : Batiment
             currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
             transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
         }
-        else if(currentSpeed > 0)
+        else if (currentSpeed > 0)
         {
-            currentSpeed -= accelerationForces[unitsOnControl] * Time.fixedDeltaTime;
-            if(currentSpeed < 0)
+            currentSpeed -= accelerationForce * Time.fixedDeltaTime;
+            if (currentSpeed < 0)
             {
                 currentSpeed = 0;
             }

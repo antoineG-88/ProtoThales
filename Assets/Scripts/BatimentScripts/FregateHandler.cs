@@ -4,102 +4,169 @@ using UnityEngine;
 using UnityEngine.UI;
 public class FregateHandler : MonoBehaviour
 {
-    public int maxUnitAvailable;
+    public float hullSonarActivationTime;
+    public float hullSonarCooldown;
     public float deepSonarChargeTime;
+    public float deepSonarCooldown;
+    public float helicopterDestinationTime;
+    public float helicopterCooldown;
     public float[] deepSonarDistanceSteps;
     public Sprite[] deepSonarDistanceStepImages;
+    public Color equipmentEnable;
+    public Color equipmentCooldown;
     public GameObject sonarEffectPrefab;
     public Image deepSonarCharge;
-    public Text unitsControlNumberText;
-    public Text unitsDeepSonarNumberText;
-    public Text unitsHullSonarNumberText;
-    public Text unitsAvailableNumberText;
-    public Image hullSonarImage;
-    public Color hullSonarActivatedColor;
+    public Image hullSonarActivation;
+    public Image helicopterDestination;
+
+    public GameObject releaseInfo;
+    public GameObject standardActionInfo;
+    public GameObject helicopter;
+    public GameObject selectionHelicopter;
     public Transform submarine;
     public PinHandler pinHandler;
+    public BatimentController batimentScript;
 
     [HideInInspector] public Zone currentZone;
-    [HideInInspector] public bool isUsingHullSonar;
-    private int unitsAvailable;
-    private int unitEngagedOnControl;
-    private int unitEngagedOnHullSonar;
-    private int unitEngagedOnDeepSonar;
     private float currentSonarCharge;
-    private BatimentController batimentController;
-    private Color hullSonarBaseColor;
+    private float currentActivationTime;
     private Fregate fregate;
 
-    [Header("HullSonar")]
-    public float maxDetectionDistanceSubmarine;
-    public Color colorFar;
-    public Color colorClose;
-    [Space]
-    public GameObject colorFeedback;
+    private bool isUsingDeepSonar;
+    private bool isUsingHullSonar;
+    private bool isUsingHelicopter;
+    private bool deepSonarCoolingDown;
+    private bool hullSonarCoolingDown;
+    private bool helicopterCoolingDown;
 
-    private float submarineDistance;
-    
+    private bool resetSelect;
+
 
     void Start()
     {
         fregate = GetComponent<Fregate>();
-        unitEngagedOnDeepSonar = 0;
-        unitEngagedOnControl = 0;
-        unitEngagedOnHullSonar = 0;
-        unitsAvailable = maxUnitAvailable;
-        hullSonarBaseColor = hullSonarImage.color;
-        colorFeedback.SetActive(false);
     }
 
     void Update()
     {
         currentZone = ZoneHandler.GetCurrentZone(fregate.currentPosition);
 
-        fregate.unitsOnControl = unitEngagedOnControl;
+        //Hull Sonar
+        if (!isUsingHullSonar)
+        {
+            hullSonarActivation.fillAmount = 0;
+        }
+        else if (isUsingHullSonar)
+        {
+            if (!hullSonarCoolingDown)
+            {
+                UseHullSonar();
+                currentActivationTime += Time.deltaTime;
 
-        isUsingHullSonar = unitEngagedOnHullSonar >= 1;
+                if (currentActivationTime > hullSonarActivationTime)
+                {                  
+                    hullSonarCoolingDown = true;
+                }
 
-        unitsHullSonarNumberText.text = unitEngagedOnHullSonar.ToString();
-        unitsControlNumberText.text = unitEngagedOnControl.ToString();
-        unitsDeepSonarNumberText.text = unitEngagedOnDeepSonar.ToString();
-        unitsAvailableNumberText.text = unitsAvailable.ToString();
+                hullSonarActivation.fillAmount = currentActivationTime / hullSonarActivationTime;
+                hullSonarActivation.color = equipmentEnable;
+            }
+            else
+            {             
+                if (hullSonarActivation.fillAmount <= 0)
+                {
+                    currentActivationTime = 0;
+                    isUsingHullSonar = false;
+                    hullSonarCoolingDown = false;
+                }
 
-        if (unitEngagedOnDeepSonar == 0)
+                hullSonarActivation.fillAmount -= 1f / hullSonarCooldown * Time.deltaTime;
+                hullSonarActivation.color = equipmentCooldown;
+            }        
+        }
+
+        //Deep Sonar
+        if (!isUsingDeepSonar)
         {
             deepSonarCharge.fillAmount = 0;
         }
-        else if (unitEngagedOnDeepSonar == 1)
+        else if (isUsingDeepSonar)
         {
-            currentSonarCharge += Time.deltaTime;
-            if (currentSonarCharge > deepSonarChargeTime)
+            if (!deepSonarCoolingDown)
             {
-                UseSonar();
+                currentSonarCharge += Time.deltaTime;
+
+                if (currentSonarCharge > deepSonarChargeTime)
+                {
+                    UseDeepSonar();
+                    deepSonarCoolingDown = true;
+                }
+
+                deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
+                deepSonarCharge.color = equipmentEnable;
             }
-            deepSonarCharge.fillAmount = currentSonarCharge / deepSonarChargeTime;
+            else
+            {
+                if (deepSonarCharge.fillAmount <= 0)
+                {
+                    currentSonarCharge = 0;
+                    isUsingDeepSonar = false;
+                    deepSonarCoolingDown = false;
+                }
+
+                deepSonarCharge.fillAmount -= 1f / deepSonarCooldown * Time.deltaTime;
+                deepSonarCharge.color = equipmentCooldown;
+            }  
         }
 
-        submarineDistance = Vector2.Distance(fregate.currentPosition, SeaCoord.Planify(submarine.position));
-
-        if (submarineDistance <= maxDetectionDistanceSubmarine && unitEngagedOnHullSonar == 1)
+        //Helicopter
+        if (!isUsingHelicopter)
         {
-            ChangeColorOverDistance();
+            helicopterDestination.fillAmount = 0;
         }
         else
         {
-            colorFeedback.SetActive(false);
+            if (helicopter.GetComponent<Helicopter>().inMovement)
+            {
+                if (!resetSelect)
+                {
+                    resetSelect = true;
+                    batimentScript.batimentSelected = GetComponent<Fregate>();
+                    selectionHelicopter.SetActive(false);
+                }
+
+                if (!helicopterCoolingDown)
+                {
+                    releaseInfo.SetActive(false);
+                    standardActionInfo.SetActive(true);
+                    helicopterDestination.color = equipmentEnable;
+
+                    if (helicopterDestination.fillAmount >= 1)
+                    {
+                        helicopterCoolingDown = true;
+                    }
+
+                    helicopterDestination.fillAmount += 1f / helicopter.GetComponent<Helicopter>().timeBetweenPoints * Time.deltaTime;
+                }               
+            }
+            if (helicopterCoolingDown)
+            {
+                if (helicopterDestination.fillAmount <= 0)
+                {
+                    helicopterCoolingDown = false;
+                    isUsingHelicopter = false;
+                    resetSelect = false;
+                }
+
+                helicopterDestination.fillAmount -= 1f / helicopterCooldown * Time.deltaTime;
+                helicopterDestination.color = equipmentCooldown;
+
+            }
         }
     }
 
-    private void ChangeColorOverDistance()
-    {
-        colorFeedback.SetActive(true);
 
-        colorFeedback.transform.position = new Vector3(fregate.transform.position.x + 2, fregate.transform.position.y + 2, fregate.transform.position.z + 2);
-
-        colorFeedback.GetComponent<SpriteRenderer>().color = Color.Lerp(colorClose, colorFar, submarineDistance / maxDetectionDistanceSubmarine);
-    }
-
-    private void UseSonar()
+    private void UseDeepSonar()
     {
         int distanceStep = 1;
         float distance = Vector3.Distance(transform.position, submarine.transform.position);
@@ -135,44 +202,43 @@ public class FregateHandler : MonoBehaviour
         }
 
         pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
-        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
-        unitsAvailable++;
-        unitEngagedOnDeepSonar--;
-        currentSonarCharge = 0;
+        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);    
     }
 
-
-    public void AddControl(int value)
+    public void UseHullSonar()
     {
-        if (unitsAvailable - value >= 0 && unitsAvailable - value <= maxUnitAvailable && unitEngagedOnControl + value >= 0)
-        {
-            unitsAvailable -= value;
-            unitEngagedOnControl += value;
-        }
+        //put hull sonar behavior here
+    }
+
+    public void ActivateDeepSonar()
+    {
+        isUsingDeepSonar = true;
     }
 
     public void ActivateHullSonar()
     {
-        if (unitsAvailable > 0 && unitEngagedOnHullSonar == 0)
-        {
-            unitsAvailable--;
-            unitEngagedOnHullSonar++;
-            hullSonarImage.color = hullSonarActivatedColor;
-        }
-        else if (unitEngagedOnHullSonar == 1)
-        {
-            unitsAvailable++;
-            unitEngagedOnHullSonar--;
-            hullSonarImage.color = hullSonarBaseColor;
-        }
+        isUsingHullSonar = true;
     }
 
-    public void AddDeepSonar(int value)
+    public void StartHelicopterRelease()
     {
-        if (unitsAvailable > 0 && unitEngagedOnDeepSonar == 0)
-        {
-            unitsAvailable -= value;
-            unitEngagedOnDeepSonar += value;
-        }
+        isUsingHelicopter = true;
+
+        batimentScript.batimentSelected = helicopter.GetComponent<Helicopter>();
+        selectionHelicopter.SetActive(true);
+
+        releaseInfo.SetActive(true);
+        standardActionInfo.SetActive(false);
+    }
+
+    public void StopHelicopterRelease()
+    {
+        isUsingHelicopter = false;
+
+        batimentScript.batimentSelected = GetComponent<Fregate>();
+        selectionHelicopter.SetActive(false);
+
+        releaseInfo.SetActive(false);
+        standardActionInfo.SetActive(true);
     }
 }

@@ -11,7 +11,7 @@ public class PinHandler : MonoBehaviour
     public float minScreenDistancePinOpen;
     public OldTwoFregateHandler fregateHandler;
     public Image deepSonarDistanceImage;
-    public Text deepSonarDirectionText;
+    //public Text deepSonarDirectionText;
     public float timeBeforePinAutoDestroy;
 
     private List<Pin> pinPlaced;
@@ -106,7 +106,7 @@ public class PinHandler : MonoBehaviour
                 (newPin.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
                 DeepSonarPin sonarPin = newPin as DeepSonarPin;
                 deepSonarDistanceImage.sprite = fregateHandler.deepSonarDistanceStepImages[sonarPin.submarineDistanceStep - 1];
-                deepSonarDirectionText.text = sonarPin.submarineDirection;
+                //deepSonarDirectionText.text = sonarPin.submarineDirection;
                 break;
         }
     }

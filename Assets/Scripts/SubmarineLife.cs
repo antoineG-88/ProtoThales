@@ -52,34 +52,7 @@ public class SubmarineLife : MonoBehaviour
 
     private void Update()
     {
-        fregateDistance = Vector3.Distance(transform.position, fregate.transform.position);
-
-        if (fregateDistance <= damageDistance && fregate.GetComponent<FregateHandler>().isUsingHullSonar)
-        {
-            timer += Time.deltaTime;
-
-            if (indexStep != timeDecreaseEachStep.Length && timer >= timeDecreaseEachStep[indexStep])
-            {
-                DamageOverTime();
-                timer = 0;
-                indexStep++;
-            }
-
-            lifeBar.fillAmount = currentLife / maxLife;
-
-            if (currentLife > maxLife)
-            {
-                currentLife = maxLife;
-            }
-            if (currentLife < 0)
-            {
-                currentLife = 0;
-            }
-        }
-        else
-        {
-            timer = 0;
-        }
+        
     }
 
     private void DamageOverTime()

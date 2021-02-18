@@ -12,6 +12,7 @@ public class ActionHandler : MonoBehaviour
     public GameObject fregateMenu;
     public Fregate fregate;
     public Transform submarine;
+    public Helicopter helicopter;
 
 
     private BatimentController batimentController;
@@ -27,7 +28,14 @@ public class ActionHandler : MonoBehaviour
     {
         actionMenu.SetActive(batimentController.batimentSelected != null);
 
-        fregateMenu.SetActive(batimentController.batimentSelected == fregate);
+        if (batimentController.batimentSelected != helicopter)
+        {
+            fregateMenu.SetActive(batimentController.batimentSelected == fregate);
+        }
+        else
+        {
+            fregateMenu.SetActive(batimentController.batimentSelected == helicopter);
+        }
         patMarMenu.SetActive(batimentController.batimentSelected == patMar);
     }
 }

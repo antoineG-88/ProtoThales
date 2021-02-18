@@ -24,7 +24,7 @@ public class FregateHandler : MonoBehaviour
     public GameObject winPannel;
     public GameObject releaseInfo;
     public GameObject standardActionInfo;
-    public GameObject helicopter;
+    public Helicopter helicopter;
     public GameObject selectionHelicopter;
     public GameObject selectionFregate;
     public Transform submarine;
@@ -133,12 +133,12 @@ public class FregateHandler : MonoBehaviour
         {
             if (!helicopterCoolingDown)
             {
-                if (helicopter.GetComponent<Helicopter>().inMovement)
+                if (helicopter.inMovement)
                 {
                     if (!resetSelect)
                     {
                         resetSelect = true;
-                        batimentScript.batimentSelected = GetComponent<Fregate>();
+                        batimentScript.batimentSelected = fregate;
                         selectionFregate.SetActive(true);
                         selectionHelicopter.SetActive(false);
                     }
@@ -153,7 +153,7 @@ public class FregateHandler : MonoBehaviour
                         UseFlashHelicopter();
                     }
 
-                    helicopterDestination.fillAmount += 1f / helicopter.GetComponent<Helicopter>().timeBetweenPoints * Time.deltaTime;
+                    helicopterDestination.fillAmount += 1f / helicopter.timeBetweenPoints * Time.deltaTime;
                 }
             }         
             else
@@ -168,7 +168,7 @@ public class FregateHandler : MonoBehaviour
                 helicopterDestination.fillAmount -= 1f / helicopterCooldown * Time.deltaTime;
                 helicopterDestination.color = equipmentCooldown;
             }
-        }       
+        }
     }
 
 
@@ -222,7 +222,6 @@ public class FregateHandler : MonoBehaviour
 
         if (distanceSubmarine < helicopterFlashRadius)
         {
-            Time.timeScale = 0;
             winPannel.SetActive(true);
         }
         else
@@ -245,7 +244,7 @@ public class FregateHandler : MonoBehaviour
     {
         isUsingHelicopter = true;
 
-        batimentScript.batimentSelected = helicopter.GetComponent<Helicopter>();
+        batimentScript.batimentSelected = helicopter;
         selectionHelicopter.SetActive(true);
         selectionFregate.SetActive(false);
 
@@ -260,7 +259,7 @@ public class FregateHandler : MonoBehaviour
     {
         isUsingHelicopter = false;
 
-        batimentScript.batimentSelected = GetComponent<Fregate>();
+        batimentScript.batimentSelected = fregate;
         selectionHelicopter.SetActive(false);
         selectionFregate.SetActive(true);
 

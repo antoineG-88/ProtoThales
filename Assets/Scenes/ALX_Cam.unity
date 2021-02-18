@@ -10873,13 +10873,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destPreview: {fileID: 1176775202}
-  distanceToStop: 0.1
+  distanceToStop: 0.2
   currentDestination: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   currentDirection: {x: 0, y: 0}
   speed: 4
   turnSpeed: 300
   fregateHandler: {fileID: 2117067380}
+  fregate: {fileID: 2117067378}
+  batimentController: {fileID: 1361004100}
   timeBetweenPoints: 0
   inMovement: 0
 --- !u!1 &1941578567
@@ -11812,7 +11814,7 @@ MonoBehaviour:
   winPannel: {fileID: 904506882}
   releaseInfo: {fileID: 290055593}
   standardActionInfo: {fileID: 289183566}
-  helicopter: {fileID: 1937976231}
+  helicopter: {fileID: 1937976234}
   selectionHelicopter: {fileID: 85956671}
   selectionFregate: {fileID: 2089094068}
   submarine: {fileID: 8453990873405826951}

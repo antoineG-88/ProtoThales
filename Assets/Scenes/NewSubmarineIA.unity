@@ -14017,7 +14017,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3346655470423000787}
   m_Layer: 0
-  m_Name: InterestPoint
+  m_Name: UnusedInterestPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14654,13 +14654,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 1610035124}
-  interestPoints: []
+  interestPoints:
+  - position: {fileID: 3346655470491793324}
+    submarineCompletionTime: 2
+    submarineCompletionLocation: {fileID: 3346655470491793324}
+    submarineCompletionRange: 2
+    isComplete: 0
+    pathIndex: 4
+  - position: {fileID: 3346655471376949933}
+    submarineCompletionTime: 2
+    submarineCompletionLocation: {fileID: 3346655471376949933}
+    submarineCompletionRange: 2
+    isComplete: 0
+    pathIndex: 8
+  - position: {fileID: 3346655470901484942}
+    submarineCompletionTime: 2
+    submarineCompletionLocation: {fileID: 3346655470901484942}
+    submarineCompletionRange: 3
+    isComplete: 0
+    pathIndex: 10
+  - position: {fileID: 0}
+    submarineCompletionTime: 2
+    submarineCompletionLocation: {fileID: 0}
+    submarineCompletionRange: 0
+    isComplete: 0
+    pathIndex: 28
   pointReachRange: 1
   maxVigilance: 100
   alertVigilanceStep: 44.8
-  maxSpeed: 1
-  acceleration: 0.2
-  turnSpeed: 20
+  maxSpeed: 5
+  acceleration: 5
+  turnSpeed: 100
+  isUnderThermocline: 0
 --- !u!4 &8453990873405826951
 Transform:
   m_ObjectHideFlags: 0

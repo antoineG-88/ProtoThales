@@ -19,10 +19,16 @@ public class Submarine : MonoBehaviour
     private float currentAngle;
     private float currentSpeed;
     private Vector2 destinationDirection;
+    private Vector2 currentDestination;
     private int currentTurnSide;
+    private bool isOnInterestPoint;
+    private bool isNextInterestPoint;
+    private InterestPoint actualInterestPoint;
+    private int actualInterestPointIndex;
 
     private float vigilance;
-    private bool isUnderThermocline;
+    [HideInInspector] public bool isUnderThermocline;
+    private float currentCompletionTimeSpend;
 
     void Start()
     {
@@ -31,33 +37,85 @@ public class Submarine : MonoBehaviour
         transform.position = SeaCoord.GetFlatCoord(currentPosition);
         currentAngle = 0;
         currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
+        actualInterestPointIndex = 0;
+        actualInterestPoint = interestPoints[actualInterestPointIndex];
+        currentCompletionTimeSpend = 0;
     }
 
-    void Update()
+    private void Update()
     {
-        destinationDirection = SeaCoord.Planify(path.pathPosition[nextDestIndex].position) - currentPosition;
+        if(IsNextInterestPoint())
+        {
+            currentDestination = SeaCoord.Planify(actualInterestPoint.submarineCompletionLocation.position);
+        }
+        else
+        {
+            currentDestination = SeaCoord.Planify(path.pathPosition[nextDestIndex].position);
+        }
+        destinationDirection = currentDestination - currentPosition;
+        isNextInterestPoint = IsNextInterestPoint();
+
+    }
+
+    private void UpdateCompletion()
+    {
+        if (isOnInterestPoint)
+        {
+            if(currentCompletionTimeSpend < actualInterestPoint.submarineCompletionTime)
+            {
+                currentCompletionTimeSpend += Time.fixedDeltaTime;
+            }
+            else
+            {
+                CompleteActualInterestPoint();
+            }
+        }
     }
 
     private void FixedUpdate()
     {
+        UpdateCompletion();
         UpdateMovement();
+    }
+
+    private void CompleteActualInterestPoint()
+    {
+        actualInterestPoint.isComplete = true;
+        if(actualInterestPointIndex < interestPoints.Count)
+        {
+            actualInterestPointIndex++;
+            actualInterestPoint = interestPoints[actualInterestPointIndex];
+        }
+
+        if (nextDestIndex < path.pathPosition.Count - 1)
+        {
+            nextDestIndex++;
+        }
     }
 
     private void UpdateMovement()
     {
-        if (Vector2.Distance(currentPosition, SeaCoord.Planify(path.pathPosition[nextDestIndex].position)) < pointReachRange)
+        if((Vector2.Distance(currentPosition, currentDestination) < pointReachRange && !isNextInterestPoint)
+            || IsNextInterestPoint() && Vector2.Distance(currentPosition, currentDestination) < actualInterestPoint.submarineCompletionRange)
         {
-            if(nextDestIndex < path.pathPosition.Count - 1)
+            if (isNextInterestPoint)
             {
-                nextDestIndex++;
-            }
-
-            if (currentSpeed > 0)
-            {
-                currentSpeed -= acceleration * Time.fixedDeltaTime;
-                if (currentSpeed < 0)
+                if (currentSpeed > 0)
                 {
-                    currentSpeed = 0;
+                    currentSpeed -= acceleration * Time.fixedDeltaTime;
+                    if (currentSpeed < 0)
+                    {
+                        currentSpeed = 0;
+                    }
+                }
+
+                isOnInterestPoint = true;
+            }
+            else
+            {
+                if (nextDestIndex < path.pathPosition.Count - 1)
+                {
+                    nextDestIndex++;
                 }
             }
         }
@@ -98,9 +156,28 @@ public class Submarine : MonoBehaviour
 
             currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
             transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
+
+            if(isNextInterestPoint)
+            {
+                currentCompletionTimeSpend = 0;
+            }
+            isOnInterestPoint = false;
         }
 
         MoveForward(currentSpeed);
+    }
+
+    private bool IsNextInterestPoint()
+    {
+        bool isInterestPoint = false;
+        for (int i = 0; i < interestPoints.Count; i++)
+        {
+            if(interestPoints[i].pathIndex == nextDestIndex)
+            {
+                isInterestPoint = true;
+            }
+        }
+        return isInterestPoint;
     }
 
 
@@ -118,6 +195,8 @@ public class Submarine : MonoBehaviour
         public float submarineCompletionTime;
         public Transform submarineCompletionLocation;
         public float submarineCompletionRange;
+        public bool isComplete;
+        public int pathIndex;
     }
 
 }

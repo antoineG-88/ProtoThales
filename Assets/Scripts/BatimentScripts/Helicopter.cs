@@ -6,13 +6,17 @@ public class Helicopter : Batiment
 {
     public float speed;
     public float turnSpeed;
+    public FregateHandler fregateHandler;
+    public Fregate fregate;
+    public BatimentController batimentController;
 
     private int currentTurnSide;
 
     public float timeBetweenPoints;
     private float distance;
+    private Vector2 startPosition;
 
-    private bool start;
+    private bool startFlag;
     [HideInInspector] public bool inMovement;
 
     public override void Start()
@@ -24,6 +28,12 @@ public class Helicopter : Batiment
     public override void Update()
     {
         base.Update();
+
+        if (batimentController.isDragingDest)
+        {
+            currentPosition = fregate.currentPosition;
+            currentDestination = fregate.currentPosition;
+        }
     }
 
     private void FixedUpdate()
@@ -48,16 +58,28 @@ public class Helicopter : Batiment
 
             distance = Vector2.Distance(currentPosition, currentDestination);
 
-            if (!start)
+            startPosition = fregate.currentPosition;
+
+            if (!startFlag)
             {
-                start = true;
+                startFlag = true;
                 timeBetweenPoints = distance / speed;
+            }
+
+            if (fregateHandler.helicopterCoolingDown)
+            {
+                currentDestination = startPosition;
             }
         }
         else
         {
-            start = false;
+            startFlag = false;
             inMovement = false;
+
+            if (fregateHandler.helicopterCoolingDown)
+            {
+                currentDestination = startPosition;
+            }
         }
     }
 }

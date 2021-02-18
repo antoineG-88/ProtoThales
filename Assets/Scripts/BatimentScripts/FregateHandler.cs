@@ -33,7 +33,7 @@ public class FregateHandler : MonoBehaviour
     private Fregate fregate;
 
     private bool isUsingDeepSonar;
-    private bool isUsingHullSonar;
+    [HideInInspector] public bool isUsingHullSonar;
     private bool isUsingHelicopter;
     private bool deepSonarCoolingDown;
     private bool hullSonarCoolingDown;

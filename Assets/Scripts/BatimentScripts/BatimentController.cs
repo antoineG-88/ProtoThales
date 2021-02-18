@@ -20,6 +20,7 @@ public class BatimentController : MonoBehaviour
     private Vector2 startTouchPos;
     private Vector2 touchMovement;
     private bool isOverUI;
+    private bool wasDraging;
 
     void Start()
     {
@@ -68,7 +69,8 @@ public class BatimentController : MonoBehaviour
 
     private void Selection()
     {
-        if (InputDuo.tapUp && !isOverUI && touchMovement.magnitude < 10f && !patMarHandler.isWaitingForReleasePosChoice)
+
+        if (InputDuo.tapUp && !isOverUI && touchMovement.magnitude < 10f && !patMarHandler.isWaitingForReleasePosChoice && !wasDraging)
         {
             RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, touch.phase == TouchPhase.Ended);
             if (touchHit.collider != null)
@@ -86,6 +88,12 @@ public class BatimentController : MonoBehaviour
         if(batimentSelected != null)
         {
             selectionHighlighter.transform.position = SeaCoord.GetFlatCoord(batimentSelected.transform.position);
+        }
+
+
+        if (InputDuo.tapUp && wasDraging)
+        {
+            wasDraging = false;
         }
     }
 
@@ -128,6 +136,7 @@ public class BatimentController : MonoBehaviour
                 touchHit = InputDuo.SeaRaycast(surfaceLayer, touch.phase == TouchPhase.Ended);
                 batimentSelected.currentDestination = SeaCoord.Planify(touchHit.point);
                 isDragingDest = false;
+                wasDraging = true;
 
                 movementLine.enabled = false;
                 destinationPreview.SetActive(false);

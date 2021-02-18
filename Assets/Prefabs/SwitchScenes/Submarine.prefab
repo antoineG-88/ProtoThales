@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &919599825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 919599826}
+  - component: {fileID: 919599827}
+  m_Layer: 10
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &919599826
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919599825}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 467279029472586790}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &919599827
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919599825}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &467279029472586785
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,6 +73,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8299712061436245943}
+  - {fileID: 919599826}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,10 +89,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e23efd9f29980a43b03f7f5d66ba955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pinHandler: {fileID: 0}
+  fregate: {fileID: 0}
   path: {fileID: 0}
   interestPoints:
   - position: {fileID: 0}
-    submarineCompletionTime: 2
+    submarineCompletionTime: 50
     submarineCompletionLocation: {fileID: 0}
     submarineCompletionRange: 2
     isComplete: 0
@@ -71,12 +118,22 @@ MonoBehaviour:
     isComplete: 0
     pathIndex: 28
   pointReachRange: 1
-  maxVigilance: 100
-  alertVigilanceStep: 44.8
   maxSpeed: 5
+  slowSpeed: 0
   acceleration: 5
   turnSpeed: 100
+  maxVigilance: 100
+  alertVigilanceStep: 47.2
+  timeBetweenAlertScans: 20
+  alertScanRange: 30
+  scanAlertPinRandomOffset: 5
+  hideDuration: 10
+  currentPosition: {x: 0, y: 0}
+  isOnInterestPoint: 0
+  currentMaxSpeed: 0
+  vigilance: 0
   isUnderThermocline: 0
+  isHiding: 0
 --- !u!1 &8299712060393616153
 GameObject:
   m_ObjectHideFlags: 0

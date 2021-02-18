@@ -11,6 +11,7 @@ public class Submarine : MonoBehaviour
     public List<InterestPoint> interestPoints;
     public float pointReachRange;
     public float maxSpeed;
+    public float slowSpeed;
     public float acceleration;
     public float turnSpeed;
 
@@ -34,6 +35,7 @@ public class Submarine : MonoBehaviour
     private bool isNextInterestPoint;
     private InterestPoint actualInterestPoint;
     private int actualInterestPointIndex;
+    [HideInInspector] public float currentMaxSpeed;
 
     [HideInInspector] public float vigilance;
     [HideInInspector] public bool isUnderThermocline;
@@ -45,6 +47,7 @@ public class Submarine : MonoBehaviour
 
     void Start()
     {
+        currentMaxSpeed = maxSpeed;
         nextDestIndex = 1;
         currentPosition = SeaCoord.Planify(path.pathPosition[0].position);
         transform.position = SeaCoord.GetFlatCoord(currentPosition);
@@ -57,8 +60,20 @@ public class Submarine : MonoBehaviour
 
     private void Update()
     {
+        RefreshDest();
+
         currentZone = ZoneHandler.GetCurrentZone(currentPosition);
 
+        UpdateVigilance();
+
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            Alert(15);
+        }
+    }
+
+    private void RefreshDest()
+    {
         if (IsNextInterestPoint())
         {
             currentDestination = SeaCoord.Planify(actualInterestPoint.submarineCompletionLocation.position);
@@ -69,13 +84,6 @@ public class Submarine : MonoBehaviour
         }
         destinationDirection = currentDestination - currentPosition;
         isNextInterestPoint = IsNextInterestPoint();
-
-        UpdateVigilance();
-
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            Alert(15);
-        }
     }
 
     private void UpdateBehavior()
@@ -158,6 +166,7 @@ public class Submarine : MonoBehaviour
 
     private IEnumerator Hide()
     {
+        Debug.Log("hide");
         isHiding = true;
         yield return new WaitForSeconds(hideDuration);
         isHiding = false;
@@ -180,10 +189,10 @@ public class Submarine : MonoBehaviour
 
     private void UpdateMovement()
     {
-        if(isHiding)
+        if(!isHiding)
         {
             if ((Vector2.Distance(currentPosition, currentDestination) < pointReachRange && !isNextInterestPoint)
-                || IsNextInterestPoint() && Vector2.Distance(currentPosition, currentDestination) < actualInterestPoint.submarineCompletionRange)
+                || isNextInterestPoint && Vector2.Distance(currentPosition, currentDestination) < actualInterestPoint.submarineCompletionRange)
             {
                 if (isNextInterestPoint)
                 {
@@ -203,31 +212,32 @@ public class Submarine : MonoBehaviour
                     if (nextDestIndex < path.pathPosition.Count - 1)
                     {
                         nextDestIndex++;
+                        RefreshDest();
                     }
                 }
             }
             else
             {
-                if (currentSpeed <= maxSpeed)
+                if (currentSpeed <= currentMaxSpeed)
                 {
-                    if (currentSpeed < maxSpeed - acceleration * Time.fixedDeltaTime)
+                    if (currentSpeed < currentMaxSpeed - acceleration * Time.fixedDeltaTime)
                     {
                         currentSpeed += acceleration * Time.fixedDeltaTime;
                     }
                     else
                     {
-                        currentSpeed = maxSpeed;
+                        currentSpeed = currentMaxSpeed;
                     }
                 }
                 else
                 {
-                    if (currentSpeed > maxSpeed + acceleration * Time.fixedDeltaTime)
+                    if (currentSpeed > currentMaxSpeed + acceleration * Time.fixedDeltaTime)
                     {
                         currentSpeed -= acceleration * Time.fixedDeltaTime;
                     }
                     else
                     {
-                        currentSpeed = maxSpeed;
+                        currentSpeed = currentMaxSpeed;
                     }
                 }
 

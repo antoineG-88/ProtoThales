@@ -11,7 +11,7 @@ public class PinHandler : MonoBehaviour
     public GameObject scanAlertInfoPanelRectTransform;
     public GameObject mapPinPrefab;
     public float minScreenDistancePinOpen;
-    public OldTwoFregateHandler fregateHandler;
+    public FregateHandler fregateHandler;
     public Image deepSonarDistanceImage;
     //public Text deepSonarDirectionText;
     public float timeBeforePinAutoDestroy;

@@ -6,11 +6,13 @@ public class Helicopter : Batiment
 {
     public float speed;
     public float turnSpeed;
+    public FregateHandler fregateHandler;
 
     private int currentTurnSide;
 
     public float timeBetweenPoints;
     private float distance;
+    private Vector2 startPosition;
 
     private bool start;
     [HideInInspector] public bool inMovement;
@@ -52,12 +54,23 @@ public class Helicopter : Batiment
             {
                 start = true;
                 timeBetweenPoints = distance / speed;
+                startPosition = currentPosition;
             }
         }
         else
         {
             start = false;
             inMovement = false;
+
+            if (fregateHandler.isUsingHelicopter)
+            {
+
+            }
+
+            if (fregateHandler.helicopterCoolingDown)
+            {
+                currentDestination = startPosition;
+            }
         }
     }
 }

@@ -8,8 +8,10 @@ public class FregateHandler : MonoBehaviour
     public float hullSonarCooldown;
     public float deepSonarChargeTime;
     public float deepSonarCooldown;
-    public float helicopterDestinationTime;
     public float helicopterCooldown;
+    public float helicopterFlashRadius;
+    public float speedSubmarineSlowDown;
+    public float slowDownTime;
     public float[] deepSonarDistanceSteps;
     public Sprite[] deepSonarDistanceStepImages;
     public Color equipmentEnable;
@@ -19,10 +21,12 @@ public class FregateHandler : MonoBehaviour
     public Image hullSonarActivation;
     public Image helicopterDestination;
 
+    public GameObject winPannel;
     public GameObject releaseInfo;
     public GameObject standardActionInfo;
     public GameObject helicopter;
     public GameObject selectionHelicopter;
+    public GameObject selectionFregate;
     public Transform submarine;
     public PinHandler pinHandler;
     public BatimentController batimentScript;
@@ -34,10 +38,10 @@ public class FregateHandler : MonoBehaviour
 
     private bool isUsingDeepSonar;
     private bool isUsingHullSonar;
-    private bool isUsingHelicopter;
+    [HideInInspector] public bool isUsingHelicopter;
     private bool deepSonarCoolingDown;
     private bool hullSonarCoolingDown;
-    private bool helicopterCoolingDown;
+    [HideInInspector] public bool helicopterCoolingDown;
 
     private bool resetSelect;
 
@@ -45,6 +49,7 @@ public class FregateHandler : MonoBehaviour
     void Start()
     {
         fregate = GetComponent<Fregate>();
+        winPannel.SetActive(false);
     }
 
     void Update()
@@ -126,17 +131,18 @@ public class FregateHandler : MonoBehaviour
         }
         else
         {
-            if (helicopter.GetComponent<Helicopter>().inMovement)
+            if (!helicopterCoolingDown)
             {
-                if (!resetSelect)
+                if (helicopter.GetComponent<Helicopter>().inMovement)
                 {
-                    resetSelect = true;
-                    batimentScript.batimentSelected = GetComponent<Fregate>();
-                    selectionHelicopter.SetActive(false);
-                }
+                    if (!resetSelect)
+                    {
+                        resetSelect = true;
+                        batimentScript.batimentSelected = GetComponent<Fregate>();
+                        selectionFregate.SetActive(true);
+                        selectionHelicopter.SetActive(false);
+                    }
 
-                if (!helicopterCoolingDown)
-                {
                     releaseInfo.SetActive(false);
                     standardActionInfo.SetActive(true);
                     helicopterDestination.color = equipmentEnable;
@@ -144,12 +150,13 @@ public class FregateHandler : MonoBehaviour
                     if (helicopterDestination.fillAmount >= 1)
                     {
                         helicopterCoolingDown = true;
+                        UseFlashHelicopter();
                     }
 
                     helicopterDestination.fillAmount += 1f / helicopter.GetComponent<Helicopter>().timeBetweenPoints * Time.deltaTime;
-                }               
-            }
-            if (helicopterCoolingDown)
+                }
+            }         
+            else
             {
                 if (helicopterDestination.fillAmount <= 0)
                 {
@@ -160,9 +167,8 @@ public class FregateHandler : MonoBehaviour
 
                 helicopterDestination.fillAmount -= 1f / helicopterCooldown * Time.deltaTime;
                 helicopterDestination.color = equipmentCooldown;
-
             }
-        }
+        }       
     }
 
 
@@ -210,6 +216,21 @@ public class FregateHandler : MonoBehaviour
         //put hull sonar behavior here
     }
 
+    public void UseFlashHelicopter()
+    {
+        float distanceSubmarine = Vector3.Distance(helicopter.transform.position, submarine.transform.position);
+
+        if (distanceSubmarine < helicopterFlashRadius)
+        {
+            Time.timeScale = 0;
+            winPannel.SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(SlowDownSubmarine());
+        }
+    }
+
     public void ActivateDeepSonar()
     {
         isUsingDeepSonar = true;
@@ -226,9 +247,13 @@ public class FregateHandler : MonoBehaviour
 
         batimentScript.batimentSelected = helicopter.GetComponent<Helicopter>();
         selectionHelicopter.SetActive(true);
+        selectionFregate.SetActive(false);
 
-        releaseInfo.SetActive(true);
-        standardActionInfo.SetActive(false);
+        if (!helicopterCoolingDown)
+        {
+            releaseInfo.SetActive(true);
+            standardActionInfo.SetActive(false);
+        }
     }
 
     public void StopHelicopterRelease()
@@ -237,8 +262,18 @@ public class FregateHandler : MonoBehaviour
 
         batimentScript.batimentSelected = GetComponent<Fregate>();
         selectionHelicopter.SetActive(false);
+        selectionFregate.SetActive(true);
 
         releaseInfo.SetActive(false);
         standardActionInfo.SetActive(true);
+    }
+
+    IEnumerator SlowDownSubmarine()
+    {
+        float submarineSpeedBase = submarine.GetComponent<SubmarineMovement>().submarineSpeed;
+
+        submarine.GetComponent<SubmarineMovement>().submarineSpeed = speedSubmarineSlowDown;
+        yield return new WaitForSeconds(slowDownTime);
+        submarine.GetComponent<SubmarineMovement>().submarineSpeed = submarineSpeedBase;
     }
 }

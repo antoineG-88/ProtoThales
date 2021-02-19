@@ -14,6 +14,7 @@ public class Zone : MonoBehaviour
     public Color zoneEdgeColor;
     public float innerEdgesOffset;
     public float outlineSeaOffset;
+    public Transform iconPos;
 
     private List<Transform> edges;
     private Transform edgesParent;

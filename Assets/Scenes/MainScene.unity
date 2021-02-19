@@ -4654,7 +4654,7 @@ PrefabInstance:
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.93
+      value: -23.3
       objectReference: {fileID: 0}
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
@@ -4664,7 +4664,7 @@ PrefabInstance:
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.4
+      value: 13.59
       objectReference: {fileID: 0}
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
@@ -13896,7 +13896,7 @@ MonoBehaviour:
   maxTouchMovementToValidatePos: 10
   hasChosen1stPos: 0
   isChoosingTrapPositions: 0
-  flyTimeAvailable: 320
+  flyTimeAvailable: 120
   timeToReloadAtAirport: 30
   rangeAirport: 2
   airport: {fileID: 1844134587}
@@ -15689,7 +15689,7 @@ PrefabInstance:
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: interestPoints.Array.data[0].submarineCompletionTime
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
@@ -15714,12 +15714,12 @@ PrefabInstance:
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: interestPoints.Array.data[1].submarineCompletionTime
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: interestPoints.Array.data[2].submarineCompletionTime
-      value: 25
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
@@ -15759,7 +15759,7 @@ PrefabInstance:
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: moveToSafeLocationConsumption
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 467279029472586785, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
@@ -16506,14 +16506,14 @@ MonoBehaviour:
   destPreview: {fileID: 684795550}
   distanceToStop: 1
   zoneDetectionDistance: 2
-  zoneDetectionInterval: 0
+  zoneDetectionInterval: 1
   currentDestination: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   currentDirection: {x: 0, y: 0}
   reachedDest: 0
   canChangeDestination: 0
   movementSpeed: 1.2
-  windMovementSpeed: 0.5
+  windMovementSpeed: 0.7
   accelerationForce: 0.5
   turnSpeed: 50
   thrustParticle: {fileID: 1516163390}
@@ -16639,7 +16639,7 @@ MonoBehaviour:
   hullSonarCooldown: 25
   deepSonarChargeTime: 3
   deepSonarCooldown: 2
-  deepSonarVigilanceMaxIncrease: 20
+  deepSonarVigilanceMaxIncrease: 40
   helicopterCooldown: 2
   helicopterFlashRadius: 2
   slowDownTimeSonoFlash: 5

@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/NewSubmarineIA.unity
-    guid: 71dde1e2faa45504ea005e2022af2e24
+    path: Assets/Scenes/MainScene.unity
+    guid: 57ac7900e4bee1b49a4428c81fe7696e
   m_configObjects: {}

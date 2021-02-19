@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
     public float camMaxVerticalDistance;
     public float camIsometricMaxOffset;
     public float camIsometricMinOffset;
+    public Vector2 minMaxVerticalBounds;
+    public Vector2 minMaxHorizontalBounds;
 
     [Space]
     public float mouseZoomSpeed;
@@ -23,7 +25,7 @@ public class CameraController : MonoBehaviour
     private bool downTag;
     private bool startTouchRegistered;
     private Vector2 camSeaFocusPoint;
-    private float currentZoom;
+    [HideInInspector] public float currentZoom;
     private Vector2 currentFocusPoint;
 
     private void Start()
@@ -55,9 +57,9 @@ public class CameraController : MonoBehaviour
                 {
                     touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
                     camSeaFocusPoint += SeaCoord.Planify(touchMovement);
-
+                    camSeaFocusPoint = new Vector2(Mathf.Clamp(camSeaFocusPoint.x, minMaxHorizontalBounds.x, minMaxHorizontalBounds.y), Mathf.Clamp(camSeaFocusPoint.y, minMaxVerticalBounds.x, minMaxVerticalBounds.y));
                     //Limit Camera movement 
-                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
+                    //transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13, 13), transform.position.y, Mathf.Clamp(transform.position.z, -46, 14));
                 }
             }
             else
@@ -101,7 +103,7 @@ public class CameraController : MonoBehaviour
         //currentFocusPoint = Vector3.Lerp(currentFocusPoint, camSeaFocusPoint, lerpMoveRatio * Time.deltaTime);
 
         mainCamera.transform.position = SeaCoord.GetFlatCoord(camSeaFocusPoint) + Vector3.up * (camMinVerticalDistance + (currentZoom * (camMaxVerticalDistance - camMinVerticalDistance))) + new Vector3(0,0, -(camIsometricMinOffset + (currentZoom * (camIsometricMaxOffset - camIsometricMinOffset))));
-
+        
 
         mainCamera.transform.LookAt(SeaCoord.GetFlatCoord(camSeaFocusPoint));
     }

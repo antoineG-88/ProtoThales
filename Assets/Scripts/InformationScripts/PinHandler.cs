@@ -9,6 +9,7 @@ public class PinHandler : MonoBehaviour
     public RectTransform openPinRectTransform;
     public GameObject deepSonarInfoPanelRectTransform;
     public GameObject scanAlertInfoPanelRectTransform;
+    public GameObject sonoFlashAlertInfoPanelRectTransform;
     public GameObject mapPinPrefab;
     public float minScreenDistancePinOpen;
     public FregateHandler fregateHandler;
@@ -48,6 +49,16 @@ public class PinHandler : MonoBehaviour
     {
         Pin newPin = new Pin();
         newPin.type = Pin.Type.ScanAlert;
+        newPin.mapPosition = mapPosition;
+        newPin.rectTransform = Instantiate(mapPinPrefab, pinPanelRectTransform).GetComponent<RectTransform>();
+        pinPlaced.Add(newPin);
+        StartCoroutine(AutoDestroyPin(newPin));
+    }
+
+    public void CreateSonoFlashAlertPin(Vector2 mapPosition)
+    {
+        Pin newPin = new Pin();
+        newPin.type = Pin.Type.SonoFlashAlert;
         newPin.mapPosition = mapPosition;
         newPin.rectTransform = Instantiate(mapPinPrefab, pinPanelRectTransform).GetComponent<RectTransform>();
         pinPlaced.Add(newPin);
@@ -122,6 +133,12 @@ public class PinHandler : MonoBehaviour
                 openPinRectTransform.anchoredPosition = new Vector2((newPin.viewPortPos.x - 0.5f) * pinPanelRectTransform.sizeDelta.x,
                 (newPin.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
                 break;
+
+            case Pin.Type.SonoFlashAlert:
+                sonoFlashAlertInfoPanelRectTransform.gameObject.SetActive(true);
+                openPinRectTransform.anchoredPosition = new Vector2((newPin.viewPortPos.x - 0.5f) * pinPanelRectTransform.sizeDelta.x,
+                (newPin.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
+                break;
         }
     }
 
@@ -129,6 +146,7 @@ public class PinHandler : MonoBehaviour
     {
         deepSonarInfoPanelRectTransform.gameObject.SetActive(false);
         scanAlertInfoPanelRectTransform.gameObject.SetActive(false);
+        sonoFlashAlertInfoPanelRectTransform.gameObject.SetActive(false);
     }
 
     public void DestroyOpenedPin()
@@ -142,7 +160,7 @@ public class PinHandler : MonoBehaviour
     public class Pin
     {
         [System.Serializable]
-        public enum Type { DeepSonar , ScanAlert};
+        public enum Type { DeepSonar , ScanAlert, SonoFlashAlert};
 
         public Type type;
         public Vector2 mapPosition;

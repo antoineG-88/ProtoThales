@@ -32,7 +32,7 @@ public class Submarine : MonoBehaviour
 
     private int nextDestIndex;
     [HideInInspector] public Vector2 currentPosition;
-    private Vector2 currentDirection;
+    [HideInInspector] public Vector2 currentDirection;
     private float currentAngle;
     private float currentSpeed;
     private Vector2 destinationDirection;
@@ -53,6 +53,7 @@ public class Submarine : MonoBehaviour
     private float timeRemainingBeforeNextAlertScan;
     private Vector2 closeZonePos;
     private bool alertFlag;
+    [HideInInspector] public bool isImmobilized;
 
     void Start()
     {
@@ -65,6 +66,7 @@ public class Submarine : MonoBehaviour
         actualInterestPointIndex = 0;
         actualInterestPoint = interestPoints[actualInterestPointIndex];
         currentCompletionTimeSpend = 0;
+        isImmobilized = false;
     }
 
     private void Update()
@@ -114,30 +116,19 @@ public class Submarine : MonoBehaviour
 
     private void UpdateMovement()
     {
-        if ((Vector2.Distance(currentPosition, currentDestination) < pointReachRange && !isNextInterestPoint)
-            || isNextInterestPoint && Vector2.Distance(currentPosition, currentDestination) < actualInterestPoint.submarineCompletionRange)
+        if(!isImmobilized)
         {
-            if (isCustomDestination)
+            if ((Vector2.Distance(currentPosition, currentDestination) < pointReachRange && !isNextInterestPoint)
+                || isNextInterestPoint && Vector2.Distance(currentPosition, currentDestination) < actualInterestPoint.submarineCompletionRange)
             {
-                if (!isInAlert)
+                if (isCustomDestination)
                 {
-                    isCustomDestination = false;
-                }
-
-
-                if (currentSpeed > 0)
-                {
-                    currentSpeed -= acceleration * Time.fixedDeltaTime;
-                    if (currentSpeed < 0)
+                    if (!isInAlert)
                     {
-                        currentSpeed = 0;
+                        isCustomDestination = false;
                     }
-                }
-            }
-            else
-            {
-                if (isNextInterestPoint)
-                {
+
+
                     if (currentSpeed > 0)
                     {
                         currentSpeed -= acceleration * Time.fixedDeltaTime;
@@ -146,62 +137,87 @@ public class Submarine : MonoBehaviour
                             currentSpeed = 0;
                         }
                     }
-
-                    isOnInterestPoint = true;
                 }
                 else
                 {
-                    if (nextDestIndex < path.pathPosition.Count - 1)
+                    if (isNextInterestPoint)
                     {
-                        nextDestIndex++;
-                        RefreshDest();
+                        if (currentSpeed > 0)
+                        {
+                            currentSpeed -= acceleration * Time.fixedDeltaTime;
+                            if (currentSpeed < 0)
+                            {
+                                currentSpeed = 0;
+                            }
+                        }
+
+                        isOnInterestPoint = true;
+                    }
+                    else
+                    {
+                        if (nextDestIndex < path.pathPosition.Count - 1)
+                        {
+                            nextDestIndex++;
+                            RefreshDest();
+                        }
                     }
                 }
+            }
+            else
+            {
+                if (currentSpeed <= currentMaxSpeed)
+                {
+                    if (currentSpeed < currentMaxSpeed - acceleration * Time.fixedDeltaTime)
+                    {
+                        currentSpeed += acceleration * Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        currentSpeed = currentMaxSpeed;
+                    }
+                }
+                else
+                {
+                    if (currentSpeed > currentMaxSpeed + acceleration * Time.fixedDeltaTime)
+                    {
+                        currentSpeed -= acceleration * Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        currentSpeed = currentMaxSpeed;
+                    }
+                }
+
+                if (Vector2.Angle(currentDirection, destinationDirection) > Time.fixedDeltaTime * turnSpeed)
+                {
+                    currentTurnSide = Vector2.SignedAngle(currentDirection, destinationDirection) > 0 ? 1 : -1;
+                    currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnSpeed;
+                }
+                else
+                {
+                    currentDirection = destinationDirection;
+                }
+
+                currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
+                transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
+
+                if (isNextInterestPoint)
+                {
+                    currentCompletionTimeSpend = 0;
+                }
+                isOnInterestPoint = false;
             }
         }
         else
         {
-            if (currentSpeed <= currentMaxSpeed)
+            if (currentSpeed > 0)
             {
-                if (currentSpeed < currentMaxSpeed - acceleration * Time.fixedDeltaTime)
+                currentSpeed -= acceleration * Time.fixedDeltaTime;
+                if (currentSpeed < 0)
                 {
-                    currentSpeed += acceleration * Time.fixedDeltaTime;
-                }
-                else
-                {
-                    currentSpeed = currentMaxSpeed;
+                    currentSpeed = 0;
                 }
             }
-            else
-            {
-                if (currentSpeed > currentMaxSpeed + acceleration * Time.fixedDeltaTime)
-                {
-                    currentSpeed -= acceleration * Time.fixedDeltaTime;
-                }
-                else
-                {
-                    currentSpeed = currentMaxSpeed;
-                }
-            }
-
-            if (Vector2.Angle(currentDirection, destinationDirection) > Time.fixedDeltaTime * turnSpeed)
-            {
-                currentTurnSide = Vector2.SignedAngle(currentDirection, destinationDirection) > 0 ? 1 : -1;
-                currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnSpeed;
-            }
-            else
-            {
-                currentDirection = destinationDirection;
-            }
-
-            currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
-            transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
-
-            if (isNextInterestPoint)
-            {
-                currentCompletionTimeSpend = 0;
-            }
-            isOnInterestPoint = false;
         }
 
         MoveForward(currentSpeed);
@@ -254,6 +270,13 @@ public class Submarine : MonoBehaviour
     {
         currentPosition += currentDirection * speed * Time.fixedDeltaTime;
         transform.position = SeaCoord.GetFlatCoord(currentPosition);
+    }
+
+    public IEnumerator Immobilize(float time)
+    {
+        isImmobilized = true;
+        yield return new WaitForSeconds(time);
+        isImmobilized = false;
     }
 
     #endregion

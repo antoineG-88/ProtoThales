@@ -20,17 +20,11 @@ public class Zone : MonoBehaviour
     private Vector2 testVector;
     private LineRenderer edgeLine;
 
-    void Start()
+    private void Awake()
     {
         testVector = Vector2.one;
-
         GetEdges();
         CreateEdgeLine();
-    }
-
-    void Update()
-    {
-
     }
 
     private void GetEdges()

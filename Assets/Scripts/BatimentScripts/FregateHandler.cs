@@ -51,6 +51,7 @@ public class FregateHandler : MonoBehaviour
         fregate = GetComponent<Fregate>();
         winPannel.SetActive(false);
         helicopter.gameObject.SetActive(false);
+        currentZone = ZoneHandler.GetCurrentZone(fregate.currentPosition);
     }
 
     void Update()

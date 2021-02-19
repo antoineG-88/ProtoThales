@@ -8,7 +8,7 @@ public class ZoneHandler : MonoBehaviour
     public List<Zone> mapZones;
 
 
-    private void Start()
+    private void Awake()
     {
         zones = mapZones;
     }

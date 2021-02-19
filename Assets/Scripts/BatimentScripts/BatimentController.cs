@@ -21,6 +21,7 @@ public class BatimentController : MonoBehaviour
     private Vector2 touchMovement;
     private bool isOverUI;
     private bool wasDraging;
+    [HideInInspector] public bool isMoving;
 
     void Start()
     {
@@ -99,7 +100,7 @@ public class BatimentController : MonoBehaviour
 
     private void Destination()
     {
-        if(batimentSelected != null)
+        if (batimentSelected != null && batimentSelected.canChangeDestination)
         {
             RaycastHit touchHit;
             if (InputDuo.tapDown)
@@ -137,9 +138,14 @@ public class BatimentController : MonoBehaviour
                 batimentSelected.currentDestination = SeaCoord.Planify(touchHit.point);
                 isDragingDest = false;
                 wasDraging = true;
+                isMoving = true;
 
                 movementLine.enabled = false;
                 destinationPreview.SetActive(false);
+            }
+            else
+            {
+                isMoving = false;
             }
         }
     }

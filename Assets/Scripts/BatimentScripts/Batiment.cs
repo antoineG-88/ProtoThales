@@ -18,8 +18,11 @@ public class Batiment : MonoBehaviour
     protected float currentSpeed;
     protected Vector2 destinationDirection;
 
+    [HideInInspector] public bool canChangeDestination;
+
     public virtual void Start()
     {
+        canChangeDestination = true;
         destinationLine = GetComponent<LineRenderer>();
         destinationLine.enabled = false;
         currentPosition = SeaCoord.Planify(transform.position);

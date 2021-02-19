@@ -13,6 +13,13 @@ public class PatMar : Batiment
     public float patrolStartAngleOffset;
 
     private int currentTurnSide;
+
+    [HideInInspector] public bool canFly;
+    [HideInInspector] public bool arrivedAtDestination;
+    [HideInInspector] public bool patmarIsReloading;
+
+    public BatimentController batimentController;
+
     private bool isNearDest;
     private bool hasPassedDest;
     private Vector2 patrolStartDestination;
@@ -30,6 +37,13 @@ public class PatMar : Batiment
     public override void Update()
     {
         base.Update();
+
+        if (batimentController.isMoving && !patmarIsReloading)
+        {
+            canFly = true;
+        }
+
+        arrivedAtDestination = reachedDest;
     }
 
     private void FixedUpdate()
@@ -47,7 +61,7 @@ public class PatMar : Batiment
                 hasPassedDest = true;
             }
         }
-        else
+        if (patmarIsReloading)
         {
             isNearDest = false;
             hasPassedDest = false;

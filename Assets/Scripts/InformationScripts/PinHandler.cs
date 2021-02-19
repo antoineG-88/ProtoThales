@@ -13,7 +13,6 @@ public class PinHandler : MonoBehaviour
     public float minScreenDistancePinOpen;
     public FregateHandler fregateHandler;
     public Image deepSonarDistanceImage;
-    //public Text deepSonarDirectionText;
     public float timeBeforePinAutoDestroy;
 
     private List<Pin> pinPlaced;
@@ -33,11 +32,9 @@ public class PinHandler : MonoBehaviour
         UpdatePinOpen();
     }
 
-    public void CreateDeepSonarPin(int distanceStep, string submarineDirection, Vector2 fregateDirection, Vector2 mapPosition)
+    public void CreateDeepSonarPin(int distanceStep, Vector2 mapPosition)
     {
         DeepSonarPin deepSonarPin = new DeepSonarPin();
-        deepSonarPin.submarineDirection = submarineDirection;
-        deepSonarPin.fregateDirection = fregateDirection;
         deepSonarPin.submarineDistanceStep = distanceStep;
         deepSonarPin.type = Pin.Type.DeepSonar;
         deepSonarPin.mapPosition = mapPosition;
@@ -118,7 +115,6 @@ public class PinHandler : MonoBehaviour
                 (newPin.viewPortPos.y - 0.5f) * pinPanelRectTransform.sizeDelta.y);
                 DeepSonarPin sonarPin = newPin as DeepSonarPin;
                 deepSonarDistanceImage.sprite = fregateHandler.deepSonarDistanceStepImages[sonarPin.submarineDistanceStep - 1];
-                //deepSonarDirectionText.text = sonarPin.submarineDirection;
                 break;
 
             case Pin.Type.ScanAlert:
@@ -158,14 +154,15 @@ public class PinHandler : MonoBehaviour
     public class DeepSonarPin : Pin
     {
         public int submarineDistanceStep;
-        public string submarineDirection;
-        public Vector2 fregateDirection;
     }
 
     public IEnumerator AutoDestroyPin(Pin pin)
     {
         yield return new WaitForSeconds(timeBeforePinAutoDestroy);
-        Destroy(pin.rectTransform.gameObject);
-        pinPlaced.Remove(pin);
+        if(pin.rectTransform != null)
+        {
+            Destroy(pin.rectTransform.gameObject);
+            pinPlaced.Remove(pin);
+        }
     }
 }

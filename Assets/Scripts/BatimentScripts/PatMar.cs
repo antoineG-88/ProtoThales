@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class PatMar : Batiment
 {
-
-    public float speed;
-    public float turnSpeed;
+    public float maxSpeed;
+    public float slowMaxSpeed;
+    public float accelerationForce;
+    public float patrolStartRange;
+    public float turnRatio;
+    public float turnRatioReferenceSpeed;
+    public float patrolStartAngleOffset;
 
     private int currentTurnSide;
-
+    private bool isNearDest;
+    private bool hasPassedDest;
+    private Vector2 patrolStartDestination;
+    private bool patrolFlag;
+    private float currentMaxSpeed;
+    private bool isInPatrol;
+    private Vector2 currentDestDirection;
     public override void Start()
     {
         base.Start();
-        currentSpeed = speed;
+        currentSpeed = maxSpeed;
+        currentMaxSpeed = maxSpeed;
     }
 
     public override void Update()
@@ -23,15 +34,67 @@ public class PatMar : Batiment
 
     private void FixedUpdate()
     {
-
-        if (Vector2.Angle(currentDirection, destinationDirection) > Time.fixedDeltaTime * turnSpeed)
+        if(IsStormInFront())
         {
-            currentTurnSide = Vector2.SignedAngle(currentDirection, destinationDirection) > 0 ? 1 : -1;
-            currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnSpeed;
+            currentDestination = currentPosition + destinationDirection * -3;
+        }
+
+        if(Vector2.Distance(currentPosition, currentDestination) < patrolStartRange + 1)
+        {
+            isNearDest = true;
+            if (Vector2.Distance(currentPosition, currentDestination) < distanceToStop)
+            {
+                hasPassedDest = true;
+            }
         }
         else
         {
-            currentDirection = destinationDirection;
+            isNearDest = false;
+            hasPassedDest = false;
+        }
+
+        if(hasPassedDest && isNearDest)
+        {
+            currentMaxSpeed = slowMaxSpeed;
+            currentDestDirection = destinationDirection;
+        }
+        else
+        {
+            currentMaxSpeed = maxSpeed;
+            currentDestDirection = destinationDirection;
+        }
+
+        if (currentSpeed <= currentMaxSpeed)
+        {
+            if (currentSpeed < currentMaxSpeed - accelerationForce * Time.fixedDeltaTime)
+            {
+                currentSpeed += accelerationForce * Time.fixedDeltaTime;
+            }
+            else
+            {
+                currentSpeed = currentMaxSpeed;
+            }
+        }
+        else
+        {
+            if (currentSpeed > currentMaxSpeed + accelerationForce * Time.fixedDeltaTime)
+            {
+                currentSpeed -= accelerationForce * Time.fixedDeltaTime;
+            }
+            else
+            {
+                currentSpeed = currentMaxSpeed;
+            }
+        }
+
+        if (Vector2.Angle(currentDirection, currentDestDirection) > Time.fixedDeltaTime * turnRatio * (turnRatioReferenceSpeed / (currentSpeed / 3)))
+        {
+            currentTurnSide = Vector2.SignedAngle(currentDirection, currentDestDirection) > 0 ? 1 : -1;
+            currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnRatio * (turnRatioReferenceSpeed / (currentSpeed / 3));
+        }
+        else
+        {
+            currentDirection = currentDestDirection;
         }
 
 
@@ -39,5 +102,12 @@ public class PatMar : Batiment
         transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
 
         MoveForward(currentSpeed);
+    }
+
+
+    private bool IsStormInFront()
+    {
+        Zone zone = ZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance);
+        return (zone != null && zone.currentWeather == Zone.Weather.Storm) || zone == null;
     }
 }

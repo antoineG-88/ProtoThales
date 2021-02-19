@@ -8,9 +8,9 @@ public class FregateHandler : MonoBehaviour
     public float hullSonarCooldown;
     public float deepSonarChargeTime;
     public float deepSonarCooldown;
+    public float deepSonarVigilanceMaxIncrease;
     public float helicopterCooldown;
     public float helicopterFlashRadius;
-    public float speedSubmarineSlowDown;
     public float slowDownTimeSonoFlash;
     public float[] deepSonarDistanceSteps;
     public Sprite[] deepSonarDistanceStepImages;
@@ -50,6 +50,7 @@ public class FregateHandler : MonoBehaviour
     {
         fregate = GetComponent<Fregate>();
         winPannel.SetActive(false);
+        helicopter.gameObject.SetActive(false);
     }
 
     void Update()
@@ -65,7 +66,6 @@ public class FregateHandler : MonoBehaviour
         {
             if (!hullSonarCoolingDown)
             {
-                UseHullSonar();
                 currentActivationTime += Time.deltaTime;
 
                 if (currentActivationTime > hullSonarActivationTime)
@@ -155,6 +155,11 @@ public class FregateHandler : MonoBehaviour
 
                     helicopterDestination.fillAmount += 1f / helicopter.timeBetweenPoints * Time.deltaTime;
                 }
+                else
+                {
+                    helicopter.currentPosition = fregate.currentPosition;
+                    helicopter.transform.position = SeaCoord.GetFlatCoord(helicopter.currentPosition);
+                }
             }         
             else
             {
@@ -163,6 +168,7 @@ public class FregateHandler : MonoBehaviour
                     helicopterCoolingDown = false;
                     isUsingHelicopter = false;
                     resetSelect = false;
+                    helicopter.gameObject.SetActive(false);
                 }
 
                 helicopterDestination.fillAmount -= 1f / helicopterCooldown * Time.deltaTime;
@@ -176,7 +182,6 @@ public class FregateHandler : MonoBehaviour
     {
         int distanceStep = 1;
         float distance = Vector2.Distance(submarine.currentPosition, fregate.currentPosition);
-        string direction = "unknown";
 
         for (int i = 0; i < deepSonarDistanceSteps.Length; i++)
         {
@@ -186,39 +191,15 @@ public class FregateHandler : MonoBehaviour
             }
         }
 
-        float angle = Vector2.SignedAngle(fregate.currentDirection, SeaCoord.Planify(submarine.transform.position - fregate.transform.position));
-        if (Mathf.Abs(angle) >= 135)
-        {
-            direction = "derrière";
-        }
-        if (Mathf.Abs(angle) < 45)
-        {
-            direction = "devant";
-        }
-        if (Mathf.Abs(angle) >= 45 && Mathf.Abs(angle) < 135)
-        {
-            if (angle > 0)
-            {
-                direction = "bâbord";
-            }
-            else
-            {
-                direction = "tribord";
-            }
-        }
+        pinHandler.CreateDeepSonarPin(distanceStep, fregate.currentPosition);
+        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
 
-        pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
-        Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);    
-    }
-
-    public void UseHullSonar()
-    {
-        //put hull sonar behavior here
+        submarine.Alert(deepSonarVigilanceMaxIncrease * Mathf.Clamp((0.2f + (1 - Mathf.Clamp((distance / deepSonarDistanceSteps[deepSonarDistanceSteps.Length - 1]), 0f, 1f))), 0f, 1f));
     }
 
     public void UseFlashHelicopter()
     {
-        float distanceSubmarine = Vector3.Distance(helicopter.transform.position, submarine.transform.position);
+        float distanceSubmarine = Vector2.Distance(helicopter.currentPosition, submarine.currentPosition);
 
         if (distanceSubmarine < helicopterFlashRadius)
         {
@@ -245,8 +226,12 @@ public class FregateHandler : MonoBehaviour
         isUsingHelicopter = true;
 
         batimentScript.batimentSelected = helicopter;
+        helicopter.gameObject.SetActive(true);
         selectionHelicopter.SetActive(true);
         selectionFregate.SetActive(false);
+        helicopter.currentPosition = fregate.currentPosition;
+        helicopter.transform.position = SeaCoord.GetFlatCoord(helicopter.currentPosition);
+        helicopter.currentDestination = helicopter.currentPosition;
 
         if (!helicopterCoolingDown)
         {
@@ -260,7 +245,7 @@ public class FregateHandler : MonoBehaviour
         isUsingHelicopter = false;
 
         batimentScript.batimentSelected = fregate;
-        selectionHelicopter.SetActive(false);
+        helicopter.gameObject.SetActive(false);
         selectionFregate.SetActive(true);
 
         releaseInfo.SetActive(false);

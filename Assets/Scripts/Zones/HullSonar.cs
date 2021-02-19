@@ -158,11 +158,6 @@ public class HullSonar : MonoBehaviour
                 {
                     isTargetValid = false;
                 }
-
-                if (submarine.isHiding)
-                {
-                    isTargetValid = false;
-                }
             }
 
             if(isTargetValid)

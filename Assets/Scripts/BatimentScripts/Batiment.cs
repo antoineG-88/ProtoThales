@@ -6,6 +6,7 @@ public class Batiment : MonoBehaviour
 {
     public GameObject destPreview;
     public float distanceToStop;
+    public float zoneDetectionDistance;
 
     [HideInInspector] public Vector2 currentDestination;
     [HideInInspector] public Vector2 currentPosition;

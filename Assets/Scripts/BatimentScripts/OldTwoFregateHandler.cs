@@ -100,7 +100,7 @@ public class OldTwoFregateHandler : MonoBehaviour
     {
         int distanceStep = 1;
         float distance = Vector3.Distance(transform.position, submarine.transform.position);
-        string direction = "unknown";
+        /*string direction = "unknown";
 
         for (int i = 0; i < deepSonarDistanceSteps.Length; i++)
         {
@@ -129,9 +129,9 @@ public class OldTwoFregateHandler : MonoBehaviour
             {
                 direction = "tribord";
             }
-        }
+        }*/
 
-        pinHandler.CreateDeepSonarPin(distanceStep, direction, fregate.currentDirection, fregate.currentPosition);
+        pinHandler.CreateDeepSonarPin(distanceStep, fregate.currentPosition);
         Instantiate(sonarEffectPrefab, fregate.transform.position + Vector3.up * 0.1f, Quaternion.identity);
         unitsAvailable++;
         unitEngagedOnDeepSonar--;

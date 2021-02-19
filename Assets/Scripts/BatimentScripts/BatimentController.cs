@@ -11,11 +11,16 @@ public class BatimentController : MonoBehaviour
     public GameObject destinationPreview;
     public PatMarHandler patMarHandler;
 
-    [HideInInspector] public Batiment batimentSelected;
+    public Batiment batimentSelected;
     private Touch touch;
     private LineRenderer movementLine;
 
-    private bool isDragingDest;
+    [HideInInspector] public bool isDragingDest;
+    private TouchPhase lastTouchPhase;
+    private Vector2 startTouchPos;
+    private Vector2 touchMovement;
+    private bool isOverUI;
+    [HideInInspector] public bool wasDraging;
 
     void Start()
     {
@@ -28,6 +33,31 @@ public class BatimentController : MonoBehaviour
 
     void Update()
     {
+        if (InputDuo.tapDown)
+        {
+            if (Input.GetButtonDown("LeftClick"))
+            {
+                startTouchPos = Input.mousePosition;
+            }
+            else
+            {
+                startTouchPos = InputDuo.touch.position;
+            }
+            isOverUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+        }
+        if (InputDuo.tapHold)
+        {
+            if(Input.GetButton("LeftClick"))
+            {
+                touchMovement = (Vector2)Input.mousePosition - startTouchPos;
+            }
+            else
+            {
+                lastTouchPhase = InputDuo.touch.phase;
+                touchMovement = InputDuo.touch.position - startTouchPos;
+            }
+        }
+
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
@@ -39,9 +69,9 @@ public class BatimentController : MonoBehaviour
 
     private void Selection()
     {
-        if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && !patMarHandler.isWaitingForReleasePosChoice)
+        if (InputDuo.tapUp && !isOverUI && touchMovement.magnitude < 10f && !patMarHandler.isChoosingTrapPositions && !wasDraging)
         {
-            RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
+            RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, touch.phase == TouchPhase.Ended);
             if (touchHit.collider != null)
             {
                 batimentSelected = touchHit.collider.transform.GetComponentInParent<Batiment>();
@@ -58,11 +88,17 @@ public class BatimentController : MonoBehaviour
         {
             selectionHighlighter.transform.position = SeaCoord.GetFlatCoord(batimentSelected.transform.position);
         }
+
+
+        if (InputDuo.tapUp && wasDraging)
+        {
+            wasDraging = false;
+        }
     }
 
     private void Destination()
     {
-        if(batimentSelected != null)
+        if (batimentSelected != null && batimentSelected.canChangeDestination)
         {
             RaycastHit touchHit;
             if (InputDuo.tapDown)
@@ -99,6 +135,7 @@ public class BatimentController : MonoBehaviour
                 touchHit = InputDuo.SeaRaycast(surfaceLayer, touch.phase == TouchPhase.Ended);
                 batimentSelected.currentDestination = SeaCoord.Planify(touchHit.point);
                 isDragingDest = false;
+                wasDraging = true;
 
                 movementLine.enabled = false;
                 destinationPreview.SetActive(false);

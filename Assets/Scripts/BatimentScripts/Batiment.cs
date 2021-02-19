@@ -6,6 +6,8 @@ public class Batiment : MonoBehaviour
 {
     public GameObject destPreview;
     public float distanceToStop;
+    public float zoneDetectionDistance;
+    public float zoneDetectionInterval;
 
     [HideInInspector] public Vector2 currentDestination;
     [HideInInspector] public Vector2 currentPosition;
@@ -13,17 +15,21 @@ public class Batiment : MonoBehaviour
 
     protected float currentAngle;
     protected LineRenderer destinationLine;
-    protected bool reachedDest;
+    [HideInInspector] public bool reachedDest;
     protected float currentSpeed;
     protected Vector2 destinationDirection;
 
+    [HideInInspector] public bool canChangeDestination;
+
     public virtual void Start()
     {
+        canChangeDestination = true;
         destinationLine = GetComponent<LineRenderer>();
         destinationLine.enabled = false;
         currentPosition = SeaCoord.Planify(transform.position);
         currentAngle = 0;
         currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
+        currentDestination = SeaCoord.Planify(destPreview.transform.position);
     }
 
     public virtual void Update()

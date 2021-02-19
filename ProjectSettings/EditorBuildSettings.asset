@@ -5,13 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/ReferenceScene.unity
-    guid: 1b386838c52a74d4ab871b05c44d0773
-  - enabled: 0
-    path: Assets/Scenes/BatimentTestScene.unity
-    guid: 28a0899026a1f8a45b8aad63a3f791ab
   - enabled: 1
-    path: Assets/Scenes/Proto2MergeScene.unity
-    guid: 73ef4d6833fc50d44ad8ae215b1129de
+    path: Assets/Scenes/MainScene.unity
+    guid: 57ac7900e4bee1b49a4428c81fe7696e
   m_configObjects: {}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SubmarinePath : MonoBehaviour
+public class OldSubmarinePath : MonoBehaviour
 {
     private void OnDrawGizmos()
     {

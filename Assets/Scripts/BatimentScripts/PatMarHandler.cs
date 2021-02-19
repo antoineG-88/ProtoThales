@@ -29,10 +29,24 @@ public class PatMarHandler : MonoBehaviour
     [HideInInspector] public bool isWaitingForReleasePosChoice;
     private bool isReleasingSonobuoy;
 
+    [Header("Airport Settings")]
+    public float flyTimeAvailable;
+    public float timeToReloadAtAirport;
+    public float rangeAirport;
+    public GameObject airport;
+    public Image fuelLevel;
+    private bool EnoughFarFromAirport;
+    private bool dontBackToAirport;
+    private bool hadComeBackManually;
+
     void Start()
     {
         patMar = GetComponent<PatMar>();
         currentSonoRemaining = maxSonoCapacity;
+        fuelLevel.fillAmount = 1;
+
+        patMar.currentPosition = SeaCoord.Planify(airport.transform.position);
+        patMar.currentDestination = SeaCoord.Planify(airport.transform.position);
     }
 
 
@@ -95,6 +109,38 @@ public class PatMarHandler : MonoBehaviour
         {
             releasePosPreview.SetActive(false);
         }
+
+        //Fuel Level
+        if (patMar.canFly)
+        {          
+            fuelLevel.fillAmount -= 1f / flyTimeAvailable * Time.deltaTime;
+
+            if (fuelLevel.fillAmount <= 0)
+            {
+                BackToAirport();
+                EnoughFarFromAirport = false;
+            }
+
+            float patmarDistanceAiport = Vector2.Distance(transform.position, airport.transform.position);
+
+            if (patmarDistanceAiport > rangeAirport * 2)
+            {
+                EnoughFarFromAirport = true;
+            }
+            if (EnoughFarFromAirport && patmarDistanceAiport < rangeAirport)
+            {
+                if (!dontBackToAirport)
+                {
+                    hadComeBackManually = true;
+                    BackToAirport();
+                }
+            }
+        }
+        if (patMar.patmarIsReloading)
+        {
+            ReloadPatmar();
+        }
+
     }
 
 
@@ -132,5 +178,41 @@ public class PatMarHandler : MonoBehaviour
 
         Sonobuoy releasedSonobuoy = Instantiate(sonobuoyPrefab, SeaCoord.GetFlatCoord(patMar.currentPosition), Quaternion.identity).GetComponent<Sonobuoy>();
         releasedSonobuoy.submarine = submarine;
+    }
+
+    private void BackToAirport()
+    {
+        patMar.currentDestination = SeaCoord.Planify(airport.transform.position);
+        patMar.canChangeDestination = false;
+
+        if (patMar.arrivedAtDestination)
+        {
+            dontBackToAirport = true;
+            EnoughFarFromAirport = false;
+            patMar.canFly = false;
+            patMar.patmarIsReloading = true;          
+        }
+    }
+
+    private void ReloadPatmar()
+    {
+        patMar.currentDestination = SeaCoord.Planify(airport.transform.position);
+
+        if (hadComeBackManually)
+        {
+            fuelLevel.fillAmount += 1f / (timeToReloadAtAirport / 2) * Time.deltaTime;
+        }
+        else
+        {
+            fuelLevel.fillAmount += 1f / timeToReloadAtAirport * Time.deltaTime;
+        }
+
+        if (fuelLevel.fillAmount >= 1)
+        {
+            dontBackToAirport = false;
+            patMar.canChangeDestination = true;
+            patMar.patmarIsReloading = false;
+            hadComeBackManually = false;
+        }
     }
 }

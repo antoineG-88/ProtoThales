@@ -10,6 +10,12 @@ public class PatMar : Batiment
 
     private int currentTurnSide;
 
+    [HideInInspector] public bool canFly;
+    [HideInInspector] public bool arrivedAtDestination;
+    [HideInInspector] public bool patmarIsReloading;
+
+    public BatimentController batimentController;
+
     public override void Start()
     {
         base.Start();
@@ -19,25 +25,41 @@ public class PatMar : Batiment
     public override void Update()
     {
         base.Update();
+
+        if (batimentController.isMoving && !patmarIsReloading)
+        {
+            canFly = true;
+        }
+
+        arrivedAtDestination = reachedDest;
     }
 
     private void FixedUpdate()
     {
-
-        if (Vector2.Angle(currentDirection, destinationDirection) > Time.fixedDeltaTime * turnSpeed)
+        if (canFly)
         {
-            currentTurnSide = Vector2.SignedAngle(currentDirection, destinationDirection) > 0 ? 1 : -1;
-            currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnSpeed;
+            if (Vector2.Angle(currentDirection, destinationDirection) > Time.fixedDeltaTime * turnSpeed)
+            {
+                currentTurnSide = Vector2.SignedAngle(currentDirection, destinationDirection) > 0 ? 1 : -1;
+                currentAngle = Vector2.SignedAngle(Vector2.right, currentDirection) + currentTurnSide * Time.fixedDeltaTime * turnSpeed;
+            }
+            else
+            {
+                currentDirection = destinationDirection;
+            }
+
+
+            currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
+            transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
+
+            MoveForward(currentSpeed);
         }
-        else
+        if (patmarIsReloading)
         {
-            currentDirection = destinationDirection;
+            transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            currentAngle = 0;
+            currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
         }
-
-
-        currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
-        transform.rotation = SeaCoord.SetRotation(transform.rotation, -currentAngle + 90);
-
-        MoveForward(currentSpeed);
     }
 }

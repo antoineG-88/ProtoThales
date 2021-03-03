@@ -160,6 +160,7 @@ public class Submarine : MonoBehaviour
                             nextDestIndex++;
                             RefreshDest();
                         }
+                        isOnInterestPoint = false;
                     }
                 }
             }
@@ -206,6 +207,7 @@ public class Submarine : MonoBehaviour
                     currentCompletionTimeSpend = 0;
                 }
                 isOnInterestPoint = false;
+                currentCompletionTimeSpend = 0;
             }
         }
         else
@@ -249,6 +251,7 @@ public class Submarine : MonoBehaviour
             else
             {
                 CompleteActualInterestPoint();
+                currentCompletionTimeSpend = 0;
             }
         }
     }

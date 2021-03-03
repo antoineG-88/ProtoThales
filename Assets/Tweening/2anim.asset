@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed2f2ecbafe45f47988832ee5865aa2, type: 3}
+  m_Name: 2anim
+  m_EditorClassIdentifier: 
+  animationTime: 0.5
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.002193451
+      value: 0.0020141602
+      inSlope: -0.012518223
+      outSlope: -0.012518223
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.5866434
+    - serializedVersion: 3
+      time: 0.2750803
+      value: 0.23241758
+      inSlope: 2.0434926
+      outSlope: 2.0434926
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.20322062
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.49551064
+      value: 0.77348834
+      inSlope: 1.2486991
+      outSlope: 1.2486991
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1697668
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  animationStartPos: {x: -433.48, y: -694}
+  animationEndPos: {x: 187.09, y: -431}
+  animationStartRot: 0
+  animationEndRot: 0
+  colorAnimation:
+    serializedVersion: 2
+    key0: {r: 0.3450556, g: 0.3250267, b: 0.8301887, a: 1}
+    key1: {r: 0.09350568, g: 0.038180854, b: 0.20754719, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  isImage: 1
+  colorImage: {fileID: 0}
+  colorText: {fileID: 0}

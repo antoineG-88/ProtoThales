@@ -53,7 +53,7 @@ public class PatMarHandler : MonoBehaviour
     {
         patMar = GetComponent<PatMar>();
         currentSonoRemaining = maxSonoCapacity;
-        flyTimeRemaining = flyTimeAvailable - 20;
+        flyTimeRemaining = flyTimeAvailable;
     }
     void Update()
     {

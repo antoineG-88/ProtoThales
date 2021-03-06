@@ -8,8 +8,14 @@ public class TweeningAnim : ScriptableObject
 {
     public float animationTime;
     public AnimationCurve animationCurve;
+    public AnimationCurve rotAnimationCurve;
+    public AnimationCurve scaleAnimationCurve;
+    public bool customRotCurve;
+    public bool customScaleCurve;
     public Vector2 animationStartPos;
     public Vector2 animationEndPos;
+    public Vector3 animationStartScale;
+    public Vector3 animationEndScale;
     public float animationStartRot;
     public float animationEndRot;
     public Gradient colorAnimation;
@@ -43,9 +49,11 @@ public class TweeningAnim : ScriptableObject
             }
             animatedTransform.anchoredPosition = Vector2.Lerp(animationStartPos, animationEndPos, animationCurve.Evaluate(time / animationTime));
 
-            animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationStartRot), Quaternion.Euler(0, 0, animationEndRot), animationCurve.Evaluate(time / animationTime));
+            animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationStartRot), Quaternion.Euler(0, 0, animationEndRot), customRotCurve ? rotAnimationCurve.Evaluate(time / animationTime) : animationCurve.Evaluate(time / animationTime));
 
-            if(canvasGroup != null)
+            animatedTransform.localScale = Vector3.Lerp(animationStartScale, animationEndScale, customScaleCurve ? scaleAnimationCurve.Evaluate(time / animationTime) : animationCurve.Evaluate(time / animationTime));
+
+            if (canvasGroup != null)
             {
                 canvasGroup.alpha = colorAnimation.Evaluate(time / animationTime).a;
             }
@@ -55,6 +63,7 @@ public class TweeningAnim : ScriptableObject
         }
         animatedTransform.anchoredPosition = animationEndPos;
         animatedTransform.localRotation = Quaternion.Euler(0, 0, animationEndRot);
+        animatedTransform.localScale = animationEndScale;
 
         if (isImage)
         {
@@ -100,12 +109,14 @@ public class TweeningAnim : ScriptableObject
             if(onlyInversePos)
             {
                 animatedTransform.anchoredPosition = Vector2.Lerp(animationEndPos, animationStartPos, animationCurve.Evaluate(time / animationTime));
-                animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationEndRot), Quaternion.Euler(0, 0, animationStartRot), animationCurve.Evaluate(time / animationTime));
+                animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationEndRot), Quaternion.Euler(0, 0, animationStartRot), customRotCurve ? rotAnimationCurve.Evaluate(time / animationTime) : animationCurve.Evaluate(time / animationTime));
+                animatedTransform.localScale = Vector3.Lerp(animationEndScale, animationStartScale, customScaleCurve ? scaleAnimationCurve.Evaluate(time / animationTime) : animationCurve.Evaluate(time / animationTime));
             }
             else
             {
                 animatedTransform.anchoredPosition = Vector2.Lerp(animationStartPos, animationEndPos, animationCurve.Evaluate(1 - (time / animationTime)));
-                animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationStartRot), Quaternion.Euler(0, 0, animationEndRot), animationCurve.Evaluate(1 - (time / animationTime)));
+                animatedTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0, 0, animationStartRot), Quaternion.Euler(0, 0, animationEndRot), customRotCurve ? rotAnimationCurve.Evaluate(1 - (time / animationTime)) : animationCurve.Evaluate(1 - (time / animationTime)));
+                animatedTransform.localScale = Vector3.Lerp(animationStartScale, animationEndScale, customScaleCurve ? scaleAnimationCurve.Evaluate(1- (time / animationTime)) : animationCurve.Evaluate(1 - (time / animationTime)));
             }
 
             if (canvasGroup != null)
@@ -118,6 +129,7 @@ public class TweeningAnim : ScriptableObject
         }
         animatedTransform.anchoredPosition = animationStartPos;
         animatedTransform.localRotation = Quaternion.Euler(0, 0, animationStartRot);
+        animatedTransform.localScale = animationStartScale;
 
         if (isImage)
         {

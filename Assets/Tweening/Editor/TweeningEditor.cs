@@ -15,7 +15,41 @@ public class TweeningEditor : Editor
         GUILayout.Space(10);
 
         tweeningAnimCreator.animationTime = EditorGUILayout.FloatField("Animation Time", tweeningAnimCreator.animationTime);
-        tweeningAnimCreator.animationCurve = EditorGUILayout.CurveField("Animation Curve", tweeningAnimCreator.animationCurve);
+        tweeningAnimCreator.animationCurve = EditorGUILayout.CurveField("Global Animation Curve", tweeningAnimCreator.animationCurve);
+
+        if(tweeningAnimCreator.customRotCurve)
+        {
+            GUILayout.BeginHorizontal();
+        }
+
+        tweeningAnimCreator.customRotCurve = EditorGUILayout.Toggle("Custom Rotation anim curve", tweeningAnimCreator.customRotCurve);
+        if (tweeningAnimCreator.customRotCurve)
+        {
+            if (GUILayout.Button("Copy global curve"))
+            {
+                tweeningAnimCreator.rotAnimationCurve = tweeningAnimCreator.animationCurve;
+            }
+            GUILayout.EndHorizontal();
+            tweeningAnimCreator.rotAnimationCurve = EditorGUILayout.CurveField("Rotation animation curve", tweeningAnimCreator.rotAnimationCurve);
+        }
+
+
+        if (tweeningAnimCreator.customScaleCurve)
+        {
+            GUILayout.BeginHorizontal();
+        }
+
+        tweeningAnimCreator.customScaleCurve = EditorGUILayout.Toggle("Custom Scale anim curve", tweeningAnimCreator.customScaleCurve);
+        if (tweeningAnimCreator.customScaleCurve)
+        {
+            if (GUILayout.Button("Copy global curve"))
+            {
+                tweeningAnimCreator.scaleAnimationCurve = tweeningAnimCreator.animationCurve;
+            }
+            GUILayout.EndHorizontal();
+            tweeningAnimCreator.scaleAnimationCurve = EditorGUILayout.CurveField("Scale animation curve", tweeningAnimCreator.scaleAnimationCurve);
+        }
+
         tweeningAnimCreator.colorAnimation = EditorGUILayout.GradientField("Color Animation", tweeningAnimCreator.colorAnimation);
         tweeningAnimCreator.isImage = EditorGUILayout.Toggle("Modify color on Image ?", tweeningAnimCreator.isImage);
 
@@ -23,6 +57,7 @@ public class TweeningEditor : Editor
 
         EditorGUILayout.Vector2Field("Animation Start Position", tweeningAnimCreator.animationStartPos);
         EditorGUILayout.FloatField("Animation Start Rotation", tweeningAnimCreator.animationStartRot);
+        EditorGUILayout.Vector3Field("Animation Start Scale", tweeningAnimCreator.animationStartScale);
 
         if (GUILayout.Button("Save Animation Start"))
         {
@@ -33,11 +68,13 @@ public class TweeningEditor : Editor
 
         EditorGUILayout.Vector2Field("Animation End Position", tweeningAnimCreator.animationEndPos);
         EditorGUILayout.FloatField("Animation End Rotation", tweeningAnimCreator.animationEndRot);
+        EditorGUILayout.Vector3Field("Animation End Scale", tweeningAnimCreator.animationEndScale);
 
         if (GUILayout.Button("Save Animation End"))
         {
             tweeningAnimCreator.SaveEnd();
         }
+
 
         GUILayout.Space(15);
 

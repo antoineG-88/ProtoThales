@@ -9,10 +9,16 @@ public class TweeningAnimCreator : MonoBehaviour
 {
     [HideInInspector] public float animationTime;
     [HideInInspector] public AnimationCurve animationCurve;
+    [HideInInspector] public AnimationCurve rotAnimationCurve;
+    [HideInInspector] public AnimationCurve scaleAnimationCurve;
+    [HideInInspector] public bool customRotCurve;
+    [HideInInspector] public bool customScaleCurve;
     [HideInInspector] public Gradient colorAnimation;
     [HideInInspector] public bool isImage;
     [HideInInspector] public Vector2 animationStartPos;
     [HideInInspector] public Vector2 animationEndPos;
+    [HideInInspector] public Vector3 animationStartScale;
+    [HideInInspector] public Vector3 animationEndScale;
     [HideInInspector] public float animationStartRot;
     [HideInInspector] public float animationEndRot;
 
@@ -34,6 +40,7 @@ public class TweeningAnimCreator : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         animationStartPos = rectTransform.anchoredPosition;
         animationStartRot = rectTransform.localRotation.eulerAngles.z;
+        animationStartScale = rectTransform.localScale;
     }
 
     public void SaveEnd()
@@ -41,6 +48,7 @@ public class TweeningAnimCreator : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         animationEndPos = rectTransform.anchoredPosition;
         animationEndRot = rectTransform.localRotation.eulerAngles.z;
+        animationEndScale = rectTransform.localScale;
     }
 
     public void CreateAnimation()
@@ -54,8 +62,14 @@ public class TweeningAnimCreator : MonoBehaviour
         anim.isImage = isImage;
         anim.animationEndRot = animationEndRot;
         anim.animationStartRot = animationStartRot;
+        anim.animationStartScale = animationStartScale;
+        anim.animationEndScale = animationEndScale;
+        anim.customRotCurve = customRotCurve;
+        anim.customScaleCurve = customScaleCurve;
+        anim.scaleAnimationCurve = customScaleCurve ? scaleAnimationCurve : animationCurve;
+        anim.rotAnimationCurve = customRotCurve ? rotAnimationCurve : animationCurve;
 
-        string path = AssetDatabase.GetAssetPath(Selection.activeContext);
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID());
         if (path == "")
         {
             path = "Assets";

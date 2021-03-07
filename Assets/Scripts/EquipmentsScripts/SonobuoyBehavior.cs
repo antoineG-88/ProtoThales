@@ -73,42 +73,53 @@ public class SonobuoyBehavior : MonoBehaviour
 
     private void Scan()
     {
+        bool atLeastOneObjectDetected = false;
+        int idendityIndex = 0;
+
         for (int i = 0; i < objectsCanBeDetected.Length; i++)
         {
             distance = Vector2.Distance(SeaCoord.Planify(objectsCanBeDetected[i].transform.position), SeaCoord.Planify(transform.position));
 
             if (distance < sonobuoyRange)
             {
-                if (!flagObjectInsideRange)
+                atLeastOneObjectDetected = true;
+                idendityIndex = i;
+
+                if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
                 {
-                    flagObjectInsideRange = true;
-                    rangeSprite.color = sonobuoyElementDetect;
                     objectInsideRange.Add(objectsCanBeDetected[i]);
                 }
+            }
+            else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+            {
+                objectInsideRange.Remove(objectsCanBeDetected[i]);
+            }
+        }
 
-                MadAbove();
-                if (madIsAboveSonobuoy)
-                {
-                    identifyImage.sprite = objectsCanBeDetectedSprite[i];
-                }
-                else
-                {
-                    identifyImage.sprite = null;
-                }
+        if (atLeastOneObjectDetected)
+        {
+            rangeSprite.color = sonobuoyElementDetect;
+
+            MadAbove();
+            if (madIsAboveSonobuoy)
+            {
+                identifyImage.sprite = objectsCanBeDetectedSprite[idendityIndex];
             }
             else
             {
                 identifyImage.sprite = null;
-                flagObjectInsideRange = false;
-                rangeSprite.color = sonobuoyNoElement;
-                objectInsideRange.Remove(objectsCanBeDetected[i]);
             }
+        }
+        else
+        {
+            identifyImage.sprite = null;
+            rangeSprite.color = sonobuoyNoElement;
         }
     }
 
     private void MadAbove()
     {
-        float distanceFromMad = Vector2.Distance(SeaCoord.Planify(madScript.gameObject.transform.position), SeaCoord.Planify(transform.position));
+        float distanceFromMad = Vector2.Distance(SeaCoord.Planify(madScript.transform.position), SeaCoord.Planify(transform.position));
 
         if (distanceFromMad < sonobuoyRange)
         {

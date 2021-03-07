@@ -28,11 +28,11 @@ public class BatimentSelection : MonoBehaviour
     private void Update()
     {
         selectionDisplay.position = SeaCoord.GetFlatCoord(batimentSelected.batimentMovement.currentPosition);
-        if(fregateSelectCard.isClicked)
+        if(fregateSelectCard.isHovered)
         {
             SelectBatiment(true);
         }
-        if(patMarSelectCard.isClicked)
+        if(patMarSelectCard.isHovered)
         {
             SelectBatiment(false);
         }
@@ -52,8 +52,8 @@ public class BatimentSelection : MonoBehaviour
                 StartCoroutine(patMarActionPanelAnim.anim.PlayBackward(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup, true));
                 StartCoroutine(fregateSelectAnim.anim.Play(fregateSelectAnim.rectTransform, null));
                 StartCoroutine(patMarSelectAnim.anim.PlayBackward(patMarSelectAnim.rectTransform, null, true));
-                patMarActionPanelAnim.canvasGroup.interactable = false;
-                fregateActionPanelAnim.canvasGroup.interactable = true;
+                patMarActionPanelAnim.canvasGroup.blocksRaycasts = false;
+                fregateActionPanelAnim.canvasGroup.blocksRaycasts = true;
             }
             else
             {
@@ -61,8 +61,8 @@ public class BatimentSelection : MonoBehaviour
                 StartCoroutine(fregateActionPanelAnim.anim.PlayBackward(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup, true));
                 StartCoroutine(patMarSelectAnim.anim.Play(patMarSelectAnim.rectTransform, null));
                 StartCoroutine(fregateSelectAnim.anim.PlayBackward(fregateSelectAnim.rectTransform, null, true));
-                patMarActionPanelAnim.canvasGroup.interactable = true;
-                fregateActionPanelAnim.canvasGroup.interactable = false;
+                patMarActionPanelAnim.canvasGroup.blocksRaycasts = true;
+                fregateActionPanelAnim.canvasGroup.blocksRaycasts = false;
             }
         }
     }

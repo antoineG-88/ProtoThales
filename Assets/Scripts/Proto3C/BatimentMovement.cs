@@ -38,7 +38,7 @@ public class BatimentMovement : MonoBehaviour
         destinationDirection = currentDestination - currentPosition;
         destinationDirection.Normalize();
 
-        if (!reachedDest && !destinationCard.isDraging)
+        if (!reachedDest && !destinationCard.isDragged)
         {
             destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
             destinationLine.enabled = true;
@@ -46,7 +46,7 @@ public class BatimentMovement : MonoBehaviour
             destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f);
         }
 
-        if (reachedDest && !destinationCard.isDraging)
+        if (reachedDest && !destinationCard.isDragged)
         {
             destinationLine.enabled = false;
         }
@@ -56,7 +56,7 @@ public class BatimentMovement : MonoBehaviour
             currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
         }
 
-        if(destinationCard.isDraging)
+        if(destinationCard.isDragged)
         {
             destPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point);
             destinationLine.enabled = true;

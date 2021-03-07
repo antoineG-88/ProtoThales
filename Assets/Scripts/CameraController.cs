@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount < 2 && !batimentSelection.fregateMovement.destinationCard.isFocused && !batimentSelection.patMarMovement.destinationCard.isFocused)
+        if (Input.touchCount < 2 && !UICard.pointerFocusedOnCard)
         {
             if (downTag)
             {

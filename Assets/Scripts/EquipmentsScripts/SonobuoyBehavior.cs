@@ -33,11 +33,10 @@ public class SonobuoyBehavior : MonoBehaviour
     private bool flagObjectInsideRange;
     private bool madIsAboveSonobuoy;
 
-    private MadBehavior madScript;
+    [HideInInspector] public MadBehavior madScript;
 
     private void Start()
     {
-        madScript = GameObject.FindGameObjectWithTag("Mad").GetComponent<MadBehavior>();
         madScript.sonobuoys.Add(gameObject);
         objectsCanBeDetected = madScript.objectsCanBeDetected;
         objectsCanBeDetectedSprite = madScript.objectsCanBeDetectedSprite;

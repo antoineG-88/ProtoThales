@@ -27,7 +27,7 @@ public class TweeningAnim : ScriptableObject
     {
         float time = 0;
         animatedTransform.anchoredPosition = animationStartPos;
-
+        
         if(isImage)
         {
             colorImage = animatedTransform.GetComponent<Image>();
@@ -36,12 +36,15 @@ public class TweeningAnim : ScriptableObject
         {
             colorText = animatedTransform.GetComponent<Text>();
         }
-
         while(time < animationTime)
         {
             if(isImage)
             {
                 colorImage.color = colorAnimation.Evaluate(time / animationTime);
+                if(canvasGroup != null)
+                {
+                    colorImage.color = new Color(colorImage.color.r, colorImage.color.g, colorImage.color.b, 1);
+                }
             }
             else
             {
@@ -68,6 +71,10 @@ public class TweeningAnim : ScriptableObject
         if (isImage)
         {
             colorImage.color = colorAnimation.Evaluate(1);
+            if (canvasGroup != null)
+            {
+                colorImage.color = new Color(colorImage.color.r, colorImage.color.g, colorImage.color.b, 1);
+            }
         }
         else
         {
@@ -100,6 +107,10 @@ public class TweeningAnim : ScriptableObject
             if (isImage)
             {
                 colorImage.color = colorAnimation.Evaluate(1 - (time / animationTime));
+                if (canvasGroup != null)
+                {
+                    colorImage.color = new Color(colorImage.color.r, colorImage.color.g, colorImage.color.b, 1);
+                }
             }
             else
             {
@@ -134,6 +145,10 @@ public class TweeningAnim : ScriptableObject
         if (isImage)
         {
             colorImage.color = colorAnimation.Evaluate(0);
+            if (canvasGroup != null)
+            {
+                colorImage.color = new Color(colorImage.color.r, colorImage.color.g, colorImage.color.b, 1);
+            }
         }
         else
         {

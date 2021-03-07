@@ -156,7 +156,7 @@ public class HelicopterBehavior : MonoBehaviour
 
     private void FlashHelicopter()
     {
-        float distanceSubmarine = Vector2.Distance(submarine.position, transform.position);
+        float distanceSubmarine = Vector3.Distance(submarine.position, transform.position);
 
         if (distanceSubmarine < flashRange)
         {

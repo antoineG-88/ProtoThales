@@ -4654,7 +4654,7 @@ PrefabInstance:
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.3
+      value: -11.83
       objectReference: {fileID: 0}
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
@@ -4664,7 +4664,7 @@ PrefabInstance:
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.59
+      value: 19.56
       objectReference: {fileID: 0}
     - target: {fileID: 433457186800105366, guid: 265bcdcf3357e7a49a1ce17ca7cb6aa5,
         type: 3}
@@ -15709,7 +15709,7 @@ PrefabInstance:
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
       propertyPath: turnSpeed
-      value: 80
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 467279029472586784, guid: 81edcdd227ec3474199a4c82995dc2f8,
         type: 3}
@@ -16638,9 +16638,9 @@ MonoBehaviour:
   hullSonarActivationTime: 2
   hullSonarCooldown: 25
   deepSonarChargeTime: 3
-  deepSonarCooldown: 2
-  deepSonarVigilanceMaxIncrease: 40
-  helicopterCooldown: 2
+  deepSonarCooldown: 5
+  deepSonarVigilanceMaxIncrease: 30
+  helicopterCooldown: 5
   helicopterFlashRadius: 2
   slowDownTimeSonoFlash: 5
   deepSonarDistanceSteps:

@@ -3,7 +3,8 @@
 public class CameraController : MonoBehaviour
 {
     private Vector3 startTouch;
-    public BatimentController batimentControllerScript;
+    //public BatimentController batimentControllerScript;
+    public BatimentSelection batimentSelection;
 
     [Header("Zoom Settings")]
     public float camMinVerticalDistance;
@@ -24,9 +25,9 @@ public class CameraController : MonoBehaviour
 
     private bool downTag;
     private bool startTouchRegistered;
-    private Vector2 camSeaFocusPoint;
+    [HideInInspector] public Vector2 camSeaFocusPoint;
     [HideInInspector] public float currentZoom;
-    private Vector2 currentFocusPoint;
+    [HideInInspector] public Vector2 currentFocusPoint;
 
     private void Start()
     {
@@ -37,7 +38,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount < 2 && !batimentControllerScript.isDragingDest)
+        if (Input.touchCount < 2 && !UICard.pointerFocusedOnCard)
         {
             if (downTag)
             {
@@ -70,6 +71,7 @@ public class CameraController : MonoBehaviour
         else
         {
             startTouchRegistered = false;
+            downTag = false;
         }
 
         Zoom(Input.GetAxis("Mouse ScrollWheel") * mouseZoomSpeed);

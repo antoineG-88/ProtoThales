@@ -25,6 +25,8 @@ public class FregateController : MonoBehaviour
     private bool touchTag;
     private Touch touch;
 
+    [HideInInspector] public bool cantControl;
+
     private void Start()
     {
         fregateHandler = GetComponent<OldFregateHandler>();
@@ -36,47 +38,47 @@ public class FregateController : MonoBehaviour
 
     private void Update()
     {
-
-
-        if ((Input.GetButtonUp("LeftClick") || touch.phase == TouchPhase.Ended) && touchTag)
+        if (!cantControl)
         {
-            touchTag = false;
-            if(!Statics.inMenu)
+            if ((Input.GetButtonUp("LeftClick") || touch.phase == TouchPhase.Ended) && touchTag)
             {
-                RaycastHit touchHit;
-                Ray screenRay;
-                if (Input.GetButtonUp("LeftClick"))
+                touchTag = false;
+                if (!Statics.inMenu)
                 {
-                    screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-                }
-                else
-                {
+                    RaycastHit touchHit;
+                    Ray screenRay;
+                    if (Input.GetButtonUp("LeftClick"))
+                    {
+                        screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+                    }
+                    else
+                    {
 
-                    screenRay = mainCamera.ScreenPointToRay(touch.position);
-                }
+                        screenRay = mainCamera.ScreenPointToRay(touch.position);
+                    }
 
-                if (Physics.Raycast(screenRay, out touchHit, 200f, surfaceLayer))
-                {
-                    targetTransform.position = new Vector3(touchHit.point.x, 0, touchHit.point.z);
+                    if (Physics.Raycast(screenRay, out touchHit, 200f, surfaceLayer))
+                    {
+                        targetTransform.position = new Vector3(touchHit.point.x, 0, touchHit.point.z);
+                    }
                 }
             }
-        }
 
-        if (!Statics.inMenu)
-        {
-            if(Input.GetButtonDown("LeftClick"))
-                touchTag = true;
-
-            if (Input.touchCount > 0)
+            if (!Statics.inMenu)
             {
-                touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
+                if (Input.GetButtonDown("LeftClick"))
                     touchTag = true;
+
+                if (Input.touchCount > 0)
+                {
+                    touch = Input.GetTouch(0);
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        touchTag = true;
+                    }
                 }
             }
         }
-
 
         isAccelerating = Vector3.Distance(Planify(transform.position), Planify(targetTransform.position)) > slowDownDistance;
         targetDirection = new Vector2(targetTransform.position.x - transform.position.x, targetTransform.position.z - transform.position.z);

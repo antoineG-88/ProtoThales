@@ -7,7 +7,7 @@ public class HullSonarBehavior : MonoBehaviour
     [Header ("Sweep")]
     public float sweepSpeed;
     public float sonarDistanceDetection;
-    public LayerMask surfaceLayer;
+    public LayerMask underWaterElements;
 
     [Space]
     public GameObject sonarDisplay;
@@ -21,6 +21,8 @@ public class HullSonarBehavior : MonoBehaviour
     private void Start()
     {
         colliderObjectSonar = new List<Collider>();
+        sonarDisplay.transform.localScale = Vector3.one * sonarDistanceDetection / 5;
+        sweepEndPoint.position = new Vector3(sonarDistanceDetection, sweep.position.y, sweep.position.z);
     }
 
     private void Update()
@@ -55,7 +57,7 @@ public class HullSonarBehavior : MonoBehaviour
         Vector3 direction = (sweepEndPoint.position - sonarDisplay.transform.position).normalized;
         //Debug.DrawLine(sonarDisplay.transform.position, sonarDisplay.transform.position + direction * sonarDistanceDetection, Color.red);
 
-        RaycastHit[] raycastHitArray = Physics.RaycastAll(sonarDisplay.transform.position, direction, sonarDistanceDetection, surfaceLayer);
+        RaycastHit[] raycastHitArray = Physics.RaycastAll(sonarDisplay.transform.position, direction, sonarDistanceDetection, underWaterElements);
         foreach(RaycastHit raycastHit in raycastHitArray)
         {
             if(raycastHit.collider != null)
@@ -63,16 +65,9 @@ public class HullSonarBehavior : MonoBehaviour
                 if (!colliderObjectSonar.Contains(raycastHit.collider))
                 {
                     colliderObjectSonar.Add(raycastHit.collider);
-                    //collision = hit.point;
-                    Instantiate(ping, raycastHit.point, ping.rotation);
+                    Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
                 }
             }            
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(collision, 0.2f);
     }
 }

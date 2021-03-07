@@ -80,7 +80,7 @@ public class UICard : MonoBehaviour
             holdTime = 0;
         }
 
-        if(holdTime > 0.5f && !descriptionOpened)
+        if(holdTime > 0.8f && !descriptionOpened)
         {
             descriptionOpened = true;
             StopAllCoroutines();

@@ -431,10 +431,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3942700596822096368, guid: 13b3afed977cd5948b6d827b80465e36,
+        type: 3}
+      propertyPath: madScript
+      value: 
+      objectReference: {fileID: 1157969309}
     - target: {fileID: 3942700596822096369, guid: 13b3afed977cd5948b6d827b80465e36,
         type: 3}
       propertyPath: m_Name
       value: Sonobuoy (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3942700596822096369, guid: 13b3afed977cd5948b6d827b80465e36,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3942700596822096375, guid: 13b3afed977cd5948b6d827b80465e36,
         type: 3}
@@ -849,7 +859,7 @@ GameObject:
   - component: {fileID: 292585728}
   - component: {fileID: 292585727}
   - component: {fileID: 292585726}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4137,7 +4147,7 @@ GameObject:
   - component: {fileID: 1380300313}
   - component: {fileID: 1380300316}
   - component: {fileID: 1380300317}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10071,13 +10081,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831613598}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Animal
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1831613598
 Transform:
   m_ObjectHideFlags: 0
@@ -10365,10 +10375,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3942700596822096368, guid: 13b3afed977cd5948b6d827b80465e36,
+        type: 3}
+      propertyPath: madScript
+      value: 
+      objectReference: {fileID: 1157969309}
     - target: {fileID: 3942700596822096369, guid: 13b3afed977cd5948b6d827b80465e36,
         type: 3}
       propertyPath: m_Name
       value: Sonobuoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3942700596822096369, guid: 13b3afed977cd5948b6d827b80465e36,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3942700596822096375, guid: 13b3afed977cd5948b6d827b80465e36,
         type: 3}
@@ -10609,7 +10629,7 @@ GameObject:
   - component: {fileID: 2038608504}
   - component: {fileID: 2038608503}
   - component: {fileID: 2038608502}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10915,10 +10935,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sweepSpeed: 130
-  sonarDistanceDetection: 5
-  surfaceLayer:
+  sonarDistanceDetection: 15
+  underWaterElements:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   sonarDisplay: {fileID: 1665816921}
   sweep: {fileID: 1594258209}
   sweepEndPoint: {fileID: 94256484}

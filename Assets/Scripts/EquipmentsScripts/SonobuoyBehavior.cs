@@ -33,7 +33,7 @@ public class SonobuoyBehavior : MonoBehaviour
     private bool flagObjectInsideRange;
     private bool madIsAboveSonobuoy;
 
-    [HideInInspector] public MadBehavior madScript;
+    public MadBehavior madScript;
 
     private void Start()
     {

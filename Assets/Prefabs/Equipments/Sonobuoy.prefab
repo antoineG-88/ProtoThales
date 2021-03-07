@@ -214,12 +214,13 @@ MonoBehaviour:
     type: 3}
   identifyImage: {fileID: 484090191488117335}
   effectFrequency: 2
-  sonobuoyRange: 2
-  sonobuoyLifeTime: 300
+  sonobuoyRange: 3.5
+  sonobuoyLifeTime: 100
   rangeDisplay: {fileID: 182848776142655686}
   sonobuoyNoElement: {r: 0, g: 1, b: 0.22808743, a: 0.3137255}
   sonobuoyElementDetect: {r: 1, g: 0.00000022252402, b: 0, a: 0.3137255}
   objectInsideRange: []
+  madScript: {fileID: 0}
 --- !u!1 &3942700597974582851
 GameObject:
   m_ObjectHideFlags: 0

@@ -102,7 +102,15 @@ public class SonobuoyBehavior : MonoBehaviour
             MadAbove();
             if (madIsAboveSonobuoy)
             {
-                identifyImage.sprite = objectsCanBeDetectedSprite[idendityIndex];
+                //If many objects inside : show only submarine icon
+                if (objectInsideRange.Contains(objectsCanBeDetected[0]))
+                {
+                    identifyImage.sprite = objectsCanBeDetectedSprite[0];
+                }
+                else
+                {
+                    identifyImage.sprite = objectsCanBeDetectedSprite[idendityIndex];
+                }               
             }
             else
             {

@@ -42,3 +42,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Sonar
+    uniqueID: 1173069747
+    locked: 0

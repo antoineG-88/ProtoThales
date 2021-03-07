@@ -6,10 +6,13 @@ public class HelicopterBehavior : MonoBehaviour
 {
     public float speed;
     public float helicopterRange;
+    public float flashRange;
 
     public Transform targetPoint;
     public Transform fregate;
+    public Transform submarine;
     public GameObject rangeDisplay;
+    public GameObject winPannel;
     public LayerMask surfaceLayer;
 
     private bool touchTag;
@@ -28,6 +31,7 @@ public class HelicopterBehavior : MonoBehaviour
 
         rangeDisplay.transform.localScale = new Vector2(helicopterRange * 2, helicopterRange * 2);
         rangeDisplay.SetActive(false);
+        winPannel.SetActive(false);
     }
 
     private void Update()
@@ -128,7 +132,7 @@ public class HelicopterBehavior : MonoBehaviour
             if (isMoving)
             {
                 Debug.Log("reach Destination Point");
-                //Launch here Sonar flash for finish the game
+                FlashHelicopter();
             }
         }
 
@@ -147,6 +151,16 @@ public class HelicopterBehavior : MonoBehaviour
         {
             transform.position = fregate.position;
             targetPoint.position = fregate.position;
+        }
+    }
+
+    private void FlashHelicopter()
+    {
+        float distanceSubmarine = Vector2.Distance(submarine.position, transform.position);
+
+        if (distanceSubmarine < flashRange)
+        {
+            winPannel.SetActive(true);
         }
     }
 }

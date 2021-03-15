@@ -20,6 +20,7 @@ public class BatimentMovement : MonoBehaviour
     protected Vector2 destinationDirection;
 
     [HideInInspector] public bool canChangeDestination;
+    [HideInInspector] public TerrainZone currentZone;
 
     public virtual void Start()
     {
@@ -34,6 +35,7 @@ public class BatimentMovement : MonoBehaviour
 
     public virtual void Update()
     {
+        currentZone = TerrainZoneHandler.GetCurrentZone(currentPosition);
         reachedDest = Vector2.Distance(currentPosition, currentDestination) < distanceToStop;
         destinationDirection = currentDestination - currentPosition;
         destinationDirection.Normalize();

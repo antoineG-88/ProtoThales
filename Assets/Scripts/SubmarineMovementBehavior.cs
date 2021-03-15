@@ -16,13 +16,12 @@ public class SubmarineMovementBehavior : MonoBehaviour
     public Transform nextPosition;
 
     private float timer;
-    private int countWaypointsAchieved;
+    private int countWaypointsAchieved = 0;
+    [HideInInspector] public bool waypointHacked;
 
     private void Start()
     {
-        int random = Random.Range(0, (allWaypoints.Count) + 1);
-        nextPosition = allWaypoints[random];
-        allWaypoints.RemoveAt(random);
+        PickRandomWaypoint();
     }
 
     private void Update()
@@ -30,25 +29,32 @@ public class SubmarineMovementBehavior : MonoBehaviour
         MoveSubmarine();
     }
 
-    void MoveSubmarine()
+    private void PickRandomWaypoint()
+    {
+        int random = Random.Range(0, (allWaypoints.Count));
+        nextPosition = allWaypoints[random];
+        allWaypoints.RemoveAt(random);
+    }
+
+    private void MoveSubmarine()
     {
         if (countWaypointsAchieved < submarineWaypoints)
         {
             if (transform.position == nextPosition.position)
             {
-                timer += Time.deltaTime;
+                timer += Time.deltaTime;               
 
                 if (timer >= waitTimeAtPoint)
                 {
                     countWaypointsAchieved++;
-
-                    int random = Random.Range(0, (allWaypoints.Count) + 1);
-                    nextPosition = allWaypoints[random];
-                    allWaypoints.RemoveAt(random);
+                    PickRandomWaypoint();
+                    waypointHacked = true;
                 }
             }
             else
             {
+                waypointHacked = false;
+
                 timer = 0;
 
                 transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.fixedDeltaTime * submarineSpeed);

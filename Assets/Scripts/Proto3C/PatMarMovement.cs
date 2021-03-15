@@ -15,15 +15,15 @@ public class PatMarMovement : BatimentMovement
     [HideInInspector] public bool canFly;
     [HideInInspector] public bool patmarIsReloading;
 
-    private bool isNearDest;
-    private bool hasPassedDest;
-    private Vector2 patrolStartDestination;
-    private bool patrolFlag;
+    //private bool isNearDest;
+    //private bool hasPassedDest;
+    //private Vector2 patrolStartDestination;
+    //private bool patrolFlag;
     private float currentMaxSpeed;
-    private bool isInPatrol;
+    //private bool isInPatrol;
     private Vector2 currentDestDirection;
-    private Vector2 standByPosition;
-    private Vector2 previousDest;
+    //private Vector2 standByPosition;
+    //private Vector2 previousDest;
     public override void Start()
     {
         base.Start();

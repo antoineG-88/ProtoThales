@@ -29,6 +29,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
     private void Start()
     {
+        sonobuoys = new List<GameObject>();
         rangeDisplay.SetActive(false);
         rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
         rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
@@ -112,7 +113,12 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
     private void DetectSonobuoy()
     {
-        sonobuoys = madBehaviorScript.sonobuoys;
+        sonobuoys.Clear();
+
+        for (int i = 0; i < madBehaviorScript.sonobuoys.Count; i++)
+        {
+            sonobuoys.Add(madBehaviorScript.sonobuoys[i].gameObject);
+        }
         sonobuoysDistance = new List<float>(new float[sonobuoys.Count]);
         for (int x = 0; x < sonobuoys.Count; x++)
         {

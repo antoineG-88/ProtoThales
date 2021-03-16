@@ -2185,7 +2185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3f5176c257d124d91b1b231ee6c2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  submarineSpeed: 0.7
+  submarineCounterMeasuresScript: {fileID: 545954734}
+  submarineSpeed: 0.9
   submarineWaypoints: 4
   allWaypoints:
   - {fileID: 2074089004}
@@ -2233,12 +2234,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   submarineVigilanceScript: {fileID: 545954733}
+  madScript: {fileID: 1698774023}
+  submarineDetectByDAM: 0
   timeBeforeLauchSL: 10
   durationSL: 10
   cooldownTimeSL: 0
   vigilanceValueCostSL: 60
   usingSilenceRadio: 0
   submarineIsInvisible: 0
+  timeBeforeLauchL: 3
+  durationL: 10
+  cooldownTimeL: 45
+  vigilanceValueCostL: 15
+  lureAngle: 30
+  lurePrefab: {fileID: 2664863420101611307, guid: 90ad513dda007d442a2e7a27c62bf00e,
+    type: 3}
+  usingLeurre: 0
+  decoyAreMoving: 0
 --- !u!1 &575451761
 GameObject:
   m_ObjectHideFlags: 0
@@ -12905,21 +12917,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonobuoys: []
   objectsCanBeDetected:
-  - {fileID: 1107969228}
+  - {fileID: 545954729}
   - {fileID: 1660524784}
   - {fileID: 796137067}
   - {fileID: 460027619}
   - {fileID: 2009171013}
   - {fileID: 405367620}
-  - {fileID: 545954729}
+  - {fileID: 1107969228}
   objectsCanBeDetectedSprite:
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
-  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
   - {fileID: 21300000, guid: dc5f2f3e2b418274187f7e4164713e02, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
+  - {fileID: 21300000, guid: bf9814fd3bffc9c49ab96a882f231632, type: 3}
 --- !u!1 &1710035274
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SubmarineMovementBehavior : MonoBehaviour
 {
+    public SubmarineCounterMeasures submarineCounterMeasuresScript;
+
     [Header("Submarine Movement")]
     public float submarineSpeed;
     public int submarineWaypoints;
@@ -25,7 +27,14 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
     private void Update()
     {
-        MoveSubmarine();
+        if (!submarineCounterMeasuresScript.decoyAreMoving)
+        {
+            MoveSubmarine();
+        }
+        else
+        {
+            timer = 0;
+        }
     }
 
     private void PickRandomWaypoint()
@@ -56,7 +65,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
                 timer = 0;
 
-                transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.fixedDeltaTime * submarineSpeed);
+                transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * submarineSpeed);
             }
         }       
     }

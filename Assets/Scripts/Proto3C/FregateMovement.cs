@@ -46,6 +46,8 @@ public class FregateMovement : BatimentMovement
         }
         else if (!reachedDest)
         {
+            isMoving = true;
+
             if (currentSpeed <= currentMaxSpeed)
             {
                 if (currentSpeed < currentMaxSpeed - accelerationForce * Time.fixedDeltaTime)
@@ -89,6 +91,10 @@ public class FregateMovement : BatimentMovement
             {
                 currentSpeed = 0;
             }
+        }
+        else
+        {
+            isMoving = false;
         }
 
         if (thrustParticle.isPlaying)

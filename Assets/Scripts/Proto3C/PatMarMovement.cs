@@ -10,20 +10,18 @@ public class PatMarMovement : BatimentMovement
     public float patrolRange;
     public float turnSpeed;
 
+    public float speedWindIncreaseRatio;
+    public float sideWindIgnorance;
+
     private int currentTurnSide;
 
     [HideInInspector] public bool canFly;
     [HideInInspector] public bool patmarIsReloading;
 
-    //private bool isNearDest;
-    //private bool hasPassedDest;
-    //private Vector2 patrolStartDestination;
-    //private bool patrolFlag;
     private float currentMaxSpeed;
-    //private bool isInPatrol;
     private Vector2 currentDestDirection;
-    //private Vector2 standByPosition;
-    //private Vector2 previousDest;
+    public float windBonusSpeedRatio;
+
     public override void Start()
     {
         base.Start();
@@ -41,17 +39,33 @@ public class PatMarMovement : BatimentMovement
         {
             canFly = true;
         }
+
+        UpdateWindBonus();
+    }
+    private void UpdateWindBonus()
+    {
+        if(currentZone.currentWeather == TerrainZone.Weather.Wind)
+        {
+            float ratio = Mathf.Cos(Mathf.Deg2Rad *(currentAngle - currentZone.windAngle));
+
+            windBonusSpeedRatio = Mathf.Pow(ratio, sideWindIgnorance) * speedWindIncreaseRatio;
+        }
+        else
+        {
+            windBonusSpeedRatio = 0;
+        }
     }
 
     private void FixedUpdate()
-    {if (Vector2.Distance(currentPosition, currentDestination) < patrolRange)
+    {
+        if (Vector2.Distance(currentPosition, currentDestination) < patrolRange)
         {
-            currentMaxSpeed = slowMaxSpeed;
+            currentMaxSpeed = slowMaxSpeed + (slowMaxSpeed * windBonusSpeedRatio);
             currentDestDirection = destinationDirection;
         }
         else
         {
-            currentMaxSpeed = maxSpeed;
+            currentMaxSpeed = maxSpeed + (maxSpeed * windBonusSpeedRatio);
             currentDestDirection = destinationDirection;
         }
 

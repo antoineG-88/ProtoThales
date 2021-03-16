@@ -10,7 +10,7 @@ public class TerrainZone : MonoBehaviour
     [Header("Zone properties")]
     public Relief relief;
     public Weather currentWeather;
-    [Range(-1f, 1f)] public Vector2 windDirection;
+    [Range(-180f, 180f)] public float windAngle;
     [Header("Display settings")]
     public Color zoneColor;
     public float innerEdgesOffset;
@@ -21,6 +21,8 @@ public class TerrainZone : MonoBehaviour
     private Transform edgesParent;
     private Vector2 testVector;
     private LineRenderer edgeLine;
+
+    private Vector2 windDirection;
 
     private void Awake()
     {
@@ -126,26 +128,29 @@ public class TerrainZone : MonoBehaviour
     private void OnDrawGizmos()
     {
         edges = new List<Transform>();
-        edgesParent = transform.transform;
-        for (int i = 0; i < edgesParent.childCount; i++)
+        edgesParent = transform.GetChild(0).transform;
+        if(edgesParent != null)
         {
-            edges.Add(edgesParent.GetChild(i));
+            for (int i = 0; i < edgesParent.childCount; i++)
+            {
+                edges.Add(edgesParent.GetChild(i));
+            }
+
+            Gizmos.color = zoneColor;
+            for (int i = 0; i < edges.Count; i++)
+            {
+                if (i == edges.Count - 1)
+                {
+                    Gizmos.DrawLine(edges[i].position, edges[0].position);
+                }
+                else
+                {
+                    Gizmos.DrawLine(edges[i].position, edges[i + 1].position);
+                }
+            }
         }
 
         Gizmos.color = zoneColor;
-        for (int i = 0; i < edges.Count; i++)
-        {
-            if (i == edges.Count - 1)
-            {
-                Gizmos.DrawLine(edges[i].position, edges[0].position);
-            }
-            else
-            {
-                Gizmos.DrawLine(edges[i].position, edges[i + 1].position);
-            }
-        }
-
-        Gizmos.color = zoneColor;
-        Gizmos.DrawRay(edges[0].position + Vector3.up, SeaCoord.GetFlatCoord(windDirection).normalized);
+        Gizmos.DrawRay(transform.position + Vector3.up * 0.5f, SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(windAngle)).normalized * 3);
     }
 }

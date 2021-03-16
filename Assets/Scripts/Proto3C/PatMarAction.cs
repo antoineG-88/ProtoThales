@@ -54,7 +54,7 @@ public class PatMarAction : BatimentAction
             {
                 isDroppingSonobuoy = false;
                 SonobuoyBehavior newSonobuoy = Instantiate(sonobuoyPrefab.gameObject, SeaCoord.GetFlatCoord(droppingPos), Quaternion.identity).GetComponent<SonobuoyBehavior>();
-                madBehavior.sonobuoys.Add(newSonobuoy.gameObject);
+                madBehavior.sonobuoys.Add(newSonobuoy);
                 newSonobuoy.madScript = madBehavior;
             }
             if(droppingPos != patMarMovement.currentDestination)

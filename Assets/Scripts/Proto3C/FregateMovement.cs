@@ -14,6 +14,8 @@ public class FregateMovement : BatimentMovement
     private float currentMaxSpeed;
     private FregateHandler fregateHandler;
 
+    public bool isMoving;
+
     public override void Start()
     {
         base.Start();

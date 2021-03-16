@@ -79,20 +79,47 @@ public class SonobuoyBehavior : MonoBehaviour
         {
             distance = Vector2.Distance(SeaCoord.Planify(objectsCanBeDetected[i].transform.position), SeaCoord.Planify(transform.position));
 
-            if (distance < sonobuoyRange)
+            if (objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>() != null)
             {
-                atLeastOneObjectDetected = true;
-                idendityIndex = i;
-
-                if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                if (objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineIsInvisible)
                 {
-                    objectInsideRange.Add(objectsCanBeDetected[i]);
+                    //Do no detect submarine
+                }
+                else
+                {
+                    if (distance < sonobuoyRange)
+                    {
+                        atLeastOneObjectDetected = true;
+                        idendityIndex = i;
+
+                        if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                        {
+                            objectInsideRange.Add(objectsCanBeDetected[i]);
+                        }
+                    }
+                    else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+                    {
+                        objectInsideRange.Remove(objectsCanBeDetected[i]);
+                    }
                 }
             }
-            else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+            else
             {
-                objectInsideRange.Remove(objectsCanBeDetected[i]);
-            }
+                if (distance < sonobuoyRange)
+                {
+                    atLeastOneObjectDetected = true;
+                    idendityIndex = i;
+
+                    if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                    {
+                        objectInsideRange.Add(objectsCanBeDetected[i]);
+                    }
+                }
+                else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+                {
+                    objectInsideRange.Remove(objectsCanBeDetected[i]);
+                }
+            }           
         }
 
         if (atLeastOneObjectDetected)

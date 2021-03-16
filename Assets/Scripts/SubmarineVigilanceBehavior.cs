@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class SubmarineVigilanceBehavior : MonoBehaviour
 {
     public float vigilanceValue = 0f;
-    public enum vigilanceState {Calme, Inquiet, Panique};
-    public vigilanceState submarineState;
+    public enum VigilanceState { Calme, Inquiet, Panique };
+    public VigilanceState submarineState;
     public float detectionRangeCalme, detectionRangeInquiet, detectionRangePanique;
     private bool reachInquietState;
 
@@ -50,11 +51,11 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     {
         if (vigilanceValue >= 0 && vigilanceValue < 40)
         {
-            submarineState = vigilanceState.Calme;
+            submarineState = VigilanceState.Calme;
         }
         else if (vigilanceValue >= 40 && vigilanceValue < 80)
         {
-            submarineState = vigilanceState.Inquiet;
+            submarineState = VigilanceState.Inquiet;
 
             if (!reachInquietState)
             {  
@@ -63,7 +64,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
         }
         else if (vigilanceValue >= 80 && vigilanceValue <= 100)
         {
-            submarineState = vigilanceState.Panique;
+            submarineState = VigilanceState.Panique;
         }
 
         if (vigilanceValue >= 100)
@@ -78,15 +79,15 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
     private void ChangeSubmarineRange()
     {
-        if (submarineState == vigilanceState.Calme)
+        if (submarineState == VigilanceState.Calme)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
         }
-        else if (submarineState == vigilanceState.Inquiet)
+        else if (submarineState == VigilanceState.Inquiet)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangeInquiet* 2, detectionRangeInquiet * 2);
         }
-        else if (submarineState == vigilanceState.Panique)
+        else if (submarineState == VigilanceState.Panique)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangePanique * 2, detectionRangePanique * 2);
         }
@@ -161,19 +162,6 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
         {
             timer3 += Time.deltaTime;
         }
-    }
-
-    private void DecreaseVigilanceBar(float valuePerSecond)
-    {
-        if (timer >= 1)
-        {
-            vigilanceValue -= valuePerSecond;
-            timer1 = 0;
-        }
-        else
-        {
-            timer += Time.deltaTime;
-        }        
     }
 
     private void EnableDebugRange()

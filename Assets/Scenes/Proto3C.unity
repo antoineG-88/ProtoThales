@@ -2135,6 +2135,7 @@ GameObject:
   - component: {fileID: 545954732}
   - component: {fileID: 545954730}
   - component: {fileID: 545954733}
+  - component: {fileID: 545954734}
   m_Layer: 0
   m_Name: Submarine
   m_TagString: Untagged
@@ -2219,6 +2220,25 @@ MonoBehaviour:
   sonobuoysDistance: []
   enableRangeDisplay: 0
   rangeDisplay: {fileID: 1508056905}
+--- !u!114 &545954734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545954729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541cbebeba6e9e548a6f9c9651162255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  submarineVigilanceScript: {fileID: 545954733}
+  timeBeforeLauchSL: 10
+  durationSL: 10
+  cooldownTimeSL: 0
+  vigilanceValueCostSL: 60
+  usingSilenceRadio: 0
+  submarineIsInvisible: 0
 --- !u!1 &575451761
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,49 +5,175 @@ using UnityEngine;
 public class SubmarineVigilanceBehavior : MonoBehaviour
 {
     public float vigilanceValue = 0f;
-    public float submarineDetectionRange;
+    public enum vigilanceState {Calme, Inquiet, Panique};
+    public vigilanceState submarineState;
+    public float detectionRangeCalme, detectionRangeInquiet, detectionRangePanique;
+    private bool reachInquietState;
+
+    [Header("Objects")]
+    public FregateMovement fregateMovementScript;
+    public MadBehavior madBehaviorScript;
+    public List<GameObject> sonobuoys;
+    public List<float> sonobuoysDistance;
 
     [Header("Debug")]
     public bool enableRangeDisplay;
     public GameObject rangeDisplay;
     private SpriteRenderer rangeSprite;
 
-    private bool refreshRange;
     private float timer;
+    private float timer1;
+    private float timer2;
+    private float timer3;
 
     private void Start()
     {
         rangeDisplay.SetActive(false);
-        rangeDisplay.transform.localScale = new Vector2(submarineDetectionRange * 2, submarineDetectionRange * 2);
+        rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
         rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        RefreshEachSecond();
+        ChangeState();
+
+        ChangeSubmarineRange();
+
         EnableDebugRange();
+
+        DetectFregate();
+
+        DetectSonobuoy();
     }
 
-    private void RefreshEachSecond()
+    private void ChangeState()
     {
-        if (timer >= 1)
+        if (vigilanceValue >= 0 && vigilanceValue < 40)
         {
-            refreshRange = true;
-            timer = 0;
+            submarineState = vigilanceState.Calme;
+        }
+        else if (vigilanceValue >= 40 && vigilanceValue < 80)
+        {
+            submarineState = vigilanceState.Inquiet;
+
+            if (!reachInquietState)
+            {  
+                reachInquietState = true;
+            }
+        }
+        else if (vigilanceValue >= 80 && vigilanceValue <= 100)
+        {
+            submarineState = vigilanceState.Panique;
+        }
+
+        if (vigilanceValue >= 100)
+        {
+            vigilanceValue = 100;
+        }
+        if (vigilanceValue <= 40 && reachInquietState)
+        {
+            vigilanceValue = 40;
+        }
+    }
+
+    private void ChangeSubmarineRange()
+    {
+        if (submarineState == vigilanceState.Calme)
+        {
+            rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
+        }
+        else if (submarineState == vigilanceState.Inquiet)
+        {
+            rangeDisplay.transform.localScale = new Vector2(detectionRangeInquiet* 2, detectionRangeInquiet * 2);
+        }
+        else if (submarineState == vigilanceState.Panique)
+        {
+            rangeDisplay.transform.localScale = new Vector2(detectionRangePanique * 2, detectionRangePanique * 2);
+        }
+    }
+
+    private void DetectFregate()
+    {
+        float distanceFromFregate = Vector3.Distance(transform.position, fregateMovementScript.transform.position);
+
+        if (distanceFromFregate < detectionRangeCalme)
+        {
+            if (fregateMovementScript.isMoving)
+            {
+                IncreaseVigilanceBarIfFregateMoveAbove(2);
+            }
+            else
+            {
+                IncreaseVigilanceBarIfFregateIdleAbove(0.5f);
+            }
+        }
+    }
+
+    private void DetectSonobuoy()
+    {
+        sonobuoys = madBehaviorScript.sonobuoys;
+        sonobuoysDistance = new List<float>(new float[sonobuoys.Count]);
+        for (int x = 0; x < sonobuoys.Count; x++)
+        {
+            sonobuoysDistance[x] = Vector3.Distance(transform.position, sonobuoys[x].transform.position);
+
+            if(sonobuoysDistance[x] < detectionRangeCalme)
+            {
+                IncreaseVigilanceBarIfSonobuoyAbove(2);
+            }
+        }
+    }
+
+    private void IncreaseVigilanceBarIfSonobuoyAbove(float valuePerSecond)
+    {
+        if (timer1 >= 1)
+        {
+            vigilanceValue += valuePerSecond;
+            timer1 = 0;
         }
         else
         {
-            refreshRange = false;
-            timer += Time.deltaTime;
+            timer1 += Time.deltaTime;
         }
     }
 
-    private void IncreaseVigilanceBar(float valuePerSecond)
+    private void IncreaseVigilanceBarIfFregateIdleAbove(float valuePerSecond)
     {
-        if (refreshRange)
+        if (timer2 >= 1)
         {
             vigilanceValue += valuePerSecond;
+            timer2 = 0;
         }
+        else
+        {
+            timer2 += Time.deltaTime;
+        }
+    }
+
+    private void IncreaseVigilanceBarIfFregateMoveAbove(float valuePerSecond)
+    {
+        if (timer3 >= 1)
+        {
+            vigilanceValue += valuePerSecond;
+            timer3 = 0;
+        }
+        else
+        {
+            timer3 += Time.deltaTime;
+        }
+    }
+
+    private void DecreaseVigilanceBar(float valuePerSecond)
+    {
+        if (timer >= 1)
+        {
+            vigilanceValue -= valuePerSecond;
+            timer1 = 0;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }        
     }
 
     private void EnableDebugRange()

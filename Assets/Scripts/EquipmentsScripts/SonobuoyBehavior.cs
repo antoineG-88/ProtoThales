@@ -37,7 +37,7 @@ public class SonobuoyBehavior : MonoBehaviour
 
     private void Start()
     {
-        madScript.sonobuoys.Add(gameObject);
+        //madScript.sonobuoys.Add(gameObject);
         objectsCanBeDetected = madScript.objectsCanBeDetected;
         objectsCanBeDetectedSprite = madScript.objectsCanBeDetectedSprite;
 

@@ -13,6 +13,8 @@ public class FregateMovement : BatimentMovement
     private float currentMaxSpeed;
     private FregateHandler fregateHandler;
 
+    public bool isMoving;
+
     public override void Start()
     {
         base.Start();
@@ -28,8 +30,15 @@ public class FregateMovement : BatimentMovement
 
     private void FixedUpdate()
     {
+        if (reachedDest)
+        {
+            isMoving = false;
+        }
+
         if (!reachedDest)
         {
+            isMoving = true;
+
             if (currentSpeed <= currentMaxSpeed)
             {
                 if (currentSpeed < currentMaxSpeed - accelerationForce * Time.fixedDeltaTime)

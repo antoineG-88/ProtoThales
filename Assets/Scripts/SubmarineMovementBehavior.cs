@@ -7,7 +7,6 @@ public class SubmarineMovementBehavior : MonoBehaviour
     [Header("Submarine Movement")]
     public float submarineSpeed;
     public int submarineWaypoints;
-    public float waitTimeAtPoint;
 
     [Space]
     public List<Transform> allWaypoints;
@@ -44,7 +43,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
             {
                 timer += Time.deltaTime;               
 
-                if (timer >= waitTimeAtPoint)
+                if (timer >= nextPosition.GetComponent<Waypoints>().hackingTime)
                 {
                     countWaypointsAchieved++;
                     PickRandomWaypoint();

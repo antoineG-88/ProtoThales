@@ -9,6 +9,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     public enum VigilanceState { Calme, Inquiet, Panique };
     public VigilanceState submarineState;
     public float detectionRangeCalme, detectionRangeInquiet, detectionRangePanique;
+    private float currentRange;
     private bool reachInquietState;
 
     [Header("Objects")]
@@ -41,11 +42,13 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
         ChangeSubmarineRange();
 
-        EnableDebugRange();
-
         DetectFregate();
 
         DetectSonobuoy();
+
+        //Debug
+        EnableDebugRange();
+        DisplaySubmarineDebug();
     }
 
     private void ChangeState()
@@ -83,14 +86,17 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
         if (submarineState == VigilanceState.Calme)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
+            currentRange = detectionRangeCalme;
         }
         else if (submarineState == VigilanceState.Inquiet)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangeInquiet* 2, detectionRangeInquiet * 2);
+            currentRange = detectionRangeInquiet;
         }
         else if (submarineState == VigilanceState.Panique)
         {
             rangeDisplay.transform.localScale = new Vector2(detectionRangePanique * 2, detectionRangePanique * 2);
+            currentRange = detectionRangePanique;
         }
     }
 
@@ -98,7 +104,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     {
         float distanceFromFregate = Vector3.Distance(transform.position, fregateMovementScript.transform.position);
 
-        if (distanceFromFregate < detectionRangeCalme)
+        if (distanceFromFregate < currentRange)
         {
             if (fregateMovementScript.isMoving)
             {
@@ -124,7 +130,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
         {
             sonobuoysDistance[x] = Vector3.Distance(transform.position, sonobuoys[x].transform.position);
 
-            if(sonobuoysDistance[x] < detectionRangeCalme)
+            if(sonobuoysDistance[x] < currentRange)
             {
                 IncreaseVigilanceBarIfSonobuoyAbove(2);
             }
@@ -180,5 +186,22 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
         {
             rangeDisplay.SetActive(false);
         }
-    } 
+    }
+
+    private void DisplaySubmarineDebug()
+    {
+        if (Input.touchCount > 4)
+        {
+            Touch touch1 = Input.GetTouch(0);
+            Touch touch2 = Input.GetTouch(1);
+            Touch touch3 = Input.GetTouch(2);
+            Touch touch4 = Input.GetTouch(3);
+            Touch touch5 = Input.GetTouch(4);
+
+            if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began && touch3.phase == TouchPhase.Began && touch4.phase == TouchPhase.Began && touch5.phase == TouchPhase.Began)
+            {
+                enableRangeDisplay = !enableRangeDisplay;
+            }
+        }
+    }
 }

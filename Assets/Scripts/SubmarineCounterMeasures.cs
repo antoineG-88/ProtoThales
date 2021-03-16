@@ -5,8 +5,10 @@ using UnityEngine;
 public class SubmarineCounterMeasures : MonoBehaviour
 {
     public SubmarineVigilanceBehavior submarineVigilanceScript;
+    public SubmarineMovementBehavior submarineMovementScript;
     public MadBehavior madScript;
     [HideInInspector] public bool submarineDetectByDAM;
+    private bool cantUseCounterMeasure;
 
     [Header("Silence Radio")]
     public float timeBeforeLauchSL;
@@ -36,9 +38,13 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
     private void Update()
     {
-        SilenceRadio();
+        if (!cantUseCounterMeasure)
+        {
+            SilenceRadio();
+            Leurre();
+        }
 
-        Leurre();
+        LureMovement();
     }
 
     private void SilenceRadio()
@@ -46,6 +52,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
         if (submarineVigilanceScript.vigilanceValue >= 100 && !usingSilenceRadio)
         {
             usingSilenceRadio = true;
+            cantUseCounterMeasure = true;
             StartCoroutine(SubmarineIsInvisible());
         }
     }
@@ -55,20 +62,24 @@ public class SubmarineCounterMeasures : MonoBehaviour
         if (submarineDetectByDAM && !usingLeurre)
         {
             usingLeurre = true;
+            cantUseCounterMeasure = true;
             StartCoroutine(SubmarineCreateDecoy());
         }
+    }
 
+    private void LureMovement()
+    {
         if (decoyAreMoving)
         {
             if (randomDirection == 0)
             {
-                transform.position += Vector3.forward * Time.deltaTime * submarineSpeed;
-                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * Vector3.forward * Time.deltaTime * submarineSpeed;
+                transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
             }
             else if (randomDirection == 1)
             {
-                transform.position += Quaternion.Euler(0, lureAngle, 0) * Vector3.forward * Time.deltaTime * submarineSpeed;
-                lure.transform.position += Vector3.forward * Time.deltaTime * submarineSpeed;
+                transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                lure.transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
             }
         }
     }
@@ -83,6 +94,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
         submarineVigilanceScript.vigilanceValue -= vigilanceValueCostSL;
         submarineIsInvisible = false;
+        cantUseCounterMeasure = false;
 
         yield return new WaitForSeconds(cooldownTimeSL);
 
@@ -93,9 +105,9 @@ public class SubmarineCounterMeasures : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBeforeLauchL);
 
+        int leftOrRight = Random.Range(0, 2);
+        randomDirection = Random.Range(0, 2);
         decoyAreMoving = true;
-        int leftOrRight = Random.Range(0, 1);
-        randomDirection = Random.Range(0, 1);
         if (leftOrRight == 0)
         {
             //keep lureAngle
@@ -104,7 +116,9 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             lureAngle = -lureAngle;
         }
+
         lure = Instantiate(lurePrefab, transform.position, Quaternion.identity);
+
         for (int i = 0; i < madScript.sonobuoys.Count; i++)
         {
             madScript.sonobuoys[i].objectsCanBeDetected.Add(lure);
@@ -120,6 +134,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
         Destroy(lure);
         submarineVigilanceScript.vigilanceValue -= vigilanceValueCostL;
         decoyAreMoving = false;
+        cantUseCounterMeasure = false;
 
         yield return new WaitForSeconds(cooldownTimeL);
 

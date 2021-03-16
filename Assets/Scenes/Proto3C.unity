@@ -2198,6 +2198,7 @@ MonoBehaviour:
   - {fileID: 202757917}
   nextPosition: {fileID: 0}
   waypointHacked: 0
+  currentDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &545954733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2234,6 +2235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   submarineVigilanceScript: {fileID: 545954733}
+  submarineMovementScript: {fileID: 545954732}
   madScript: {fileID: 1698774023}
   submarineDetectByDAM: 0
   timeBeforeLauchSL: 10

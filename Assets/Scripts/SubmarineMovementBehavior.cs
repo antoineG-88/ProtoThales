@@ -16,9 +16,12 @@ public class SubmarineMovementBehavior : MonoBehaviour
     [Space]
     public Transform nextPosition;
 
+    private bool lureIsCreateFlag;
+    private int random;
     private float timer;
     private int countWaypointsAchieved = 0;
     [HideInInspector] public bool waypointHacked;
+    [HideInInspector] public Vector3 currentDirection;
 
     private void Start()
     {
@@ -29,19 +32,26 @@ public class SubmarineMovementBehavior : MonoBehaviour
     {
         if (!submarineCounterMeasuresScript.decoyAreMoving)
         {
+            lureIsCreateFlag = false;
             MoveSubmarine();
         }
         else
         {
-            timer = 0;
+            if (timer > 0 && !lureIsCreateFlag)
+            {
+                lureIsCreateFlag = true;
+                timer = 0;
+                PickRandomWaypoint();
+            }
         }
     }
 
     private void PickRandomWaypoint()
     {
-        int random = Random.Range(0, (allWaypoints.Count));
+        random = Random.Range(0, (allWaypoints.Count));
         nextPosition = allWaypoints[random];
-        allWaypoints.RemoveAt(random);
+        //allWaypoints.RemoveAt(random);
+        currentDirection = -(transform.position - nextPosition.position).normalized;
     }
 
     private void MoveSubmarine()
@@ -54,6 +64,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
                 if (timer >= nextPosition.GetComponent<Waypoints>().hackingTime)
                 {
+                    allWaypoints.RemoveAt(random);
                     countWaypointsAchieved++;
                     PickRandomWaypoint();
                     waypointHacked = true;

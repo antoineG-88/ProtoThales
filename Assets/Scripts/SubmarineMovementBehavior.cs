@@ -8,6 +8,8 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
     [Header("Submarine Movement")]
     public float submarineSpeed;
+    public float submarineSpeedDeepWater;
+    private float currentSpeed;
     public int submarineWaypoints;
 
     [Space]
@@ -22,6 +24,8 @@ public class SubmarineMovementBehavior : MonoBehaviour
     private int countWaypointsAchieved = 0;
     [HideInInspector] public bool waypointHacked;
     [HideInInspector] public Vector3 currentDirection;
+
+    private TerrainZone submarineZone;
 
     private void Start()
     {
@@ -44,6 +48,23 @@ public class SubmarineMovementBehavior : MonoBehaviour
                 PickRandomWaypoint();
             }
         }
+
+        ChangeSpeedByZone();
+    }
+
+    private void ChangeSpeedByZone()
+    {
+        submarineZone = TerrainZoneHandler.GetCurrentZone(SeaCoord.Planify(transform.position));
+        
+        if (submarineZone.relief == TerrainZone.Relief.Hilly)
+        {
+            currentSpeed = submarineSpeedDeepWater;
+        }
+        else
+        {
+            currentSpeed = submarineSpeed;
+        }
+
     }
 
     private void PickRandomWaypoint()
@@ -76,7 +97,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
                 timer = 0;
 
-                transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * submarineSpeed);
+                transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * currentSpeed);
             }
         }       
     }

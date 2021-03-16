@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainZone : MonoBehaviour
 {
-    public enum Relief { Coast, Flat, Hilly };
+    public enum Relief { Coast, Flat, Hilly, Land};
     public enum Weather { ClearSky, Wind};
 
     [Header("Zone properties")]

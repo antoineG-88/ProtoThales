@@ -53,9 +53,14 @@ public class BatimentMovement : MonoBehaviour
             destinationLine.enabled = false;
         }
 
-        if(destinationCard.isDropped)
+        if(destinationCard.isDropped || (InputDuo.tapHold && destinationCard.isSelected))
         {
             currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+        }
+
+        if(destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
+        {
+            destinationCard.Deselect();
         }
 
         if(destinationCard.isDragged)

@@ -67,16 +67,17 @@ public class PatMarAction : BatimentAction
 
         isDraggingAction = sonobuoyCard.isFocused;
 
-
-        if (sonobuoyCard.isDropped && !sonobuoyCard.isHovered && !sonobuoyCard.descriptionOpened && isChoosingDropPos)
+        if (((sonobuoyCard.isSelected && InputDuo.tapUp) || (sonobuoyCard.isDropped && !sonobuoyCard.isCursorOn)) && !sonobuoyCard.descriptionOpened && isChoosingDropPos)
         {
             isChoosingDropPos = false;
             isDroppingSonobuoy = true;
             droppingPos = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
             patMarMovement.currentDestination = droppingPos;
+            dropPosPreview.SetActive(true);
+            sonobuoyCard.Deselect();
         }
 
-        if (((sonobuoyCard.isDragged && !sonobuoyCard.isHovered) || sonobuoyCard.isDropped) && !sonobuoyCard.descriptionOpened)
+        if (((sonobuoyCard.isSelected && InputDuo.tapHold) || ((sonobuoyCard.isDragged && !sonobuoyCard.isHovered) || sonobuoyCard.isDropped)) && !sonobuoyCard.descriptionOpened)
         {
             isChoosingDropPos = true;
             dropPosPreview.SetActive(true);

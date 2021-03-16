@@ -44,9 +44,9 @@ public class PatMarMovement : BatimentMovement
     }
     private void UpdateWindBonus()
     {
-        if(currentZone.currentWeather == TerrainZone.Weather.Wind)
+        if(currentZone != null && currentZone.currentWeather == TerrainZone.Weather.Wind)
         {
-            float ratio = Mathf.Cos(Mathf.Deg2Rad *(currentAngle - currentZone.windAngle));
+            float ratio = Mathf.Cos(Mathf.Deg2Rad * (currentAngle - currentZone.windAngle));
 
             windBonusSpeedRatio = Mathf.Pow(ratio, sideWindIgnorance) * speedWindIncreaseRatio;
         }
@@ -60,7 +60,7 @@ public class PatMarMovement : BatimentMovement
     {
         if (Vector2.Distance(currentPosition, currentDestination) < patrolRange)
         {
-            currentMaxSpeed = slowMaxSpeed + (slowMaxSpeed * windBonusSpeedRatio);
+            currentMaxSpeed = Mathf.Min(slowMaxSpeed, maxSpeed + (maxSpeed * windBonusSpeedRatio));
             currentDestDirection = destinationDirection;
         }
         else

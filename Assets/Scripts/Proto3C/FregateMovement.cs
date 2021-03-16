@@ -8,6 +8,7 @@ public class FregateMovement : BatimentMovement
     public float accelerationForce;
     public float turnSpeed;
     public ParticleSystem thrustParticle;
+    public float zoneDetectionDistance;
 
     private int currentTurnSide;
     private float currentMaxSpeed;
@@ -28,7 +29,20 @@ public class FregateMovement : BatimentMovement
 
     private void FixedUpdate()
     {
-        if (!reachedDest)
+        if (IsLandInFront())
+        {
+            if (currentSpeed > 0)
+            {
+                currentSpeed -= accelerationForce * Time.fixedDeltaTime;
+                if (currentSpeed < 0)
+                {
+                    currentSpeed = 0;
+                }
+            }
+            currentDestination = currentPosition;
+            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
+        }
+        else if (!reachedDest)
         {
             if (currentSpeed <= currentMaxSpeed)
             {
@@ -91,5 +105,12 @@ public class FregateMovement : BatimentMovement
         }
 
         MoveForward(currentSpeed);
+    }
+
+    private bool IsLandInFront()
+    {
+        TerrainZone zone = TerrainZoneHandler.GetCurrentZone(currentPosition + currentDirection * zoneDetectionDistance);
+        TerrainZone zone2 = TerrainZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance);
+        return (zone != null && zone.relief == TerrainZone.Relief.Land && zone == zone2);
     }
 }

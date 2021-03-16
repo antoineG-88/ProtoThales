@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         UICard.UpdateFocusCard();
+        UICard.UpdateSelectedCard();
     }
 
     public void LoadScene(int sceneIndex)

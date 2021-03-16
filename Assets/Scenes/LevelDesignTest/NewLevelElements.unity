@@ -1657,6 +1657,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &310675005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 310675006}
+  - component: {fileID: 310675007}
+  m_Layer: 9
+  m_Name: SelectCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &310675006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310675005}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1698774020}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &310675007
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310675005}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &329887609
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,11 +2118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -2087,7 +2126,19 @@ MonoBehaviour:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!225 &400159328
 CanvasGroup:
@@ -2368,11 +2419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
     rectTransform: {fileID: 468597018}
@@ -2381,7 +2427,19 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 4a7dc74863135d747adeb7be65fe2dbc, type: 2}
     rectTransform: {fileID: 468597018}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
+    rectTransform: {fileID: 468597018}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 1
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &468597020
 MonoBehaviour:
@@ -3123,7 +3181,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.8
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3878,6 +3936,9 @@ MonoBehaviour:
     canvasGroup: {fileID: 0}
   fregateSelectCard: {fileID: 1785311569}
   patMarSelectCard: {fileID: 1355422237}
+  batimentMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!4 &680721225
 Transform:
   m_ObjectHideFlags: 0
@@ -4675,11 +4736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
     rectTransform: {fileID: 719290531}
@@ -4688,7 +4744,19 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: b86977a2f747820438854c8147250ebb, type: 2}
     rectTransform: {fileID: 719290531}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
+    rectTransform: {fileID: 719290531}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 1
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &719290533
 MonoBehaviour:
@@ -5618,7 +5686,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.8
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -6101,6 +6169,7 @@ Transform:
   - {fileID: 1560981472}
   - {fileID: 831552958}
   - {fileID: 21177744}
+  - {fileID: 1563803600}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6534,6 +6603,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a945537976062844283ac05110c2c0fc, type: 3}
+--- !u!1 &936994609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 936994610}
+  - component: {fileID: 936994611}
+  m_Layer: 9
+  m_Name: SelectCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &936994610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936994609}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2117067377}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &936994611
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936994609}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &947595637
 GameObject:
   m_ObjectHideFlags: 0
@@ -8312,11 +8425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
     rectTransform: {fileID: 1272483420}
@@ -8325,7 +8433,19 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 4a7dc74863135d747adeb7be65fe2dbc, type: 2}
     rectTransform: {fileID: 1272483420}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
+    rectTransform: {fileID: 1272483420}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 1
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1272483422
 MonoBehaviour:
@@ -8687,11 +8807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -8700,7 +8815,19 @@ MonoBehaviour:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 0
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1355422238
 MonoBehaviour:
@@ -8859,7 +8986,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.8
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -9048,11 +9175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -9061,7 +9183,19 @@ MonoBehaviour:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!225 &1463643706
 CanvasGroup:
@@ -14147,7 +14281,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.8
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -14212,7 +14346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63a4645ed0dd13944a7b62186a957a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relief: 0
+  relief: 3
   currentWeather: 0
   windAngle: 0
   zoneColor: {r: 0.6886792, g: 0.061721236, b: 0.5149772, a: 1}
@@ -14357,6 +14491,36 @@ Transform:
   - {fileID: 10619511}
   m_Father: {fileID: 927093012}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1563803599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1563803600}
+  m_Layer: 0
+  m_Name: CamTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1563803600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563803599}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 927093012}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571629977
 GameObject:
@@ -14702,11 +14866,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
     rectTransform: {fileID: 1626833993}
@@ -14715,7 +14874,19 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: b86977a2f747820438854c8147250ebb, type: 2}
     rectTransform: {fileID: 1626833993}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
+    rectTransform: {fileID: 1626833993}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 1
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1626833995
 MonoBehaviour:
@@ -15061,6 +15232,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 575451762}
+  - {fileID: 310675006}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15724,11 +15896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -15737,7 +15904,19 @@ MonoBehaviour:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
   darkenBackWhileHold: 0
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1785311570
 MonoBehaviour:
@@ -15854,7 +16033,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.8
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -15921,7 +16100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relief: 0
   currentWeather: 1
-  windAngle: 90
+  windAngle: 1
   zoneColor: {r: 0.023584902, g: 1, b: 0.7432964, a: 1}
   innerEdgesOffset: 0.4
   outlineSeaOffset: 0.01
@@ -16166,6 +16345,21 @@ PrefabInstance:
       propertyPath: camIsometricMaxOffset
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 7003991111947384127, guid: 6444f25ceaa5a244887acde70e06360b,
+        type: 3}
+      propertyPath: touchMovementAmplitude
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003991111947384127, guid: 6444f25ceaa5a244887acde70e06360b,
+        type: 3}
+      propertyPath: lerpMoveRatio
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003991111947384127, guid: 6444f25ceaa5a244887acde70e06360b,
+        type: 3}
+      propertyPath: camTargetTransform
+      value: 
+      objectReference: {fileID: 1563803600}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6444f25ceaa5a244887acde70e06360b, type: 3}
 --- !u!1 &1839577821
@@ -17846,6 +18040,7 @@ Transform:
   m_Children:
   - {fileID: 947595638}
   - {fileID: 1516163388}
+  - {fileID: 936994610}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18003,6 +18198,7 @@ MonoBehaviour:
   accelerationForce: 0.3
   turnSpeed: 20
   thrustParticle: {fileID: 1516163390}
+  zoneDetectionDistance: 3
 --- !u!114 &2117067381
 MonoBehaviour:
   m_ObjectHideFlags: 0

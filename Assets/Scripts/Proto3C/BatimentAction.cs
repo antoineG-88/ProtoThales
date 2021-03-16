@@ -6,9 +6,14 @@ public class BatimentAction : MonoBehaviour
 {
     [HideInInspector] public BatimentMovement batimentMovement;
     [HideInInspector] public bool isDraggingAction;
-    public virtual void Start()
+    private void Awake()
     {
         batimentMovement = GetComponent<BatimentMovement>();
+    }
+
+    public virtual void Start()
+    {
+
     }
 
     void Update()

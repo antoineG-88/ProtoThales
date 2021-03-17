@@ -19,6 +19,7 @@ public class SonobuoyBehavior : MonoBehaviour
 
     [Header("Range")]
     public GameObject rangeDisplay;
+    public GameObject sonobuoyCollider;
     private SpriteRenderer rangeSprite;
 
     public Color sonobuoyNoElement;
@@ -45,6 +46,7 @@ public class SonobuoyBehavior : MonoBehaviour
         timerBeforeEffect = effectFrequency;
 
         rangeDisplay.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
+        sonobuoyCollider.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
         rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
 
         identifyImage.sprite = null;

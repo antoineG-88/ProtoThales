@@ -68,7 +68,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
     }
 
-    private void PickRandomWaypoint()
+    public void PickRandomWaypoint()
     {
         random = Random.Range(0, (allWaypoints.Count));
         nextPosition = allWaypoints[random];
@@ -78,28 +78,34 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
     private void MoveSubmarine()
     {
-        if (countWaypointsAchieved < submarineWaypoints)
+        if (!submarineCounterMeasuresScript.raycastTouchObstacle)
         {
-            if (transform.position == nextPosition.position)
+            if (countWaypointsAchieved < submarineWaypoints)
             {
-                timer += Time.deltaTime;               
-
-                if (timer >= nextPosition.GetComponent<Waypoints>().hackingTime)
+                if (transform.position == nextPosition.position)
                 {
-                    allWaypoints.RemoveAt(random);
-                    countWaypointsAchieved++;
-                    PickRandomWaypoint();
-                    waypointHacked = true;
+                    timer += Time.deltaTime;
+                    submarineCounterMeasuresScript.canAvoidFregate = false;
+
+                    if (timer >= nextPosition.GetComponent<Waypoints>().hackingTime)
+                    {
+                        allWaypoints.RemoveAt(random);
+                        countWaypointsAchieved++;
+                        PickRandomWaypoint();
+                        waypointHacked = true;
+                    }
+                }
+                else
+                {
+                    waypointHacked = false;
+
+                    timer = 0;
+
+                    transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * currentSpeed);
                 }
             }
-            else
-            {
-                waypointHacked = false;
+        }
 
-                timer = 0;
-
-                transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * currentSpeed);
-            }
-        }       
+        
     }
 }

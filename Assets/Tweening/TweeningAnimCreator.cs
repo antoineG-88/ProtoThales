@@ -21,6 +21,7 @@ public class TweeningAnimCreator : MonoBehaviour
     [HideInInspector] public Vector3 animationEndScale;
     [HideInInspector] public float animationStartRot;
     [HideInInspector] public float animationEndRot;
+    [HideInInspector] public bool movementRelativeToOriginalPos;
 
     [Header("Test Animation > Press \"T\" at runtime to preview")]
     public TweeningAnimator testTweenAnimator;
@@ -68,6 +69,7 @@ public class TweeningAnimCreator : MonoBehaviour
         anim.customScaleCurve = customScaleCurve;
         anim.scaleAnimationCurve = customScaleCurve ? scaleAnimationCurve : animationCurve;
         anim.rotAnimationCurve = customRotCurve ? rotAnimationCurve : animationCurve;
+        anim.movementRelativeToOriginalPos = movementRelativeToOriginalPos;
 
         string path = AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID());
         if (path == "")
@@ -101,6 +103,16 @@ public class TweeningAnimCreator : MonoBehaviour
             {
                 StartCoroutine(testTweenAnimator.anim.PlayBackward(testTweenAnimator.rectTransform, testTweenAnimator.canvasGroup, true));
             }
+        }
+
+    }
+
+    public void UpdateRelativePos()
+    {
+        if (movementRelativeToOriginalPos == true && animationStartPos != Vector2.zero)
+        {
+            animationEndPos -= animationStartPos;
+            animationStartPos = Vector2.zero;
         }
     }
 }

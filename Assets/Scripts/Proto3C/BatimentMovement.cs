@@ -8,6 +8,7 @@ public class BatimentMovement : MonoBehaviour
     public float distanceToStop;
     public LayerMask seaMask;
     public UICard destinationCard;
+    public bool isStandard;
 
     [HideInInspector] public Vector2 currentDestination;
     [HideInInspector] public Vector2 currentPosition;
@@ -40,35 +41,38 @@ public class BatimentMovement : MonoBehaviour
         destinationDirection = currentDestination - currentPosition;
         destinationDirection.Normalize();
 
-        if (!reachedDest && !destinationCard.isDragged)
+        if (isStandard)
         {
-            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
-            destinationLine.enabled = true;
-            destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
-            destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f);
-        }
+            if (!reachedDest && !destinationCard.isDragged)
+            {
+                destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
+                destinationLine.enabled = true;
+                destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
+                destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f);
+            }
 
-        if (reachedDest && !destinationCard.isDragged)
-        {
-            destinationLine.enabled = false;
-        }
+            if (reachedDest && !destinationCard.isDragged)
+            {
+                destinationLine.enabled = false;
+            }
 
-        if(destinationCard.isDropped || (InputDuo.tapHold && destinationCard.isSelected))
-        {
-            currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
-        }
+            if (destinationCard.isDropped || (InputDuo.tapHold && destinationCard.isSelected))
+            {
+                currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+            }
 
-        if(destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
-        {
-            destinationCard.Deselect();
-        }
+            if (destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
+            {
+                destinationCard.Deselect();
+            }
 
-        if(destinationCard.isDragged)
-        {
-            destPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point);
-            destinationLine.enabled = true;
-            destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
-            destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point) + Vector3.up * 0.01f);
+            if (destinationCard.isDragged)
+            {
+                destPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point);
+                destinationLine.enabled = true;
+                destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
+                destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point) + Vector3.up * 0.01f);
+            }
         }
     }
 

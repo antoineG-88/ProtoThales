@@ -4918,6 +4918,7 @@ MonoBehaviour:
     canvasGroup: {fileID: 0}
     originalPos: {x: 0, y: 0}
   debugOnPc: 0
+  _winPanel: {fileID: 1720879021}
   _cameraController: {fileID: 1899627876}
 --- !u!114 &680721228
 MonoBehaviour:
@@ -15668,7 +15669,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1522685212}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 680721227}
+        m_MethodName: LoadScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1522685212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17207,7 +17219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1720879022
 RectTransform:
   m_ObjectHideFlags: 0

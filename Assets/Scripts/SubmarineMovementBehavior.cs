@@ -41,6 +41,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
         }
         else
         {
+            //Change waypoint target if creation lure is lauch when submarine is hacking waypoint
             if (timer > 0 && !lureIsCreateFlag)
             {
                 lureIsCreateFlag = true;

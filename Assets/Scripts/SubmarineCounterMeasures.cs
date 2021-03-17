@@ -7,7 +7,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
     public SubmarineVigilanceBehavior submarineVigilanceScript;
     public SubmarineMovementBehavior submarineMovementScript;
     public MadBehavior madScript;
-    [HideInInspector] public bool submarineDetectByDAM;
+    
     private bool cantUseCounterMeasure;
 
     [Header("Silence Radio")]
@@ -30,6 +30,23 @@ public class SubmarineCounterMeasures : MonoBehaviour
     private int randomDirection;
     public bool usingLeurre;
     [HideInInspector] public bool decoyAreMoving;
+    [HideInInspector] public bool submarineDetectByDAM;
+
+    [Header("Contournement de Bouée")]
+    public float timeBeforeLauchCB;
+    //public float durationCB;
+    public float cooldownTimeCB;
+    public float vigilanceValueCostCB;
+    public bool usingContournementBouee;
+    [HideInInspector] public bool submarineDetectSonobuoy;
+
+    [Header("Changement de Cap")]
+    public float timeBeforeLauchCC;
+    //public float durationCC;
+    public float cooldownTimeCC;
+    public float vigilanceValueCostCC;
+    public bool usingChangementDeCap;
+    [HideInInspector] public bool submarineDetectFregate;
 
     private void Start()
     {
@@ -42,6 +59,8 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             SilenceRadio();
             Leurre();
+            ContournementDeBouee();
+            ChangementDeCap();
         }
 
         LureMovement();
@@ -81,6 +100,22 @@ public class SubmarineCounterMeasures : MonoBehaviour
                 transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
                 lure.transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
             }
+        }
+    }
+
+    private void ContournementDeBouee()
+    {
+        if (submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique && submarineDetectSonobuoy && !usingContournementBouee)
+        {
+            usingContournementBouee = true;
+        }
+    }
+
+    private void ChangementDeCap()
+    {
+        if ((submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Inquiet || submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique) && !usingChangementDeCap)
+        {
+            usingChangementDeCap = true;
         }
     }
 

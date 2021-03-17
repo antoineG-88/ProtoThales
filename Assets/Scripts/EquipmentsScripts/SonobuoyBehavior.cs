@@ -89,7 +89,18 @@ public class SonobuoyBehavior : MonoBehaviour
                 { 
                     if (distance < sonobuoyRange)
                     {
-                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = true;
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectSonobuoy = true;
+
+                        float distanceFromMad = Vector2.Distance(SeaCoord.Planify(madScript.transform.position), SeaCoord.Planify(transform.position));
+
+                        if (distanceFromMad < sonobuoyRange)
+                        {
+                            objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = true;
+                        }
+                        else
+                        {
+                            objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = false;
+                        }
 
                         atLeastOneObjectDetected = true;
                         idendityIndex = i;
@@ -103,10 +114,9 @@ public class SonobuoyBehavior : MonoBehaviour
                     {
                         objectInsideRange.Remove(objectsCanBeDetected[i]);
                     }
-
-                    if(distance > sonobuoyRange)
+                    if (distance > sonobuoyRange)
                     {
-                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = false;
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectSonobuoy = false;
                     }
                 }
             }

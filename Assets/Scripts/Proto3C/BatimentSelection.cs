@@ -21,6 +21,9 @@ public class BatimentSelection : MonoBehaviour
 
     private void Start()
     {
+        fregateSelectAnim.originalPos = fregateSelectAnim.rectTransform.anchoredPosition;
+        patMarSelectAnim.originalPos = patMarSelectAnim.rectTransform.anchoredPosition;
+
         fregateActionPanelAnim.canvasGroup = fregateActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
         patMarActionPanelAnim.canvasGroup = patMarActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
         SelectBatiment(fregateAction, true);
@@ -77,8 +80,8 @@ public class BatimentSelection : MonoBehaviour
             {
                 StartCoroutine(fregateActionPanelAnim.anim.Play(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup));
                 StartCoroutine(patMarActionPanelAnim.anim.PlayBackward(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup, true));
-                StartCoroutine(fregateSelectAnim.anim.Play(fregateSelectAnim.rectTransform, null));
-                StartCoroutine(patMarSelectAnim.anim.PlayBackward(patMarSelectAnim.rectTransform, null, true));
+                StartCoroutine(fregateSelectAnim.anim.Play(fregateSelectAnim.rectTransform, null, fregateSelectAnim.originalPos));
+                StartCoroutine(patMarSelectAnim.anim.PlayBackward(patMarSelectAnim.rectTransform, null, patMarSelectAnim.originalPos, true));
                 patMarActionPanelAnim.canvasGroup.blocksRaycasts = false;
                 fregateActionPanelAnim.canvasGroup.blocksRaycasts = true;
             }
@@ -86,8 +89,8 @@ public class BatimentSelection : MonoBehaviour
             {
                 StartCoroutine(patMarActionPanelAnim.anim.Play(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup));
                 StartCoroutine(fregateActionPanelAnim.anim.PlayBackward(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup, true));
-                StartCoroutine(patMarSelectAnim.anim.Play(patMarSelectAnim.rectTransform, null));
-                StartCoroutine(fregateSelectAnim.anim.PlayBackward(fregateSelectAnim.rectTransform, null, true));
+                StartCoroutine(patMarSelectAnim.anim.Play(patMarSelectAnim.rectTransform, null, patMarSelectAnim.originalPos));
+                StartCoroutine(fregateSelectAnim.anim.PlayBackward(fregateSelectAnim.rectTransform, null, fregateSelectAnim.originalPos, true));
                 patMarActionPanelAnim.canvasGroup.blocksRaycasts = true;
                 fregateActionPanelAnim.canvasGroup.blocksRaycasts = false;
             }

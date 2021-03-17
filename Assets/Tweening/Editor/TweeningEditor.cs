@@ -75,6 +75,11 @@ public class TweeningEditor : Editor
             tweeningAnimCreator.SaveEnd();
         }
 
+        tweeningAnimCreator.movementRelativeToOriginalPos = EditorGUILayout.Toggle("Movement relative to start pos", tweeningAnimCreator.movementRelativeToOriginalPos);
+        if (tweeningAnimCreator.movementRelativeToOriginalPos)
+        {
+            tweeningAnimCreator.UpdateRelativePos();
+        }
 
         GUILayout.Space(15);
 

@@ -26,18 +26,21 @@ public class BatimentMovement : MonoBehaviour
     public virtual void Start()
     {
         canChangeDestination = true;
+
         destinationLine = GetComponent<LineRenderer>();
         destinationLine.enabled = false;
+        currentDestination = SeaCoord.Planify(destPreview.transform.position);
+
         currentPosition = SeaCoord.Planify(transform.position);
         currentAngle = 0;
         currentDirection = SeaCoord.GetDirectionFromAngle(currentAngle);
-        currentDestination = SeaCoord.Planify(destPreview.transform.position);
+        currentDestination = SeaCoord.Planify(transform.position);
     }
 
     public virtual void Update()
     {
-        currentZone = TerrainZoneHandler.GetCurrentZone(currentPosition);
-        reachedDest = Vector2.Distance(currentPosition, currentDestination) < distanceToStop;
+        currentZone = TerrainZoneHandler.GetCurrentZone(currentPosition, currentZone);
+        UpdateHasReachedDest();
         destinationDirection = currentDestination - currentPosition;
         destinationDirection.Normalize();
 
@@ -58,7 +61,8 @@ public class BatimentMovement : MonoBehaviour
 
             if (destinationCard.isDropped || (InputDuo.tapHold && destinationCard.isSelected))
             {
-                currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+                currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
+                GameManager.cameraController.MoveCameraWithEdge();
             }
 
             if (destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
@@ -68,10 +72,10 @@ public class BatimentMovement : MonoBehaviour
 
             if (destinationCard.isDragged)
             {
-                destPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point);
+                destPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
                 destinationLine.enabled = true;
                 destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
-                destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point) + Vector3.up * 0.01f);
+                destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point) + Vector3.up * 0.01f);
             }
         }
     }
@@ -104,5 +108,10 @@ public class BatimentMovement : MonoBehaviour
             currentDestination = newDestination;
             return true;
         }
+    }
+
+    public void UpdateHasReachedDest()
+    {
+        reachedDest = Vector2.Distance(currentPosition, currentDestination) < distanceToStop;
     }
 }

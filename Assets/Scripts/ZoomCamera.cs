@@ -34,12 +34,12 @@ public class ZoomCamera : MonoBehaviour
             /*
             if (InputDuo.tapDown)
             {
-                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+                startTouch = GetSeaPosition(GameManager.useMouseControl);
             }
 
             if (InputDuo.tapHold)
             {
-                touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                touchMovement = startTouch - GetSeaPosition(GameManager.useMouseControl);
                 mainCamera.transform.position += touchMovement;
 
                 //Limit Camera movement 
@@ -54,7 +54,7 @@ public class ZoomCamera : MonoBehaviour
             {
                 downTag = false;
                 startTouchRegistered = true;
-                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+                startTouch = GetSeaPosition(GameManager.useMouseControl);
             }
 
             if (InputDuo.tapDown)
@@ -66,7 +66,7 @@ public class ZoomCamera : MonoBehaviour
             {
                 if (startTouchRegistered)
                 {
-                    touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                    touchMovement = startTouch - GetSeaPosition(GameManager.useMouseControl);
                     mainCamera.transform.position += touchMovement;
 
                     //Limit Camera movement 

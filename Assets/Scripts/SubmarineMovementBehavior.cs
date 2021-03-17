@@ -54,7 +54,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
     private void ChangeSpeedByZone()
     {
-        submarineZone = TerrainZoneHandler.GetCurrentZone(SeaCoord.Planify(transform.position));
+        submarineZone = TerrainZoneHandler.GetCurrentZone(SeaCoord.Planify(transform.position), submarineZone);
         
         if (submarineZone.relief == TerrainZone.Relief.Hilly)
         {

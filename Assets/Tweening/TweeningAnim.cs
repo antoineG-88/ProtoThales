@@ -57,7 +57,8 @@ public class TweeningAnim : ScriptableObject
             }
             else
             {
-                colorText.color = colorAnimation.Evaluate(time / animationTime);
+                if(colorText != null)
+                    colorText.color = colorAnimation.Evaluate(time / animationTime);
             }
             animatedTransform.anchoredPosition = Vector2.Lerp(movementRelativeToOriginalPos ? originalPos : animationStartPos, movementRelativeToOriginalPos ? originalPos + animationEndPos : animationEndPos, animationCurve.Evaluate(time / animationTime));
 
@@ -87,7 +88,8 @@ public class TweeningAnim : ScriptableObject
         }
         else
         {
-            colorText.color = colorAnimation.Evaluate(1);
+            if (colorText != null)
+                colorText.color = colorAnimation.Evaluate(1);
         }
 
         if(canvasGroup != null)
@@ -122,7 +124,8 @@ public class TweeningAnim : ScriptableObject
             }
             else
             {
-                colorText.color = colorAnimation.Evaluate(time / animationTime);
+                if (colorText != null)
+                    colorText.color = colorAnimation.Evaluate(time / animationTime);
             }
             animatedTransform.anchoredPosition = Vector2.Lerp(animationStartPos, animationEndPos, animationCurve.Evaluate(time / animationTime));
 
@@ -152,7 +155,8 @@ public class TweeningAnim : ScriptableObject
         }
         else
         {
-            colorText.color = colorAnimation.Evaluate(1);
+            if (colorText != null)
+                colorText.color = colorAnimation.Evaluate(1);
         }
 
         if (canvasGroup != null)
@@ -194,7 +198,8 @@ public class TweeningAnim : ScriptableObject
             }
             else
             {
-                colorText.color = colorAnimation.Evaluate(1 - (time / animationTime));
+                if (colorText != null)
+                    colorText.color = colorAnimation.Evaluate(1 - (time / animationTime));
             }
 
             if(onlyInversePos)
@@ -232,7 +237,8 @@ public class TweeningAnim : ScriptableObject
         }
         else
         {
-            colorText.color = colorAnimation.Evaluate(0);
+            if (colorText != null)
+                colorText.color = colorAnimation.Evaluate(0);
         }
 
         if (canvasGroup != null)

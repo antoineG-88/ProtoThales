@@ -11,7 +11,7 @@ public class BatimentController : MonoBehaviour
     public GameObject destinationPreview;
     public PatMarHandler patMarHandler;
 
-    public Batiment batimentSelected;
+    public OldBatiment batimentSelected;
     private Touch touch;
     private LineRenderer movementLine;
 
@@ -74,7 +74,7 @@ public class BatimentController : MonoBehaviour
             RaycastHit touchHit = InputDuo.SeaRaycast(elementsLayer, touch.phase == TouchPhase.Ended);
             if (touchHit.collider != null)
             {
-                batimentSelected = touchHit.collider.transform.GetComponentInParent<Batiment>();
+                batimentSelected = touchHit.collider.transform.GetComponentInParent<OldBatiment>();
                 selectionHighlighter.SetActive(true);
             }
             else
@@ -103,7 +103,7 @@ public class BatimentController : MonoBehaviour
             RaycastHit touchHit;
             if (InputDuo.tapDown)
             {
-                touchHit = InputDuo.SeaRaycast(elementsLayer, !Input.GetButton("LeftClick"));
+                touchHit = InputDuo.SeaRaycast(elementsLayer, !GameManager.useMouseControl);
                 if (touchHit.collider != null)
                 {
                     if (batimentSelected.transform == touchHit.collider.transform.parent)
@@ -116,7 +116,7 @@ public class BatimentController : MonoBehaviour
 
             if (isDragingDest)
             {
-                touchHit = InputDuo.SeaRaycast(surfaceLayer, !Input.GetButton("LeftClick"));
+                touchHit = InputDuo.SeaRaycast(surfaceLayer, !GameManager.useMouseControl);
                 Vector2 pointedPosition = SeaCoord.Planify(touchHit.point);
                 if (Vector2.Distance(batimentSelected.currentPosition, pointedPosition) > minDistanceToDrag)
                 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fregate : Batiment
+public class Fregate : OldBatiment
 {
     public float movementSpeed;
     public float windMovementSpeed;

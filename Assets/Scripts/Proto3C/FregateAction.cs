@@ -17,12 +17,12 @@ public class FregateAction : BatimentAction
         hullSonarDescriptionAnim.canvasGroup = hullSonarDescriptionAnim.rectTransform.GetComponent<CanvasGroup>();
     }
 
-    void Update()
+    public override void Update()
     {
-        hullSonarCardUpdate();
+        HullSonarCardUpdate();
     }
 
-    public void hullSonarCardUpdate()
+    public void HullSonarCardUpdate()
     {
         if (hullSonarCard.isHovered && !hullSonarDescriptionOpened)
         {
@@ -34,10 +34,5 @@ public class FregateAction : BatimentAction
             hullSonarDescriptionOpened = false;
             StartCoroutine(hullSonarDescriptionAnim.anim.PlayBackward(hullSonarDescriptionAnim.rectTransform, hullSonarDescriptionAnim.canvasGroup, true));
         }
-    }
-
-    public void UseHelicopter()
-    {
-        Debug.Log("aoiuzfb");
     }
 }

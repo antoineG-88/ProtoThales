@@ -12,6 +12,7 @@ public class UICard : MonoBehaviour
      , IEndDragHandler
 {
     public static bool pointerFocusedOnCard;
+    public static bool pointerOverAnyUICard;
     public static bool anyCardSelected;
     private static List<UICard> allCards = new List<UICard>();
     public static TweeningAnimator darkBackAnim;
@@ -45,6 +46,13 @@ public class UICard : MonoBehaviour
             if(allCards[i].isFocused)
                 pointerFocusedOnCard = allCards[i].isFocused;
         }
+
+        pointerOverAnyUICard = false;
+        for (int i = 0; i < allCards.Count; i++)
+        {
+            if (allCards[i].isCursorOn)
+                pointerOverAnyUICard = allCards[i].isCursorOn;
+        }
     }
     public static void UpdateSelectedCard()
     {
@@ -64,7 +72,13 @@ public class UICard : MonoBehaviour
 
     private void Update()
     {
-        isHovered = isHovered && Input.touchCount > 0;
+        isHovered = isCursorOn && (GameManager.useMouseControl ? Input.GetButton("LeftClick") : Input.touchCount > 0);
+
+        if(!GameManager.useMouseControl && Input.touchCount == 0)
+        {
+            isCursorOn = false;
+        }
+
         isFocused = isHovered || isDragged || isSelected;
 
         if (dropCount > 0)
@@ -113,7 +127,7 @@ public class UICard : MonoBehaviour
             cursorGoOut = false;
         }
 
-        if(holdTime > 0.8f && !descriptionOpened)
+        if(holdTime > 0.8f && !descriptionOpened && BatimentAction.currentActionNumber == 0)
         {
             descriptionOpened = true;
             StopAllCoroutines();
@@ -195,14 +209,12 @@ public class UICard : MonoBehaviour
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isHovered = true;
         isCursorOn = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isCursorOn = false;
-        isHovered = false;
         if(isDragged)
         {
             cursorGoOut = true;

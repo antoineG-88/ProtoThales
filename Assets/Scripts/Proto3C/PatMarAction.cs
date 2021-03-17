@@ -26,7 +26,7 @@ public class PatMarAction : BatimentAction
         madDescriptionAnim.canvasGroup = madDescriptionAnim.rectTransform.GetComponent<CanvasGroup>();
     }
 
-    void Update()
+    public override void Update()
     {
         SonobuoyUpdate();
         MadCardUpdate();
@@ -65,13 +65,13 @@ public class PatMarAction : BatimentAction
             dropPosPreview.transform.position = SeaCoord.GetFlatCoord(droppingPos);
         }
 
-        isDraggingAction = sonobuoyCard.isFocused;
+        isDoingAction = sonobuoyCard.isFocused;
 
         if (((sonobuoyCard.isSelected && InputDuo.tapUp) || (sonobuoyCard.isDropped && !sonobuoyCard.isCursorOn)) && !sonobuoyCard.descriptionOpened && isChoosingDropPos)
         {
             isChoosingDropPos = false;
             isDroppingSonobuoy = true;
-            droppingPos = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+            droppingPos = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
             patMarMovement.currentDestination = droppingPos;
             dropPosPreview.SetActive(true);
             sonobuoyCard.Deselect();
@@ -81,7 +81,7 @@ public class PatMarAction : BatimentAction
         {
             isChoosingDropPos = true;
             dropPosPreview.SetActive(true);
-            dropPosPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, true).point);
+            dropPosPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
         }
         else if (!isDroppingSonobuoy)
         {

@@ -40,7 +40,7 @@ public class HelicopterHandler : MonoBehaviour
         if (helicopterCard.isDragged && !helicopterCard.isHovered && !isActive)
         {
             isChoosingHelicopterDest = true;
-            currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+            currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
             helicopterDestPreview.gameObject.SetActive(true);
             helicopterDestPreview.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.1f;
         }
@@ -49,9 +49,9 @@ public class HelicopterHandler : MonoBehaviour
 
         if(helicopterCard.isDropped && isChoosingHelicopterDest && !isActive)
         {
-            if (Vector2.Distance(SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point), fregateMovement.currentPosition) < helicopterRange)
+            if (Vector2.Distance(SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point), fregateMovement.currentPosition) < helicopterRange)
             {
-                currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+                currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
                 currentPosition = fregateMovement.currentPosition;
                 isActive = true;
             }

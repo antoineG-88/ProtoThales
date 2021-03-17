@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Helicopter : Batiment
+public class Helicopter : OldBatiment
 {
     public float speed;
     public float turnSpeed;

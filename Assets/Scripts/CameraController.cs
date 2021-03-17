@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour
     //public BatimentController batimentControllerScript;
     public BatimentSelection batimentSelection;
     public Transform camTargetTransform;
+    [Range(0f, 1f)] public float initialZoon;
 
     [Header("Zoom Settings")]
     public float camMinVerticalDistance;
@@ -19,6 +20,9 @@ public class CameraController : MonoBehaviour
     public float mouseZoomSpeed;
     public float touchZoomSpeed;
     public float lerpMoveRatio;
+    [Header("Edge Move Settings")]
+    public float offsetFromEdgeDetectionToMove;
+    public float edgeMoveSpeed;
 
     private Touch touch;
     private Camera mainCamera;
@@ -34,19 +38,19 @@ public class CameraController : MonoBehaviour
     {
         mainCamera = Camera.main;
         camSeaFocusPoint = Vector2.zero;
-        currentZoom = camMaxVerticalDistance;
+        currentZoom = initialZoon;
         seaPlane = new Plane(Vector3.up, new Vector3(0, 0, 0));
     }
 
     void Update()
     {
-        if (Input.touchCount < 2 && !UICard.pointerFocusedOnCard)
+        if (Input.touchCount < 2 && !UICard.pointerFocusedOnCard && BatimentAction.currentActionNumber == 0)
         {
             if (downTag)
             {
                 downTag = false;
                 startTouchRegistered = true;
-                startTouch = GetSeaPosition(!Input.GetButton("LeftClick"));
+                startTouch = GetSeaPosition(GameManager.useMouseControl);
             }
 
             if (InputDuo.tapDown)
@@ -58,7 +62,7 @@ public class CameraController : MonoBehaviour
             {
                 if (startTouchRegistered)
                 {
-                    touchMovement = startTouch - GetSeaPosition(!Input.GetButton("LeftClick"));
+                    touchMovement = startTouch - GetSeaPosition(GameManager.useMouseControl);
                     camSeaFocusPoint += SeaCoord.Planify(touchMovement);
                     camSeaFocusPoint = new Vector2(Mathf.Clamp(camSeaFocusPoint.x, minMaxHorizontalBounds.x, minMaxHorizontalBounds.y), Mathf.Clamp(camSeaFocusPoint.y, minMaxVerticalBounds.x, minMaxVerticalBounds.y));
                     //Limit Camera movement 
@@ -131,5 +135,37 @@ public class CameraController : MonoBehaviour
         float distance;
         seaPlane.Raycast(touchRay, out distance);
         return touchRay.GetPoint(distance);
+    }
+
+    public void MoveCameraWithEdge()
+    {
+        Vector2 cursorPos = GameManager.useMouseControl ? (Vector2)Input.mousePosition : InputDuo.touch.position;
+        float offsetFromTop = Screen.height - cursorPos.y;
+        float offsetFromBot = cursorPos.y;
+        float offsetFromRight = Screen.width - cursorPos.x;
+        float offsetFromLeft = cursorPos.x;
+
+        Vector2 cameraMovement = Vector2.zero;
+        if (GameManager.useMouseControl ? Input.GetButton("LeftClick") : Input.touchCount > 0)
+        {
+            if(offsetFromTop < offsetFromEdgeDetectionToMove)
+            {
+                cameraMovement += Vector2.up;
+            }
+            if (offsetFromBot < offsetFromEdgeDetectionToMove)
+            {
+                cameraMovement += Vector2.down;
+            }
+            if (offsetFromRight < offsetFromEdgeDetectionToMove)
+            {
+                cameraMovement += Vector2.right;
+            }
+            if (offsetFromLeft < offsetFromEdgeDetectionToMove)
+            {
+                cameraMovement += Vector2.left;
+            }
+        }
+        cameraMovement.Normalize();
+        camSeaFocusPoint += cameraMovement * edgeMoveSpeed * Time.deltaTime;
     }
 }

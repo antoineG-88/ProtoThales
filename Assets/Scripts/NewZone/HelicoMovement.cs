@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FregateMovement : BatimentMovement
+public class HelicoMovement : BatimentMovement
 {
-    public float movementSpeed;
+    public float maxSpeed;
     public float accelerationForce;
     public float turnSpeed;
-    public ParticleSystem thrustParticle;
-    public float zoneDetectionDistance;
 
-    private int currentTurnSide;
+    [HideInInspector] public bool isControllable;
+
     private float currentMaxSpeed;
-    private FregateHandler fregateHandler;
-
-    public bool isMoving;
+    private int currentTurnSide;
 
     public override void Start()
     {
         base.Start();
-        fregateHandler = GetComponent<FregateHandler>();
+        currentMaxSpeed = maxSpeed;
         currentSpeed = 0;
-        currentMaxSpeed = movementSpeed;
+        isControllable = true;
     }
 
     public override void Update()
@@ -29,25 +26,30 @@ public class FregateMovement : BatimentMovement
         base.Update();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
-        if (IsLandInFront())
-        {
-            if (currentSpeed > 0)
-            {
-                currentSpeed -= accelerationForce * Time.fixedDeltaTime;
-                if (currentSpeed < 0)
-                {
-                    currentSpeed = 0;
-                }
-            }
-            currentDestination = currentPosition;
-            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
-        }
-        else if (!reachedDest)
-        {
-            isMoving = true;
+        UpdateMovement();
+    }
 
+    void UpdateMovement()
+    {
+        if (isControllable)
+        {
+            destinationLine.enabled = true;
+            destPreview.SetActive(true);
+            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
+            destinationLine.enabled = true;
+            destinationLine.SetPosition(0, SeaCoord.GetFlatCoord(currentPosition) + Vector3.up * 0.01f);
+            destinationLine.SetPosition(1, SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f);
+        }
+        else
+        {
+            destinationLine.enabled = false;
+            destPreview.SetActive(false);
+        }
+
+        if (!reachedDest)
+        {
             if (currentSpeed <= currentMaxSpeed)
             {
                 if (currentSpeed < currentMaxSpeed - accelerationForce * Time.fixedDeltaTime)
@@ -92,33 +94,7 @@ public class FregateMovement : BatimentMovement
                 currentSpeed = 0;
             }
         }
-        else
-        {
-            isMoving = false;
-        }
-
-        if (thrustParticle.isPlaying)
-        {
-            if (reachedDest)
-            {
-                thrustParticle.Stop();
-            }
-        }
-        else
-        {
-            if (!reachedDest)
-            {
-                thrustParticle.Play();
-            }
-        }
 
         MoveForward(currentSpeed);
-    }
-
-    private bool IsLandInFront()
-    {
-        TerrainZone zone = TerrainZoneHandler.GetCurrentZone(currentPosition + currentDirection * zoneDetectionDistance, currentZone);
-        TerrainZone zone2 = TerrainZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance, currentZone);
-        return (zone != null && zone.relief == TerrainZone.Relief.Land && zone == zone2);
     }
 }

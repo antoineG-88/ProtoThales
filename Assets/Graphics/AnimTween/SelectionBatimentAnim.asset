@@ -123,6 +123,6 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  isImage: 1
+  isImage: 0
   colorImage: {fileID: 0}
   colorText: {fileID: 0}

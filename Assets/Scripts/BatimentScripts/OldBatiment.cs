@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Batiment : MonoBehaviour
+public class OldBatiment : MonoBehaviour
 {
     public GameObject destPreview;
     public float distanceToStop;

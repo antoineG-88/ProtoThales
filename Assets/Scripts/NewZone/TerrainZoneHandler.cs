@@ -18,14 +18,24 @@ public class TerrainZoneHandler : MonoBehaviour
         zones = mapZones;
         //mainCamera = Camera.main;
     }
-    public static TerrainZone GetCurrentZone(Vector2 position)
+    public static TerrainZone GetCurrentZone(Vector2 position, TerrainZone previousZone)
     {
         TerrainZone currentZone = null;
-        for (int i = 0; i < zones.Count; i++)
+        if(zones.Count > 0)
         {
-            if (zones[i].IsElementInZone(position))
+            if (previousZone == null || !previousZone.IsElementInZone(position))
             {
-                currentZone = zones[i];
+                for (int i = 0; i < zones.Count; i++)
+                {
+                    if (zones[i].IsElementInZone(position))
+                    {
+                        currentZone = zones[i];
+                    }
+                }
+            }
+            else
+            {
+                return previousZone;
             }
         }
 

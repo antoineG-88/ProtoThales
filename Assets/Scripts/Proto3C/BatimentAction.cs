@@ -5,7 +5,10 @@ using UnityEngine;
 public class BatimentAction : MonoBehaviour
 {
     [HideInInspector] public BatimentMovement batimentMovement;
-    [HideInInspector] public bool isDraggingAction;
+    [HideInInspector] public bool isDoingAction;
+    [HideInInspector] public bool doingActionFlag;
+    public static int currentActionNumber;
+
     private void Awake()
     {
         batimentMovement = GetComponent<BatimentMovement>();
@@ -16,7 +19,7 @@ public class BatimentAction : MonoBehaviour
 
     }
 
-    void Update()
+    public virtual void Update()
     {
         
     }

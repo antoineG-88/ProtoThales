@@ -27,7 +27,7 @@ public class SonobuoyBehavior : MonoBehaviour
     public List<GameObject> objectInsideRange = new List<GameObject>();
 
 
-    private GameObject[] objectsCanBeDetected;
+    public List<GameObject> objectsCanBeDetected;
     private Sprite[] objectsCanBeDetectedSprite;
 
     private bool flagObjectInsideRange;
@@ -37,7 +37,7 @@ public class SonobuoyBehavior : MonoBehaviour
 
     private void Start()
     {
-        madScript.sonobuoys.Add(gameObject);
+        //madScript.sonobuoys.Add(gameObject);
         objectsCanBeDetected = madScript.objectsCanBeDetected;
         objectsCanBeDetectedSprite = madScript.objectsCanBeDetectedSprite;
 
@@ -65,7 +65,7 @@ public class SonobuoyBehavior : MonoBehaviour
         }
         else
         {
-            madScript.sonobuoys.Remove(gameObject);
+            madScript.sonobuoys.Remove(this);
             Destroy(gameObject);
         }
     }
@@ -75,24 +75,58 @@ public class SonobuoyBehavior : MonoBehaviour
         bool atLeastOneObjectDetected = false;
         int idendityIndex = 0;
 
-        for (int i = 0; i < objectsCanBeDetected.Length; i++)
+        for (int i = 0; i < objectsCanBeDetected.Count; i++)
         {
             distance = Vector2.Distance(SeaCoord.Planify(objectsCanBeDetected[i].transform.position), SeaCoord.Planify(transform.position));
 
-            if (distance < sonobuoyRange)
+            if (objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>() != null)
             {
-                atLeastOneObjectDetected = true;
-                idendityIndex = i;
-
-                if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                if (objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineIsInvisible)
                 {
-                    objectInsideRange.Add(objectsCanBeDetected[i]);
+                    //Do no detect submarine
+                }
+                else
+                { 
+                    if (distance < sonobuoyRange)
+                    {
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = true;
+
+                        atLeastOneObjectDetected = true;
+                        idendityIndex = i;
+
+                        if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                        {
+                            objectInsideRange.Add(objectsCanBeDetected[i]);
+                        }
+                    }
+                    else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+                    {
+                        objectInsideRange.Remove(objectsCanBeDetected[i]);
+                    }
+
+                    if(distance > sonobuoyRange)
+                    {
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = false;
+                    }
                 }
             }
-            else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+            else
             {
-                objectInsideRange.Remove(objectsCanBeDetected[i]);
-            }
+                if (distance < sonobuoyRange)
+                {
+                    atLeastOneObjectDetected = true;
+                    idendityIndex = i;
+
+                    if (!objectInsideRange.Contains(objectsCanBeDetected[i]))
+                    {
+                        objectInsideRange.Add(objectsCanBeDetected[i]);
+                    }
+                }
+                else if (objectInsideRange.Contains(objectsCanBeDetected[i]))
+                {
+                    objectInsideRange.Remove(objectsCanBeDetected[i]);
+                }
+            }           
         }
 
         if (atLeastOneObjectDetected)
@@ -109,7 +143,14 @@ public class SonobuoyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    identifyImage.sprite = objectsCanBeDetectedSprite[idendityIndex];
+                    if (idendityIndex >= objectsCanBeDetectedSprite.Length)
+                    {
+                        identifyImage.sprite = objectsCanBeDetectedSprite[0];
+                    }
+                    else
+                    {
+                        identifyImage.sprite = objectsCanBeDetectedSprite[idendityIndex];
+                    }
                 }               
             }
             else

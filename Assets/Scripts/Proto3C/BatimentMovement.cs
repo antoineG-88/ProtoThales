@@ -20,6 +20,7 @@ public class BatimentMovement : MonoBehaviour
     protected Vector2 destinationDirection;
 
     [HideInInspector] public bool canChangeDestination;
+    [HideInInspector] public TerrainZone currentZone;
 
     public virtual void Start()
     {
@@ -34,6 +35,7 @@ public class BatimentMovement : MonoBehaviour
 
     public virtual void Update()
     {
+        currentZone = TerrainZoneHandler.GetCurrentZone(currentPosition);
         reachedDest = Vector2.Distance(currentPosition, currentDestination) < distanceToStop;
         destinationDirection = currentDestination - currentPosition;
         destinationDirection.Normalize();
@@ -51,9 +53,14 @@ public class BatimentMovement : MonoBehaviour
             destinationLine.enabled = false;
         }
 
-        if(destinationCard.isDropped)
+        if(destinationCard.isDropped || (InputDuo.tapHold && destinationCard.isSelected))
         {
             currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, true).point);
+        }
+
+        if(destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
+        {
+            destinationCard.Deselect();
         }
 
         if(destinationCard.isDragged)

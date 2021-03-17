@@ -5,10 +5,10 @@ using UnityEngine;
 public class MadBehavior : MonoBehaviour
 {
     [Header("Sonobuys in Scene")]
-    public List<GameObject> sonobuoys = new List<GameObject>();
+    public List<SonobuoyBehavior> sonobuoys = new List<SonobuoyBehavior>();
 
     [Header("Detected objects")]
-    public GameObject[] objectsCanBeDetected;
+    public List<GameObject> objectsCanBeDetected;
     public Sprite[] objectsCanBeDetectedSprite;
 
     private void Start()

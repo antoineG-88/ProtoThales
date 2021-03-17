@@ -17,12 +17,13 @@ public class BatimentSelection : MonoBehaviour
     public TweeningAnimator patMarSelectAnim;
     public UICard fregateSelectCard;
     public UICard patMarSelectCard;
+    public LayerMask batimentMask;
 
     private void Start()
     {
         fregateActionPanelAnim.canvasGroup = fregateActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
         patMarActionPanelAnim.canvasGroup = patMarActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
-        SelectBatiment(true);
+        SelectBatiment(fregateAction, true);
     }
 
     private void Update()
@@ -30,23 +31,49 @@ public class BatimentSelection : MonoBehaviour
         selectionDisplay.position = SeaCoord.GetFlatCoord(batimentSelected.batimentMovement.currentPosition);
         if(fregateSelectCard.isHovered)
         {
-            SelectBatiment(true);
+            SelectBatiment(fregateAction, true);
         }
         if(patMarSelectCard.isHovered)
         {
-            SelectBatiment(false);
+            SelectBatiment(patMarAction, true);
+        }
+
+        UpdateDirectSelect();
+    }
+
+    RaycastHit hit;
+
+    private void UpdateDirectSelect()
+    {
+        if(!UICard.pointerFocusedOnCard && !UICard.anyCardSelected && InputDuo.tapDown)
+        {
+            hit = InputDuo.SeaRaycast(batimentMask, true);
+            if(hit.collider != null)
+            {
+                if(hit.collider.transform.parent == fregateAction.transform)
+                {
+                    SelectBatiment(fregateAction, false);
+                }
+                else if (hit.collider.transform.parent == patMarAction.transform)
+                {
+                    SelectBatiment(patMarAction, false);
+                }
+            }
         }
     }
 
-
-    public void SelectBatiment(bool selectFregate)
+    public void SelectBatiment(BatimentAction batiment, bool refocusCamera)
     {
         BatimentAction previousBatimentSelected = batimentSelected;
-        batimentSelected = selectFregate ? (BatimentAction)fregateAction : patMarAction;
-        cameraController.camSeaFocusPoint = selectFregate ? fregateMovement.currentPosition : patMarMovement.currentPosition;
+        batimentSelected = batiment;
+        if (refocusCamera)
+        {
+            cameraController.camSeaFocusPoint = batiment.batimentMovement.currentPosition;
+        }
+
         if(previousBatimentSelected != batimentSelected)
         {
-            if (selectFregate)
+            if (batiment == fregateAction)
             {
                 StartCoroutine(fregateActionPanelAnim.anim.Play(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup));
                 StartCoroutine(patMarActionPanelAnim.anim.PlayBackward(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup, true));
@@ -55,7 +82,7 @@ public class BatimentSelection : MonoBehaviour
                 patMarActionPanelAnim.canvasGroup.blocksRaycasts = false;
                 fregateActionPanelAnim.canvasGroup.blocksRaycasts = true;
             }
-            else
+            else if(batiment == patMarAction)
             {
                 StartCoroutine(patMarActionPanelAnim.anim.Play(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup));
                 StartCoroutine(fregateActionPanelAnim.anim.PlayBackward(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup, true));

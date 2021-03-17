@@ -62,10 +62,28 @@ public class HullSonarBehavior : MonoBehaviour
         {
             if(raycastHit.collider != null)
             {
-                if (!colliderObjectSonar.Contains(raycastHit.collider))
+                if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>() != null)
                 {
-                    colliderObjectSonar.Add(raycastHit.collider);
-                    Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
+                    if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>().submarineIsInvisible)
+                    {
+                        //Do no detect submarine
+                    }
+                    else
+                    {
+                        if (!colliderObjectSonar.Contains(raycastHit.collider))
+                        {
+                            colliderObjectSonar.Add(raycastHit.collider);
+                            Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!colliderObjectSonar.Contains(raycastHit.collider))
+                    {
+                        colliderObjectSonar.Add(raycastHit.collider);
+                        Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
+                    }
                 }
             }            
         }

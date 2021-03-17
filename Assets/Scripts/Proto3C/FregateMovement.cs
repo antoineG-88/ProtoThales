@@ -8,10 +8,13 @@ public class FregateMovement : BatimentMovement
     public float accelerationForce;
     public float turnSpeed;
     public ParticleSystem thrustParticle;
+    public float zoneDetectionDistance;
 
     private int currentTurnSide;
     private float currentMaxSpeed;
     private FregateHandler fregateHandler;
+
+    public bool isMoving;
 
     public override void Start()
     {
@@ -28,8 +31,23 @@ public class FregateMovement : BatimentMovement
 
     private void FixedUpdate()
     {
-        if (!reachedDest)
+        if (IsLandInFront())
         {
+            if (currentSpeed > 0)
+            {
+                currentSpeed -= accelerationForce * Time.fixedDeltaTime;
+                if (currentSpeed < 0)
+                {
+                    currentSpeed = 0;
+                }
+            }
+            currentDestination = currentPosition;
+            destPreview.transform.position = SeaCoord.GetFlatCoord(currentDestination) + Vector3.up * 0.01f;
+        }
+        else if (!reachedDest)
+        {
+            isMoving = true;
+
             if (currentSpeed <= currentMaxSpeed)
             {
                 if (currentSpeed < currentMaxSpeed - accelerationForce * Time.fixedDeltaTime)
@@ -74,6 +92,10 @@ public class FregateMovement : BatimentMovement
                 currentSpeed = 0;
             }
         }
+        else
+        {
+            isMoving = false;
+        }
 
         if (thrustParticle.isPlaying)
         {
@@ -91,5 +113,12 @@ public class FregateMovement : BatimentMovement
         }
 
         MoveForward(currentSpeed);
+    }
+
+    private bool IsLandInFront()
+    {
+        TerrainZone zone = TerrainZoneHandler.GetCurrentZone(currentPosition + currentDirection * zoneDetectionDistance);
+        TerrainZone zone2 = TerrainZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance);
+        return (zone != null && zone.relief == TerrainZone.Relief.Land && zone == zone2);
     }
 }

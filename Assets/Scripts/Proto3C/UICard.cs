@@ -12,22 +12,29 @@ public class UICard : MonoBehaviour
      , IEndDragHandler
 {
     public static bool pointerFocusedOnCard;
+    public static bool anyCardSelected;
     private static List<UICard> allCards = new List<UICard>();
     public static TweeningAnimator darkBackAnim;
+
+    public TweeningAnimator dragAnim;
+    public TweeningAnimator holdAnim;
+    public TweeningAnimator selectedAnim;
+    public bool darkenBackWhileHold;
+    public bool canBeSelected;
 
     [HideInInspector] public bool isDragged;
     [HideInInspector] public bool isDropped;
     [HideInInspector] public bool isHovered;
+    [HideInInspector] public bool isCursorOn;
     [HideInInspector] public bool isFocused;
     [HideInInspector] public bool isClicked;
-    public TweeningAnimator dragAnim;
-    public TweeningAnimator holdAnim;
-    public bool darkenBackWhileHold;
-
+    [HideInInspector] public bool isSelected;
     private int dropCount;
     private int clickCount;
     private bool dragFlag;
+    private bool selectedFlag;
     private float holdTime;
+    private bool cursorGoOut;
     [HideInInspector] public bool descriptionOpened;
 
     public static void UpdateFocusCard()
@@ -37,6 +44,15 @@ public class UICard : MonoBehaviour
         {
             if(allCards[i].isFocused)
                 pointerFocusedOnCard = allCards[i].isFocused;
+        }
+    }
+    public static void UpdateSelectedCard()
+    {
+        anyCardSelected = false;
+        for (int i = 0; i < allCards.Count; i++)
+        {
+            if (allCards[i].isSelected)
+                anyCardSelected = allCards[i].isSelected;
         }
     }
 
@@ -49,7 +65,7 @@ public class UICard : MonoBehaviour
     private void Update()
     {
         isHovered = isHovered && Input.touchCount > 0;
-        isFocused = isHovered || isDragged;
+        isFocused = isHovered || isDragged || isSelected;
 
         if (dropCount > 0)
         {
@@ -71,13 +87,30 @@ public class UICard : MonoBehaviour
             isClicked = false;
         }
 
-        if(isHovered)
+        if(isClicked && canBeSelected)
+        {
+            if (isSelected)
+            {
+                Deselect();
+            }
+            else
+            {
+                SelectCard(this);
+            }
+        }
+
+        if(isHovered && !cursorGoOut)
         {
             holdTime += Time.deltaTime;
         }
         if(Input.touchCount == 0)
         {
             holdTime = 0;
+        }
+
+        if(isDropped)
+        {
+            cursorGoOut = false;
         }
 
         if(holdTime > 0.8f && !descriptionOpened)
@@ -104,7 +137,7 @@ public class UICard : MonoBehaviour
         }
 
 
-        if(dragFlag && isHovered && !descriptionOpened)
+        if(dragFlag && isHovered && !descriptionOpened && !isSelected && isDragged)
         {
             if (dragAnim.rectTransform != null)
                 StartCoroutine(dragAnim.anim.Play(dragAnim.rectTransform, null));
@@ -112,10 +145,46 @@ public class UICard : MonoBehaviour
         }
     }
 
+    public void Select()
+    {
+        isSelected = true;
+        if (selectedAnim.rectTransform != null)
+            StartCoroutine(selectedAnim.anim.Play(selectedAnim.rectTransform, null));
+    }
+
+    public void Deselect()
+    {
+        if(isSelected)
+        {
+            isSelected = false;
+            if (selectedAnim.rectTransform != null)
+                StartCoroutine(selectedAnim.anim.PlayBackward(selectedAnim.rectTransform, null, true));
+        }
+    }
+
+    public static void SelectCard(UICard card)
+    {
+        card.Select();
+        for (int i = 0; i < allCards.Count; i++)
+        {
+            if(allCards[i] != card && allCards[i].isSelected)
+            {
+                allCards[i].Deselect();
+            }
+        }
+    }
+
     #region   InterfaceEvents
     public void OnPointerClick(PointerEventData eventData)
     {
-        clickCount = 2;
+        if(!cursorGoOut)
+        {
+            clickCount = 1;
+        }
+        else
+        {
+            cursorGoOut = false;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -127,11 +196,17 @@ public class UICard : MonoBehaviour
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
+        isCursorOn = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        isCursorOn = false;
         isHovered = false;
+        if(isDragged)
+        {
+            cursorGoOut = true;
+        }
         if (!dragFlag && !isDragged)
         {
             dragFlag = true;
@@ -154,7 +229,7 @@ public class UICard : MonoBehaviour
         if(!dragFlag)
         {
             dragFlag = true;
-            if (dragAnim.rectTransform != null)
+            if (dragAnim.rectTransform != null && !isSelected)
                 StartCoroutine(dragAnim.anim.PlayBackward(dragAnim.rectTransform, null, true));
         }
         dropCount = 2;

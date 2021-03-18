@@ -16,43 +16,43 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"2ed5e0df-c5ed-48b7-a148-3f92c1caf114\"\n    },\n    \"m_Name\": \"Largeur ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_F64F0E45\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 20.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"2ed5e0df-c5ed-48b7-a148-3f92c1caf114\"\n    },\n    \"m_Name\": \"Largeur ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_F64F0E45\",\n    \"m_OverrideReferenceName\": \"LargeurOnde\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 20.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"f0dcce1f-4bbe-471f-9916-69445b297b8a\"\n    },\n    \"m_Name\": \"Vitesse ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_2EF285E7\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"f0dcce1f-4bbe-471f-9916-69445b297b8a\"\n    },\n    \"m_Name\": \"Vitesse ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_2EF285E7\",\n    \"m_OverrideReferenceName\": \"VitesseOnde\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"614e2dad-e1c6-48c2-a026-caf1a537e946\"\n    },\n    \"m_Name\": \"Quantité ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_77125479\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"614e2dad-e1c6-48c2-a026-caf1a537e946\"\n    },\n    \"m_Name\": \"Quantité ondes\",\n    \"m_DefaultReferenceName\": \"Vector1_77125479\",\n    \"m_OverrideReferenceName\": \"QuantiteOndes\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"efbc288b-9615-454a-bdc5-0ee2bd99ee8a\"\n    },\n    \"m_Name\": \"Flou halo intérieur\",\n    \"m_DefaultReferenceName\": \"Vector1_E7291D26\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"efbc288b-9615-454a-bdc5-0ee2bd99ee8a\"\n    },\n    \"m_Name\": \"Flou halo intérieur\",\n    \"m_DefaultReferenceName\": \"Vector1_E7291D26\",\n    \"m_OverrideReferenceName\": \"FlouInterieur\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a66d4d92-84e5-4ff3-9ac5-3d006410823c\"\n    },\n    \"m_Name\": \"Largeur halo intérieur\",\n    \"m_DefaultReferenceName\": \"Vector1_8A7A7256\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a66d4d92-84e5-4ff3-9ac5-3d006410823c\"\n    },\n    \"m_Name\": \"Largeur halo intérieur\",\n    \"m_DefaultReferenceName\": \"Vector1_8A7A7256\",\n    \"m_OverrideReferenceName\": \"LargeurInterieur\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": 0.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    }\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a3b8b4e3-bb44-4579-988a-fddd6f2b97ac\"\n    },\n    \"m_Name\": \"Couleur anneau\",\n    \"m_DefaultReferenceName\": \"Color_50AD28D8\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"r\": 0.8820754885673523,\n        \"g\": 1.0,\n        \"b\": 0.9323616623878479,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 1\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a3b8b4e3-bb44-4579-988a-fddd6f2b97ac\"\n    },\n    \"m_Name\": \"Couleur anneau\",\n    \"m_DefaultReferenceName\": \"Color_50AD28D8\",\n    \"m_OverrideReferenceName\": \"ColorAnneau\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"r\": 0.8820754885673523,\n        \"g\": 1.0,\n        \"b\": 0.9323616623878479,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 1\n}"
         },
         {
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"089ec266-d89f-45a0-a9e7-d60d4c8ba930\"\n    },\n    \"m_Name\": \"Couleur ondes\",\n    \"m_DefaultReferenceName\": \"Color_E87FFE0\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"r\": 0.0,\n        \"g\": 0.5094339847564697,\n        \"b\": 0.3646768033504486,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 0\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"089ec266-d89f-45a0-a9e7-d60d4c8ba930\"\n    },\n    \"m_Name\": \"Couleur ondes\",\n    \"m_DefaultReferenceName\": \"Color_E87FFE0\",\n    \"m_OverrideReferenceName\": \"ColorOnde\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"r\": 0.0,\n        \"g\": 0.5094339847564697,\n        \"b\": 0.3646768033504486,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 0\n}"
         }
     ],
     "m_SerializedKeywords": [],

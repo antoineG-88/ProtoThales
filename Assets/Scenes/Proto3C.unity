@@ -682,7 +682,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &164981680
 GameObject:
@@ -1656,8 +1656,9 @@ Transform:
   m_Children:
   - {fileID: 706476070}
   - {fileID: 1052947864}
+  - {fileID: 847624818}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &304843486
 GameObject:
@@ -2380,20 +2381,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!225 &400159328
 CanvasGroup:
@@ -2793,20 +2804,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
     rectTransform: {fileID: 468597018}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 11400000, guid: 4a7dc74863135d747adeb7be65fe2dbc, type: 2}
     rectTransform: {fileID: 468597018}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &468597020
 MonoBehaviour:
@@ -3152,7 +3173,7 @@ Transform:
   - {fileID: 1710035275}
   - {fileID: 202757917}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &523505598
 GameObject:
@@ -3278,7 +3299,7 @@ Transform:
   - {fileID: 1818928460}
   - {fileID: 1508056907}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &545954732
 MonoBehaviour:
@@ -3325,6 +3346,7 @@ MonoBehaviour:
   detectionRangeInquiet: 3.5
   detectionRangePanique: 4
   fregateMovementScript: {fileID: 2117067380}
+  submarineCounterMeasuresScript: {fileID: 545954734}
   madBehaviorScript: {fileID: 1698774023}
   sonobuoys: []
   sonobuoysDistance: []
@@ -3345,7 +3367,6 @@ MonoBehaviour:
   submarineVigilanceScript: {fileID: 545954733}
   submarineMovementScript: {fileID: 545954732}
   madScript: {fileID: 1698774023}
-  submarineDetectByDAM: 0
   timeBeforeLauchSL: 10
   durationSL: 10
   cooldownTimeSL: 0
@@ -3361,6 +3382,26 @@ MonoBehaviour:
     type: 3}
   usingLeurre: 0
   decoyAreMoving: 0
+  submarineDetectByDAM: 0
+  timeBeforeLauchCB: 0
+  cooldownTimeCB: 15
+  vigilanceValueCostCB: 5
+  usingContournementBouee: 0
+  submarineDetectSonobuoy: 0
+  raycastLenght: 0.2
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  raycastTouchObstacle: 0
+  timeBeforeLauchCC: 3
+  cooldownTimeCC: 30
+  vigilanceValueCostCC: 10
+  usingChangementDeCap: 0
+  _LayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  submarineDetectFregate: 0
+  canAvoidFregate: 0
 --- !u!1 &553246987
 GameObject:
   m_ObjectHideFlags: 0
@@ -4452,20 +4493,27 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 84c08201081d68f4698b23c39a715fd7, type: 2}
     rectTransform: {fileID: 1464000175}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   patMarActionPanelAnim:
     anim: {fileID: 11400000, guid: 84c08201081d68f4698b23c39a715fd7, type: 2}
     rectTransform: {fileID: 686344981}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   fregateSelectAnim:
-    anim: {fileID: 11400000, guid: 57f8ef054b2b2694bbcf8fce45aa5353, type: 2}
+    anim: {fileID: 11400000, guid: 6bf3780b5082d0640923bd05d6d5d287, type: 2}
     rectTransform: {fileID: 1785311568}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   patMarSelectAnim:
-    anim: {fileID: 11400000, guid: 16f38c508cea9df45bbe871abcf5d5d9, type: 2}
+    anim: {fileID: 11400000, guid: 6bf3780b5082d0640923bd05d6d5d287, type: 2}
     rectTransform: {fileID: 1355422236}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   fregateSelectCard: {fileID: 1785311569}
   patMarSelectCard: {fileID: 1355422237}
+  batimentMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &680721225
 Transform:
   m_ObjectHideFlags: 0
@@ -4508,6 +4556,7 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 9374460f94b9e0b4aaca10199098ffb5, type: 2}
     rectTransform: {fileID: 1749194902}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
 --- !u!114 &680721228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4825,7 +4874,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50.01, y: -30, z: 0}
 --- !u!1 &706476069
 GameObject:
@@ -5323,20 +5372,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
     rectTransform: {fileID: 719290531}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 11400000, guid: b86977a2f747820438854c8147250ebb, type: 2}
     rectTransform: {fileID: 719290531}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &719290533
 MonoBehaviour:
@@ -5852,6 +5911,130 @@ Transform:
   m_Father: {fileID: 668147565}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &847624817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 847624818}
+  - component: {fileID: 847624823}
+  - component: {fileID: 847624822}
+  - component: {fileID: 847624821}
+  - component: {fileID: 847624820}
+  - component: {fileID: 847624819}
+  m_Layer: 12
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &847624818
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_Children: []
+  m_Father: {fileID: 302146106}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &847624819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724478d5f2296d5479d2e6aa010ae8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fregateIsAbove: 0
+--- !u!54 &847624820
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &847624821
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &847624822
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9391ad239b96a184880b6ca44f3ee9a9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &847624823
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847624817}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &865586236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6394,7 +6577,7 @@ Transform:
   - {fileID: 831552958}
   - {fileID: 21177744}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &929948362
 GameObject:
@@ -7861,9 +8044,8 @@ RectTransform:
   - {fileID: 620419979}
   - {fileID: 1604926186}
   - {fileID: 1720879022}
-  - {fileID: 1375698555}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9024,20 +9206,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: 27c4f0b77308aa0408eb86123779a0cc, type: 2}
     rectTransform: {fileID: 1272483420}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 11400000, guid: 4a7dc74863135d747adeb7be65fe2dbc, type: 2}
     rectTransform: {fileID: 1272483420}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1272483422
 MonoBehaviour:
@@ -9383,20 +9575,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 0
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1355422238
 MonoBehaviour:
@@ -9583,20 +9785,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!225 &1463643706
 CanvasGroup:
@@ -15146,7 +15358,7 @@ Transform:
   m_Children:
   - {fileID: 908622983}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1626833992
 GameObject:
@@ -15200,20 +15412,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 11400000, guid: c1ccc95225f93cb4d93be52df3aa384e, type: 2}
     rectTransform: {fileID: 1626833993}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 11400000, guid: b86977a2f747820438854c8147250ebb, type: 2}
     rectTransform: {fileID: 1626833993}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 1
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1626833995
 MonoBehaviour:
@@ -15321,7 +15543,7 @@ Transform:
   - {fileID: 68990708}
   - {fileID: 1660341859}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1660341857
 GameObject:
@@ -15513,6 +15735,7 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 66a24237286554a4dbc9f53c2c9e56b1, type: 2}
     rectTransform: {fileID: 1041542867}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   dropPosPreview: {fileID: 831552957}
   seaMask:
     serializedVersion: 2
@@ -15530,7 +15753,7 @@ Transform:
   m_Children:
   - {fileID: 575451762}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &1698774021
 LineRenderer:
@@ -15656,6 +15879,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   destinationCard: {fileID: 468597019}
+  isStandard: 0
   currentDestination: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   currentDirection: {x: 0, y: 0}
@@ -16078,7 +16302,7 @@ Transform:
   m_LocalScale: {x: 300, y: 300, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1785311567
 GameObject:
@@ -16130,20 +16354,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDragged: 0
-  isDropped: 0
-  isHovered: 0
-  isFocused: 0
-  isClicked: 0
   dragAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   holdAnim:
     anim: {fileID: 0}
     rectTransform: {fileID: 0}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
   darkenBackWhileHold: 0
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
   descriptionOpened: 0
 --- !u!114 &1785311570
 MonoBehaviour:
@@ -16931,7 +17165,7 @@ Transform:
   - {fileID: 2009171014}
   - {fileID: 405367621}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1938074138
 GameObject:
@@ -17745,8 +17979,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1375698555}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -18271,7 +18505,7 @@ Transform:
   - {fileID: 947595638}
   - {fileID: 1516163388}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2117067378
 MonoBehaviour:
@@ -18293,6 +18527,7 @@ MonoBehaviour:
     anim: {fileID: 11400000, guid: 66a24237286554a4dbc9f53c2c9e56b1, type: 2}
     rectTransform: {fileID: 204403421}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
 --- !u!120 &2117067379
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -18417,6 +18652,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   destinationCard: {fileID: 1272483421}
+  isStandard: 0
   currentDestination: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   currentDirection: {x: 0, y: 0}
@@ -18427,6 +18663,7 @@ MonoBehaviour:
   accelerationForce: 0.3
   turnSpeed: 20
   thrustParticle: {fileID: 1516163390}
+  zoneDetectionDistance: 0
   isMoving: 0
 --- !u!114 &2117067381
 MonoBehaviour:

@@ -14,6 +14,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
     [Header("Objects")]
     public FregateMovement fregateMovementScript;
+    public SubmarineCounterMeasures submarineCounterMeasuresScript;
     public MadBehavior madBehaviorScript;
     public List<GameObject> sonobuoys;
     public List<float> sonobuoysDistance;
@@ -106,6 +107,8 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
         if (distanceFromFregate < currentRange)
         {
+            submarineCounterMeasuresScript.submarineDetectFregate = true;
+
             if (fregateMovementScript.isMoving)
             {
                 IncreaseVigilanceBarIfFregateMoveAbove(2);
@@ -114,6 +117,10 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
             {
                 IncreaseVigilanceBarIfFregateIdleAbove(0.5f);
             }
+        }
+        else
+        {
+            submarineCounterMeasuresScript.submarineDetectFregate = false;
         }
     }
 

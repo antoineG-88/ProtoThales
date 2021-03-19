@@ -20,7 +20,7 @@ public class SonobuoyBehavior : MonoBehaviour
     [Header("Range")]
     public GameObject rangeDisplay;
     public GameObject effectDisplay;
-    /*private SpriteRenderer rangeSprite;
+    public GameObject sonobuoyCollider;
 
     public Color sonobuoyNoElement;
     public Color sonobuoyElementDetect;*/
@@ -52,10 +52,10 @@ public class SonobuoyBehavior : MonoBehaviour
 
         rangeDisplay.transform.localScale = new Vector2(rangeDisplay.transform.localScale.x * sonobuoyRange, rangeDisplay.transform.localScale.y * sonobuoyRange);
         effectDisplay.transform.localScale = new Vector2(effectDisplay.transform.localScale.x * sonobuoyRange, effectDisplay.transform.localScale.y * sonobuoyRange);
-        //rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
         ownMat = Instantiate(sonobuoyRefMat);
         noElementEffect.ApplyToMat(ownMat);
         sonoMeshRenderer.material = ownMat;
+        sonobuoyCollider.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
         identifyImage.sprite = null;
     }
 
@@ -98,7 +98,18 @@ public class SonobuoyBehavior : MonoBehaviour
                 { 
                     if (distance < sonobuoyRange)
                     {
-                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = true;
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectSonobuoy = true;
+
+                        float distanceFromMad = Vector2.Distance(SeaCoord.Planify(madScript.transform.position), SeaCoord.Planify(transform.position));
+
+                        if (distanceFromMad < sonobuoyRange)
+                        {
+                            objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = true;
+                        }
+                        else
+                        {
+                            objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = false;
+                        }
 
                         atLeastOneObjectDetected = true;
                         idendityIndex = i;
@@ -112,10 +123,9 @@ public class SonobuoyBehavior : MonoBehaviour
                     {
                         objectInsideRange.Remove(objectsCanBeDetected[i]);
                     }
-
-                    if(distance > sonobuoyRange)
+                    if (distance > sonobuoyRange)
                     {
-                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectByDAM = false;
+                        objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().submarineDetectSonobuoy = false;
                     }
                 }
             }

@@ -23,7 +23,7 @@ public class SonobuoyBehavior : MonoBehaviour
     public GameObject sonobuoyCollider;
 
     public Color sonobuoyNoElement;
-    public Color sonobuoyElementDetect;*/
+    public Color sonobuoyElementDetect;
     public SonobuoyEffectProperties noElementEffect;
     public SonobuoyEffectProperties elementDetectedEffect;
     public MeshRenderer sonoMeshRenderer;

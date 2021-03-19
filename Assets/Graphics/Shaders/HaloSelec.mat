@@ -21,12 +21,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
+    - FlouInterieur: -25
+    - LargeurInterieur: 50
+    - LargeurOnde: 70
+    - QuantiteOndes: -13
     - Vector1_2EF285E7: -14.32
     - Vector1_77125479: -18.2
     - Vector1_8A7A7256: 53.2
     - Vector1_E7291D26: 0
     - Vector1_F64F0E45: 40.2
+    - VitesseOnde: -15
     m_Colors:
+    - ColorAnneau: {r: 0.8820755, g: 1, b: 0.9323617, a: 0}
+    - ColorOnde: {r: 1, g: 0.5065029, b: 0, a: 0}
     - Color_182BC99F: {r: 0, g: 0.8867923, b: 0.733577, a: 0}
     - Color_50AD28D8: {r: 0.8820755, g: 1, b: 0.9323617, a: 1}
     - Color_E87FFE0: {r: 0.11654504, g: 0.9150943, b: 0.68818414, a: 0}

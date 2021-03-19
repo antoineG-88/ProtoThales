@@ -19,10 +19,16 @@ public class SonobuoyBehavior : MonoBehaviour
 
     [Header("Range")]
     public GameObject rangeDisplay;
-    private SpriteRenderer rangeSprite;
+    public GameObject effectDisplay;
+    /*private SpriteRenderer rangeSprite;
 
     public Color sonobuoyNoElement;
-    public Color sonobuoyElementDetect;
+    public Color sonobuoyElementDetect;*/
+    public SonobuoyEffectProperties noElementEffect;
+    public SonobuoyEffectProperties elementDetectedEffect;
+    public MeshRenderer sonoMeshRenderer;
+    public Material sonobuoyRefMat;
+    private Material ownMat;
 
     public List<GameObject> objectInsideRange = new List<GameObject>();
 
@@ -44,9 +50,12 @@ public class SonobuoyBehavior : MonoBehaviour
         timeBeforeDestroy = sonobuoyLifeTime;
         timerBeforeEffect = effectFrequency;
 
-        rangeDisplay.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
-        rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
-
+        rangeDisplay.transform.localScale = new Vector2(rangeDisplay.transform.localScale.x * sonobuoyRange, rangeDisplay.transform.localScale.y * sonobuoyRange);
+        effectDisplay.transform.localScale = new Vector2(effectDisplay.transform.localScale.x * sonobuoyRange, effectDisplay.transform.localScale.y * sonobuoyRange);
+        //rangeSprite = rangeDisplay.GetComponent<SpriteRenderer>();
+        ownMat = Instantiate(sonobuoyRefMat);
+        noElementEffect.ApplyToMat(ownMat);
+        sonoMeshRenderer.material = ownMat;
         identifyImage.sprite = null;
     }
 
@@ -131,7 +140,8 @@ public class SonobuoyBehavior : MonoBehaviour
 
         if (atLeastOneObjectDetected)
         {
-            rangeSprite.color = sonobuoyElementDetect;
+            elementDetectedEffect.ApplyToMat(ownMat);
+            //rangeSprite.color = sonobuoyElementDetect;
 
             MadAbove();
             if (madIsAboveSonobuoy)
@@ -161,7 +171,8 @@ public class SonobuoyBehavior : MonoBehaviour
         else
         {
             identifyImage.sprite = null;
-            rangeSprite.color = sonobuoyNoElement;
+            noElementEffect.ApplyToMat(ownMat);
+            //rangeSprite.color = sonobuoyNoElement;
         }
     }
 
@@ -197,6 +208,27 @@ public class SonobuoyBehavior : MonoBehaviour
             {
                 Instantiate(scanEffectPrefab, SeaCoord.GetFlatCoord(transform.position), Quaternion.identity);
             }
+        }
+    }
+
+    [System.Serializable]
+    public class SonobuoyEffectProperties
+    {
+        public float largeurOndes;
+        public float vitesseOndes;
+        public float quantiteOndes;
+        public float flouHaloInterieur;
+        public float largeurHaloInterieur;
+        public Color couleurOndes;
+
+        public void ApplyToMat(Material material)
+        {
+            material.SetFloat("LargeurOnde", largeurOndes);
+            material.SetFloat("VitesseOnde", vitesseOndes);
+            material.SetFloat("QuantiteOndes", quantiteOndes);
+            material.SetFloat("FlouInterieur", flouHaloInterieur);
+            material.SetFloat("LargeurInterieur", largeurHaloInterieur);
+            material.SetColor("ColorOnde", couleurOndes);
         }
     }
 }

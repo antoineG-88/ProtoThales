@@ -117,8 +117,19 @@ public class FregateMovement : BatimentMovement
 
     private bool IsLandInFront()
     {
-        TerrainZone zone = TerrainZoneHandler.GetCurrentZone(currentPosition + currentDirection * zoneDetectionDistance, currentZone);
-        TerrainZone zone2 = TerrainZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance, currentZone);
-        return (zone != null && zone.relief == TerrainZone.Relief.Land && zone == zone2);
+        bool landInFront = false;
+        TerrainZone zone;
+        TerrainZone zone2;
+
+        for (int i = 0; i < 5; i++)
+        {
+            zone = TerrainZoneHandler.GetCurrentZone(currentPosition + currentDirection * zoneDetectionDistance * i / 5, currentZone);
+            zone2 = TerrainZoneHandler.GetCurrentZone(currentPosition + destinationDirection * zoneDetectionDistance * i / 5, currentZone);
+            if(zone != null && zone.relief == TerrainZone.Relief.Land && zone == zone2)
+            {
+                landInFront = true;
+            }
+        }
+        return landInFront;
     }
 }

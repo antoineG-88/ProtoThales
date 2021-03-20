@@ -136,6 +136,8 @@ public class TerrainZone : MonoBehaviour
                 edges.Add(edgesParent.GetChild(i));
             }
 
+            //CreateEdgeLine();
+
             Gizmos.color = zoneColor;
             for (int i = 0; i < edges.Count; i++)
             {

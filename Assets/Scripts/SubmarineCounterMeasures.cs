@@ -121,31 +121,31 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             if (randomDirection == 0)
             {
-                transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
             }
             else if (randomDirection == 1)
             {
-                transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+                lure.transform.position += submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
             }
         }
     }
 
     private void submarineMovementAroundObstacle(LayerMask mask)
     {
-        float raycastForward = RaySensor(transform.position, submarineMovementScript.currentDirection, 4f, mask);
-        float raycastDiagonalRight = RaySensor(transform.position, Quaternion.Euler(0, 45, 0) * submarineMovementScript.currentDirection, 3f, mask);
-        float raycastDiagonalLeft = RaySensor(transform.position, Quaternion.Euler(0, -45, 0) * submarineMovementScript.currentDirection, 3f, mask);
+        float raycastForward = RaySensor(transform.position, submarineMovementScript.dirtyCurrentDirection, 4f, mask);
+        float raycastDiagonalRight = RaySensor(transform.position, Quaternion.Euler(0, 45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
+        float raycastDiagonalLeft = RaySensor(transform.position, Quaternion.Euler(0, -45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
 
         if (raycastDiagonalRight > 0)
         {
-            transform.position += Quaternion.Euler(0, -90, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+            transform.position += Quaternion.Euler(0, -90, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
             raycastTouchObstacle = true;
         }
         else if (raycastDiagonalLeft > 0)
         {
-            transform.position += Quaternion.Euler(0, 90, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+            transform.position += Quaternion.Euler(0, 90, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
             raycastTouchObstacle = true;
         }
         else

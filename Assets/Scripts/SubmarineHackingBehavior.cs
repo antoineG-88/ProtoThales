@@ -7,7 +7,9 @@ public class SubmarineHackingBehavior : MonoBehaviour
 {
     [Header("UI")]
     public Image lifeBar;
+    public GameObject losePanel;
     private int numberOfWaypoints;
+    private int currentWaypointsHacked;
 
     public SubmarineMovementBehavior submarineMovementScript;
 
@@ -21,7 +23,13 @@ public class SubmarineHackingBehavior : MonoBehaviour
     {
         if (submarineMovementScript.waypointHacked)
         {
+            currentWaypointsHacked++;
             lifeBar.fillAmount += 1f / numberOfWaypoints;
+        }
+
+        if(currentWaypointsHacked == submarineMovementScript.submarineWaypoints)
+        {
+            losePanel.SetActive(true);
         }
     }
 }

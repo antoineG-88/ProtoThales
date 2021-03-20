@@ -84,12 +84,15 @@ public class PatMarAction : BatimentAction
 
         if (((sonobuoyCard.isSelected && InputDuo.tapUp) || (sonobuoyCard.isDropped && !sonobuoyCard.isCursorOn)) && !sonobuoyCard.descriptionOpened && isChoosingDropPos)
         {
-            isChoosingDropPos = false;
-            isDroppingSonobuoy = true;
             droppingPos = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
-            patMarMovement.currentDestination = droppingPos;
-            dropPosPreview.SetActive(true);
-            sonobuoyCard.Deselect();
+            if (TerrainZoneHandler.GetCurrentZone(droppingPos, null).relief != TerrainZone.Relief.Land)
+            {
+                isChoosingDropPos = false;
+                isDroppingSonobuoy = true;
+                patMarMovement.currentDestination = droppingPos;
+                dropPosPreview.SetActive(true);
+                sonobuoyCard.Deselect();
+            }
         }
 
         if(currentSonobuoyCharge > 0)

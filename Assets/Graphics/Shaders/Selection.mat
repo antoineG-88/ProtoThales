@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Selection
+  m_Shader: {fileID: -6465566751694194690, guid: 16c1f0073548ea04f85ad9e8bacd775c,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - FlouHaloInterieur: 0.6
+    - LargeurHaloInterieur: 1.3
+    - LargeurOnde: -160
+    - QuantiteOnde: -10
+    - VitesseOnde: 9
+    m_Colors:
+    - ColorAnneau: {r: 1.1270248, g: 1.1270248, b: 1.1270248, a: 0.3764706}
+    - ColorOnde: {r: 0.14195444, g: 0.5471698, b: 0.43183923, a: 0}
+    - CouleurHaloInterieur: {r: 0.23380204, g: 1.3396225, b: 1.2696598, a: 0}

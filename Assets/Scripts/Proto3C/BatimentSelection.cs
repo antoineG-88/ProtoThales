@@ -9,11 +9,12 @@ public class BatimentSelection : MonoBehaviour
     public static Batiment batimentSelected;
     public CameraController cameraController;
     public Transform selectionDisplay;
-
+    public float doubleSelectTime;
 
     public LayerMask batimentMask;
     private HelicoController helicoController;
-
+    private float timeSpendSinceLastDirectSelect;
+    private Batiment lastBatimentDirectlySelected;
     private void Start()
     {
         helicoController = (HelicoController)batiments[2].batimentAction;
@@ -52,6 +53,7 @@ public class BatimentSelection : MonoBehaviour
 
     private void UpdateDirectSelect()
     {
+        timeSpendSinceLastDirectSelect += Time.deltaTime;
         if(!UICard.pointerFocusedOnCard && !UICard.anyCardSelected && InputDuo.tapDown)
         {
             hit = InputDuo.SeaRaycast(batimentMask, !GameManager.useMouseControl);
@@ -61,7 +63,19 @@ public class BatimentSelection : MonoBehaviour
                 {
                     if(hit.collider.transform.parent == batiments[b].batimentAction.transform)
                     {
-                        SelectBatiment(batiments[b], false);
+                        if(lastBatimentDirectlySelected == batiments[b])
+                        {
+                            if(timeSpendSinceLastDirectSelect < doubleSelectTime)
+                            {
+                                batiments[b].batimentMovement.destinationCard.Select();
+                            }
+                        }
+                        else
+                        {
+                            SelectBatiment(batiments[b], false);
+                        }
+                        lastBatimentDirectlySelected = batiments[b];
+                        timeSpendSinceLastDirectSelect = 0;
                     }
                 }
             }

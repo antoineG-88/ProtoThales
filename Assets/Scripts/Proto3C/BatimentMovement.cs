@@ -65,7 +65,7 @@ public class BatimentMovement : MonoBehaviour
                 GameManager.cameraController.MoveCameraWithEdge();
             }
 
-            if (destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
+            if (InputDuo.tapUp && destinationCard.isSelected)
             {
                 destinationCard.Deselect();
             }

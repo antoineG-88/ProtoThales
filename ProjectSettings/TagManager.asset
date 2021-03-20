@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Mad
+  - Bio
+  - Submarine
+  - ShipWreck
   layers:
   - Default
   - TransparentFX

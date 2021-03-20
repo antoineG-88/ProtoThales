@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PatMarAction : BatimentAction
 {
     public SonobuoyBehavior sonobuoyPrefab;
+    public int sonobuoyMaxCharge;
+    public float sonobuoyRechargeTime;
+    public Image sonobuoyRechargeFill;
+    public Text currentSonobuoyChargeText;
     public UICard sonobuoyCard;
     public UICard madCard;
     public TweeningAnimator madDescriptionAnim;
@@ -17,6 +22,8 @@ public class PatMarAction : BatimentAction
     private Vector2 droppingPos;
     private bool madDescriptionOpened;
     private bool isChoosingDropPos;
+    private int currentSonobuoyCharge;
+    private float timeBeforeNextSonobuoy;
 
     public override void Start()
     {
@@ -24,6 +31,8 @@ public class PatMarAction : BatimentAction
         patMarMovement = (PatMarMovement)batimentMovement;
         madBehavior = GetComponent<MadBehavior>();
         madDescriptionAnim.canvasGroup = madDescriptionAnim.rectTransform.GetComponent<CanvasGroup>();
+        currentSonobuoyCharge = sonobuoyMaxCharge;
+        timeBeforeNextSonobuoy = 0;
     }
 
     public override void Update()
@@ -46,6 +55,14 @@ public class PatMarAction : BatimentAction
         }
     }
 
+    private void DropSonobuoy()
+    {
+        SonobuoyBehavior newSonobuoy = Instantiate(sonobuoyPrefab.gameObject, SeaCoord.GetFlatCoord(droppingPos), Quaternion.identity).GetComponent<SonobuoyBehavior>();
+        madBehavior.sonobuoys.Add(newSonobuoy);
+        newSonobuoy.madScript = madBehavior;
+        currentSonobuoyCharge--;
+    }
+
     public void SonobuoyUpdate()
     {
         if(isDroppingSonobuoy)
@@ -53,9 +70,7 @@ public class PatMarAction : BatimentAction
             if(Vector2.Distance(patMarMovement.currentPosition, droppingPos) < 0.1f)
             {
                 isDroppingSonobuoy = false;
-                SonobuoyBehavior newSonobuoy = Instantiate(sonobuoyPrefab.gameObject, SeaCoord.GetFlatCoord(droppingPos), Quaternion.identity).GetComponent<SonobuoyBehavior>();
-                madBehavior.sonobuoys.Add(newSonobuoy);
-                newSonobuoy.madScript = madBehavior;
+                DropSonobuoy();
             }
             if(droppingPos != patMarMovement.currentDestination)
             {
@@ -77,16 +92,42 @@ public class PatMarAction : BatimentAction
             sonobuoyCard.Deselect();
         }
 
-        if (((sonobuoyCard.isSelected && InputDuo.tapHold) || ((sonobuoyCard.isDragged && !sonobuoyCard.isHovered) || sonobuoyCard.isDropped)) && !sonobuoyCard.descriptionOpened)
+        if(currentSonobuoyCharge > 0)
         {
-            isChoosingDropPos = true;
-            dropPosPreview.SetActive(true);
-            dropPosPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
+            sonobuoyCard.canBeSelected = true;
+            if (((sonobuoyCard.isSelected && InputDuo.tapHold) || ((sonobuoyCard.isDragged && !sonobuoyCard.isHovered) || sonobuoyCard.isDropped)) && !sonobuoyCard.descriptionOpened)
+            {
+                isChoosingDropPos = true;
+                dropPosPreview.SetActive(true);
+                dropPosPreview.transform.position = SeaCoord.GetFlatCoord(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
+            }
+            else if (!isDroppingSonobuoy)
+            {
+                isChoosingDropPos = false;
+                dropPosPreview.SetActive(false);
+            }
         }
-        else if (!isDroppingSonobuoy)
+        else
         {
+            sonobuoyCard.canBeSelected = false;
             isChoosingDropPos = false;
             dropPosPreview.SetActive(false);
         }
+
+        if(currentSonobuoyCharge < sonobuoyMaxCharge)
+        {
+            if(timeBeforeNextSonobuoy >= sonobuoyRechargeTime)
+            {
+                currentSonobuoyCharge++;
+                timeBeforeNextSonobuoy = 0;
+            }
+            else
+            {
+                timeBeforeNextSonobuoy += Time.deltaTime;
+            }
+        }
+
+        sonobuoyRechargeFill.fillAmount = currentSonobuoyCharge == sonobuoyMaxCharge ? 1 : (timeBeforeNextSonobuoy / sonobuoyRechargeTime);
+        currentSonobuoyChargeText.text = currentSonobuoyCharge.ToString();
     }
 }

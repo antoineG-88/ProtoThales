@@ -20,10 +20,7 @@ public class SonobuoyBehavior : MonoBehaviour
     [Header("Range")]
     public GameObject rangeDisplay;
     public GameObject effectDisplay;
-    public GameObject sonobuoyCollider;
-
-    public Color sonobuoyNoElement;
-    public Color sonobuoyElementDetect;
+    //public GameObject sonobuoyCollider;
     public SonobuoyEffectProperties noElementEffect;
     public SonobuoyEffectProperties elementDetectedEffect;
     public MeshRenderer sonoMeshRenderer;
@@ -55,7 +52,7 @@ public class SonobuoyBehavior : MonoBehaviour
         ownMat = Instantiate(sonobuoyRefMat);
         noElementEffect.ApplyToMat(ownMat);
         sonoMeshRenderer.material = ownMat;
-        sonobuoyCollider.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
+        //sonobuoyCollider.transform.localScale = new Vector2(sonobuoyRange * 2, sonobuoyRange * 2);
         identifyImage.sprite = null;
     }
 

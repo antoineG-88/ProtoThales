@@ -13,7 +13,11 @@ public class HullSonarBehavior : MonoBehaviour
     public GameObject sonarDisplay;
     public Transform sweep;
     public Transform sweepEndPoint;
-    public Transform ping;
+    public Sprite submarineIdentitySprite;
+    public Sprite bioIdentitySprite;
+    public Sprite shipwreckIdentitySprite;
+    public SonarPing pingPrefab;
+    public MadBehavior madBehavior;
 
     private List<Collider> colliderObjectSonar;
     private Vector3 collision = Vector3.zero;
@@ -62,7 +66,32 @@ public class HullSonarBehavior : MonoBehaviour
         {
             if(raycastHit.collider != null)
             {
-                if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>() != null)
+                switch (raycastHit.collider.transform.parent.gameObject.tag)
+                {
+                    case "Submarine":
+                        if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>().submarineIsInvisible)
+                        {
+                            //Do no detect submarine
+                        }
+                        else
+                        {
+                            CreateDetectionPoint(raycastHit.collider, submarineIdentitySprite);
+                        }
+                        break;
+
+                    case "Bio":
+                        CreateDetectionPoint(raycastHit.collider, bioIdentitySprite);
+                        break;
+
+                    case "ShipWrek":
+                        CreateDetectionPoint(raycastHit.collider, shipwreckIdentitySprite);
+                        break;
+                }
+
+
+
+
+                /*if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>() != null)
                 {
                     if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>().submarineIsInvisible)
                     {
@@ -73,7 +102,7 @@ public class HullSonarBehavior : MonoBehaviour
                         if (!colliderObjectSonar.Contains(raycastHit.collider))
                         {
                             colliderObjectSonar.Add(raycastHit.collider);
-                            Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
+                            Instantiate(pingPrefab, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, pingPrefab.transform.rotation);
                         }
                     }
                 }
@@ -82,10 +111,21 @@ public class HullSonarBehavior : MonoBehaviour
                     if (!colliderObjectSonar.Contains(raycastHit.collider))
                     {
                         colliderObjectSonar.Add(raycastHit.collider);
-                        Instantiate(ping, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, ping.rotation);
+                        Instantiate(pingPrefab, SeaCoord.GetFlatCoord(raycastHit.collider.transform.position) + Vector3.up * 0.1f, pingPrefab.transform.rotation);
                     }
-                }
+                }*/
             }            
+        }
+    }
+
+    private void CreateDetectionPoint(Collider colliderTouched, Sprite identitySprite)
+    {
+        if (!colliderObjectSonar.Contains(colliderTouched))
+        {
+            colliderObjectSonar.Add(colliderTouched);
+            SonarPing newPing = Instantiate(pingPrefab, SeaCoord.GetFlatCoord(colliderTouched.transform.position) + Vector3.up * 0.1f, pingPrefab.transform.rotation);
+            newPing.identitySpriteRenderer.sprite = identitySprite;
+            newPing.madBehavior = madBehavior;
         }
     }
 }

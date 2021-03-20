@@ -13,10 +13,10 @@ public class SubmarineMovementBehavior : MonoBehaviour
     public int submarineWaypoints;
 
     [Space]
-    public List<Transform> allWaypoints;
+    public List<Waypoints> allWaypoints;
 
     [Space]
-    public Transform nextPosition;
+    public Waypoints nextPosition;
 
     private bool lureIsCreateFlag;
     private int random;
@@ -73,7 +73,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
         random = Random.Range(0, (allWaypoints.Count));
         nextPosition = allWaypoints[random];
         //allWaypoints.RemoveAt(random);
-        currentDirection = -(transform.position - nextPosition.position).normalized;
+        currentDirection = -(transform.position - nextPosition.transform.position).normalized;
     }
 
     private void MoveSubmarine()
@@ -82,12 +82,12 @@ public class SubmarineMovementBehavior : MonoBehaviour
         {
             if (countWaypointsAchieved < submarineWaypoints)
             {
-                if (transform.position == nextPosition.position)
+                if (transform.position == nextPosition.transform.position)
                 {
                     timer += Time.deltaTime;
                     submarineCounterMeasuresScript.canAvoidFregate = false;
 
-                    if (timer >= nextPosition.GetComponent<Waypoints>().hackingTime)
+                    if (timer >= nextPosition.hackingTime)
                     {
                         allWaypoints.RemoveAt(random);
                         countWaypointsAchieved++;
@@ -101,7 +101,7 @@ public class SubmarineMovementBehavior : MonoBehaviour
 
                     timer = 0;
 
-                    transform.position = Vector3.MoveTowards(transform.position, nextPosition.position, Time.deltaTime * currentSpeed);
+                    transform.position = Vector3.MoveTowards(transform.position, nextPosition.transform.position, Time.deltaTime * currentSpeed);
                 }
             }
         }

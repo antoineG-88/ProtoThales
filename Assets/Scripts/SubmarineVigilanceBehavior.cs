@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class SubmarineVigilanceBehavior : MonoBehaviour
 {
     public float vigilanceValue = 0f;
     public enum VigilanceState { Calme, Inquiet, Panique };
     public VigilanceState submarineState;
+    public Sprite calmeSprite, inquietSprite, paniqueSprite;
+    public Image vigilanceStateImage;
     public float detectionRangeCalme, detectionRangeInquiet, detectionRangePanique;
     private float currentRange;
     private bool reachInquietState;
+    public float vigilanceIncreaseRatioInFlat;
 
     [Header("Objects")]
     public FregateMovement fregateMovementScript;
@@ -25,12 +28,11 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     private SpriteRenderer rangeSprite;
 
     private float timer;
-    private float timer1;
-    private float timer2;
-    private float timer3;
+    private SubmarineMovementBehavior submarineMovementBehavior;
 
     private void Start()
     {
+        submarineMovementBehavior = GetComponent<SubmarineMovementBehavior>();
         sonobuoys = new List<GameObject>();
         rangeDisplay.SetActive(false);
         rangeDisplay.transform.localScale = new Vector2(detectionRangeCalme * 2, detectionRangeCalme * 2);
@@ -54,31 +56,26 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
     private void ChangeState()
     {
-        if (vigilanceValue >= 0 && vigilanceValue < 40)
+        if (vigilanceValue >= 0 && vigilanceValue < 40 && !reachInquietState)
         {
             submarineState = VigilanceState.Calme;
+            vigilanceStateImage.sprite = calmeSprite;
         }
-        else if (vigilanceValue >= 40 && vigilanceValue < 80)
+        else if ((vigilanceValue >= 40 && vigilanceValue < 80) || (vigilanceValue >= 0 && vigilanceValue < 40 && reachInquietState))
         {
             submarineState = VigilanceState.Inquiet;
-
-            if (!reachInquietState)
-            {  
-                reachInquietState = true;
-            }
+            vigilanceStateImage.sprite = inquietSprite;
+            reachInquietState = true;
         }
         else if (vigilanceValue >= 80 && vigilanceValue <= 100)
         {
             submarineState = VigilanceState.Panique;
+            vigilanceStateImage.sprite = paniqueSprite;
         }
 
         if (vigilanceValue >= 100)
         {
             vigilanceValue = 100;
-        }
-        if (vigilanceValue <= 40 && reachInquietState)
-        {
-            vigilanceValue = 40;
         }
     }
 
@@ -111,11 +108,11 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
             if (fregateMovementScript.isMoving)
             {
-                IncreaseVigilanceBarIfFregateMoveAbove(2);
+                IncreaseVigilance(2);
             }
             else
             {
-                IncreaseVigilanceBarIfFregateIdleAbove(0.5f);
+                IncreaseVigilance(0.5f);
             }
         }
         else
@@ -139,48 +136,14 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
             if(sonobuoysDistance[x] < currentRange)
             {
-                IncreaseVigilanceBarIfSonobuoyAbove(2);
+                IncreaseVigilance(2);
             }
         }
     }
 
-    private void IncreaseVigilanceBarIfSonobuoyAbove(float valuePerSecond)
+    private void IncreaseVigilance(float valuePerSecond)
     {
-        if (timer1 >= 1)
-        {
-            vigilanceValue += valuePerSecond;
-            timer1 = 0;
-        }
-        else
-        {
-            timer1 += Time.deltaTime;
-        }
-    }
-
-    private void IncreaseVigilanceBarIfFregateIdleAbove(float valuePerSecond)
-    {
-        if (timer2 >= 1)
-        {
-            vigilanceValue += valuePerSecond;
-            timer2 = 0;
-        }
-        else
-        {
-            timer2 += Time.deltaTime;
-        }
-    }
-
-    private void IncreaseVigilanceBarIfFregateMoveAbove(float valuePerSecond)
-    {
-        if (timer3 >= 1)
-        {
-            vigilanceValue += valuePerSecond;
-            timer3 = 0;
-        }
-        else
-        {
-            timer3 += Time.deltaTime;
-        }
+        vigilanceValue += valuePerSecond * Time.deltaTime * (submarineMovementBehavior.submarineZone.relief == TerrainZone.Relief.Flat ? vigilanceIncreaseRatioInFlat : 1);
     }
 
     private void EnableDebugRange()
@@ -199,16 +162,17 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     {
         if (Input.touchCount > 4)
         {
-            Touch touch1 = Input.GetTouch(0);
-            Touch touch2 = Input.GetTouch(1);
-            Touch touch3 = Input.GetTouch(2);
-            Touch touch4 = Input.GetTouch(3);
-            Touch touch5 = Input.GetTouch(4);
+            Touch touch = Input.GetTouch(5);
 
-            if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began && touch3.phase == TouchPhase.Began && touch4.phase == TouchPhase.Began && touch5.phase == TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began)
             {
                 enableRangeDisplay = !enableRangeDisplay;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            enableRangeDisplay = !enableRangeDisplay;
         }
     }
 }

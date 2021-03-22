@@ -9,8 +9,11 @@ public class GameManager : MonoBehaviour
     public GameObject _winPanel;
     public static GameObject winPanel;
     public CameraController _cameraController;
+    public  SubmarineCounterMeasures _submarineCounterMeasures;
     public static bool useMouseControl;
     public static CameraController cameraController;
+    public static SubmarineCounterMeasures submarineCounterMeasures;
+
     void Start()
     {
         winPanel = _winPanel;
@@ -18,6 +21,7 @@ public class GameManager : MonoBehaviour
         darkBackAnim.canvasGroup = darkBackAnim.rectTransform.GetComponent<CanvasGroup>();
         UICard.darkBackAnim = darkBackAnim;
         cameraController = _cameraController;
+        submarineCounterMeasures = _submarineCounterMeasures;
     }
 
     void Update()

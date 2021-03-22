@@ -70,29 +70,34 @@ public class HullSonarBehavior : MonoBehaviour
                 switch (raycastHit.collider.transform.parent.gameObject.tag)
                 {
                     case "Submarine":
-                        if (raycastHit.collider.GetComponentInParent<SubmarineCounterMeasures>().submarineIsInvisible)
+                        if (GameManager.submarineCounterMeasures.submarineIsInvisible)
                         {
                             //Do no detect submarine
                         }
                         else
                         {
-                            CreateDetectionPoint(raycastHit.collider, submarineIdentitySprite);
+                            CreateDetectionPoint(raycastHit.collider, submarineIdentitySprite, SonarPing.UnderWaterType.Submarine);
                         }
                         break;
 
+
+                    case "Lure":
+                        CreateDetectionPoint(raycastHit.collider, submarineIdentitySprite, SonarPing.UnderWaterType.Lure);
+                        break;
+
                     case "Bio":
-                        CreateDetectionPoint(raycastHit.collider, bioIdentitySprite);
+                        CreateDetectionPoint(raycastHit.collider, bioIdentitySprite, SonarPing.UnderWaterType.Bio);
                         break;
 
                     case "ShipWreck":
-                        CreateDetectionPoint(raycastHit.collider, shipwreckIdentitySprite);
+                        CreateDetectionPoint(raycastHit.collider, shipwreckIdentitySprite, SonarPing.UnderWaterType.ShipWreck);
                         break;
                 }
             }            
         }
     }
 
-    private void CreateDetectionPoint(Collider colliderTouched, Sprite identitySprite)
+    private void CreateDetectionPoint(Collider colliderTouched, Sprite identitySprite, SonarPing.UnderWaterType type)
     {
         if (!colliderObjectSonar.Contains(colliderTouched))
         {
@@ -100,6 +105,7 @@ public class HullSonarBehavior : MonoBehaviour
             SonarPing newPing = Instantiate(pingPrefab, SeaCoord.GetFlatCoord(colliderTouched.transform.position) + Vector3.up * 0.1f, pingPrefab.transform.rotation);
             newPing.identitySpriteRenderer.sprite = identitySprite;
             newPing.madBehavior = madBehavior;
+            newPing.type = type;
         }
     }
 }

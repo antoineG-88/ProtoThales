@@ -100,6 +100,9 @@ MonoBehaviour:
   identificationDistance: 8
   identitySpriteRenderer: {fileID: 4482441576078227504}
   madBehavior: {fileID: 0}
+  submarineCounterMeasures: {fileID: 0}
+  type: 0
+  isIdentifiable: 1
 --- !u!1 &8282533920505274515
 GameObject:
   m_ObjectHideFlags: 0

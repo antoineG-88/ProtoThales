@@ -54,7 +54,8 @@ MonoBehaviour:
   identifyImage: {fileID: 2801389054874190565}
   effectFrequency: 2
   sonobuoyRange: 3.5
-  sonobuoyLifeTime: 30
+  sonobuoyIncreasedRange: 5
+  sonobuoyLifeTime: 45
   rangeDisplay: {fileID: 2512663380419868788}
   effectDisplay: {fileID: 7760927651017697740}
   noElementEffect:

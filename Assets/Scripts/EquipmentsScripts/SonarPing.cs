@@ -11,6 +11,10 @@ public class SonarPing : MonoBehaviour
     public float identificationDistance;
     public SpriteRenderer identitySpriteRenderer;
     public MadBehavior madBehavior;
+    public SubmarineCounterMeasures submarineCounterMeasures;
+    public enum UnderWaterType { Bio, Submarine, ShipWreck, Lure};
+    public UnderWaterType type;
+    public bool isIdentifiable;
 
     private bool isMadAbove;
 
@@ -32,7 +36,10 @@ public class SonarPing : MonoBehaviour
             Destroy(gameObject);
         }
 
-        UpdateMadDetection();
+        if(isIdentifiable)
+        {
+            UpdateMadDetection();
+        }
     }
 
 
@@ -41,9 +48,13 @@ public class SonarPing : MonoBehaviour
     private void UpdateMadDetection()
     {
         distance = Vector2.Distance(SeaCoord.Planify(transform.position), SeaCoord.Planify(madBehavior.transform.position));
-        if(distance <identificationDistance)
+        if(distance < identificationDistance)
         {
             identitySpriteRenderer.gameObject.SetActive(true);
+            if(type == UnderWaterType.Submarine)
+            {
+                GameManager.submarineCounterMeasures.RefreshIdentified();
+            }
         }
         else
         {

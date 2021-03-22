@@ -30,7 +30,8 @@ public class SubmarineCounterMeasures : MonoBehaviour
     private int randomDirection;
     public bool usingLeurre;
     [HideInInspector] public bool decoyAreMoving;
-    [HideInInspector] public bool submarineDetectByDAM;
+    private bool isIdentified;
+    private float identifiedTimeRemaining;
 
     [Header("Contournement de Bouée")]
     public float timeBeforeLauchCB;
@@ -41,7 +42,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
     [HideInInspector] public bool submarineDetectSonobuoy;
     RaycastHit hit;
     public float raycastLenght = 4;
-    public LayerMask LayerMask;
+    public LayerMask boueeLayerMask;
     [HideInInspector] public bool raycastTouchObstacle; 
 
     [Header("Changement de Cap")]
@@ -50,7 +51,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
     public float cooldownTimeCC;
     public float vigilanceValueCostCC;
     public bool usingChangementDeCap;
-    public LayerMask _LayerMask;
+    public LayerMask fregateLayerMask;
     [HideInInspector] public bool submarineDetectFregate;
     [HideInInspector] public bool canAvoidFregate;
 
@@ -69,11 +70,30 @@ public class SubmarineCounterMeasures : MonoBehaviour
             ChangementDeCap();
         }
 
+        UpdateIdentified();
+
         LureMovement();
 
-        if (canAvoidFregate)
+        if(usingChangementDeCap)
         {
-            submarineMovementAroundObstacle(_LayerMask);
+            SubmarineMovementAroundObstacle(fregateLayerMask);
+        }
+        else
+        {
+            SubmarineMovementAroundObstacle(0);
+        }
+    }
+
+    private void UpdateIdentified()
+    {
+        if (identifiedTimeRemaining > 0)
+        {
+            isIdentified = true;
+            identifiedTimeRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            isIdentified = false;
         }
     }
 
@@ -81,6 +101,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
     {
         if (submarineVigilanceScript.vigilanceValue >= 100 && !usingSilenceRadio)
         {
+            Debug.Log("Le sous marin se rend invisible");
             usingSilenceRadio = true;
             cantUseCounterMeasure = true;
             StartCoroutine(SubmarineIsInvisible());
@@ -89,8 +110,9 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
     private void Leurre()
     {
-        if (submarineDetectByDAM && !usingLeurre)
+        if (isIdentified && !usingLeurre && submarineVigilanceScript.vigilanceValue > vigilanceValueCostL)
         {
+            Debug.Log("Le sous marin utilise un leurre");
             usingLeurre = true;
             cantUseCounterMeasure = true;
             StartCoroutine(SubmarineCreateDecoy());
@@ -99,7 +121,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
     private void ContournementDeBouee()
     {
-        if (submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique && submarineDetectSonobuoy && !usingContournementBouee)
+        if (submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique && submarineDetectSonobuoy && !usingContournementBouee && submarineVigilanceScript.vigilanceValue > vigilanceValueCostCB)
         {
             usingContournementBouee = true;
         }
@@ -107,8 +129,9 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
     private void ChangementDeCap()
     {
-        if ((submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Inquiet || submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique) && submarineDetectFregate && !usingChangementDeCap)
+        if ((submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Inquiet || submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique) && submarineDetectFregate && !usingChangementDeCap && submarineVigilanceScript.vigilanceValue > vigilanceValueCostCC)
         {
+            Debug.Log("Le sous marin change de cap");
             usingChangementDeCap = true;
             cantUseCounterMeasure = true;
             StartCoroutine(SubmarineChangeTargetWaypoint());
@@ -121,20 +144,21 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             if (randomDirection == 0)
             {
-                transform.position += submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
+                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
             }
             else if (randomDirection == 1)
             {
-                transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += Quaternion.Euler(0, lureAngle, 0) * SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
+                lure.transform.position += SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
             }
         }
     }
 
-    private void submarineMovementAroundObstacle(LayerMask mask)
+    private void SubmarineMovementAroundObstacle(LayerMask mask)
     {
-        float raycastForward = RaySensor(transform.position, submarineMovementScript.dirtyCurrentDirection, 4f, mask);
+        submarineMovementScript.avoidanceLayerMask = mask;
+        /*float raycastForward = RaySensor(transform.position, submarineMovementScript.dirtyCurrentDirection, 4f, mask);
         float raycastDiagonalRight = RaySensor(transform.position, Quaternion.Euler(0, 45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
         float raycastDiagonalLeft = RaySensor(transform.position, Quaternion.Euler(0, -45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
 
@@ -151,21 +175,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
         else
         {
             raycastTouchObstacle = false;
-        }
-    }
-
-    float RaySensor(Vector3 pos, Vector3 direction, float lenght, LayerMask layer)
-    {
-        if (Physics.Raycast(pos, direction, out hit, lenght * raycastLenght, layer))
-        {
-            Debug.DrawRay(pos, hit.distance * direction, Color.Lerp(Color.red, Color.green, (raycastLenght * lenght - hit.distance) / (raycastLenght * lenght)));
-            return (raycastLenght * lenght - hit.distance) / (raycastLenght * lenght);
-        }
-        else
-        {
-            Debug.DrawRay(pos, direction * raycastLenght * lenght, Color.red);          
-            return 0;
-        }
+        }*/
     }
 
     IEnumerator SubmarineIsInvisible()
@@ -238,5 +248,10 @@ public class SubmarineCounterMeasures : MonoBehaviour
         yield return new WaitForSeconds(cooldownTimeCC);
 
         usingChangementDeCap = false;
+    }
+
+    public void RefreshIdentified()
+    {
+        identifiedTimeRemaining = 1;
     }
 }

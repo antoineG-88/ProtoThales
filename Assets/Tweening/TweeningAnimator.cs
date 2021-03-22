@@ -9,4 +9,5 @@ public class TweeningAnimator
     public TweeningAnim anim;
     public RectTransform rectTransform;
     [HideInInspector] public CanvasGroup canvasGroup;
+    [HideInInspector] public Vector2 originalPos;
 }

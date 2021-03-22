@@ -60,13 +60,20 @@ public class PatMarMovement : BatimentMovement
     {
         if (Vector2.Distance(currentPosition, currentDestination) < patrolRange)
         {
-            currentMaxSpeed = Mathf.Min(slowMaxSpeed, maxSpeed + (maxSpeed * windBonusSpeedRatio));
             currentDestDirection = destinationDirection;
+            currentMaxSpeed = Mathf.Min(slowMaxSpeed, maxSpeed + (maxSpeed * windBonusSpeedRatio));
         }
         else
         {
-            currentMaxSpeed = maxSpeed + (maxSpeed * windBonusSpeedRatio);
             currentDestDirection = destinationDirection;
+            if (Vector2.Angle(currentDirection, destinationDirection) < 45)
+            {
+                currentMaxSpeed = maxSpeed + (maxSpeed * windBonusSpeedRatio);
+            }
+            else
+            {
+                currentMaxSpeed = Mathf.Min(slowMaxSpeed, maxSpeed + (maxSpeed * windBonusSpeedRatio));
+            }
         }
 
         if (canFly)

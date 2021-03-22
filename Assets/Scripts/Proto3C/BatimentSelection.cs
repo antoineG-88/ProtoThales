@@ -4,67 +4,87 @@ using UnityEngine;
 
 public class BatimentSelection : MonoBehaviour
 {
-    public FregateAction fregateAction;
-    public PatMarAction patMarAction;
-    public FregateMovement fregateMovement;
-    public PatMarMovement patMarMovement;
-    public static BatimentAction batimentSelected;
+    public List<Batiment> batiments;
+
+    public static Batiment batimentSelected;
     public CameraController cameraController;
     public Transform selectionDisplay;
-    public TweeningAnimator fregateActionPanelAnim;
-    public TweeningAnimator patMarActionPanelAnim;
-    public TweeningAnimator fregateSelectAnim;
-    public TweeningAnimator patMarSelectAnim;
-    public UICard fregateSelectCard;
-    public UICard patMarSelectCard;
-    public LayerMask batimentMask;
+    public float doubleSelectTime;
 
+    public LayerMask batimentMask;
+    private HelicoController helicoController;
+    private float timeSpendSinceLastDirectSelect;
+    private Batiment lastBatimentDirectlySelected;
     private void Start()
     {
-        fregateActionPanelAnim.canvasGroup = fregateActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
-        patMarActionPanelAnim.canvasGroup = patMarActionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
-        SelectBatiment(fregateAction, true);
+        helicoController = (HelicoController)batiments[2].batimentAction;
+        for (int b = 0; b < batiments.Count; b++)
+        {
+            batiments[b].selectButtonAnim.originalPos = batiments[b].selectButtonAnim.rectTransform.anchoredPosition;
+            batiments[b].actionPanelAnim.canvasGroup = batiments[b].actionPanelAnim.rectTransform.GetComponent<CanvasGroup>();
+            SelectBatiment(batiments[b], true);
+        }
+        SelectBatiment(batiments[0], true);
     }
 
     private void Update()
     {
         selectionDisplay.position = SeaCoord.GetFlatCoord(batimentSelected.batimentMovement.currentPosition);
-        if(fregateSelectCard.isHovered)
+
+        if (BatimentAction.currentActionNumber == 0)
         {
-            SelectBatiment(fregateAction, true);
-        }
-        if(patMarSelectCard.isHovered)
-        {
-            SelectBatiment(patMarAction, true);
+            for (int b = 0; b < batiments.Count; b++)
+            {
+                if (batiments[b].selectCard.isHovered)
+                {
+                    SelectBatiment(batiments[b], true);
+                }
+            }
         }
 
         UpdateDirectSelect();
+
+
+        helicoController.isSelected = batimentSelected == batiments[2];
+
     }
 
     RaycastHit hit;
 
     private void UpdateDirectSelect()
     {
+        timeSpendSinceLastDirectSelect += Time.deltaTime;
         if(!UICard.pointerFocusedOnCard && !UICard.anyCardSelected && InputDuo.tapDown)
         {
-            hit = InputDuo.SeaRaycast(batimentMask, true);
+            hit = InputDuo.SeaRaycast(batimentMask, !GameManager.useMouseControl);
             if(hit.collider != null)
             {
-                if(hit.collider.transform.parent == fregateAction.transform)
+                for (int b = 0; b < batiments.Count; b++)
                 {
-                    SelectBatiment(fregateAction, false);
-                }
-                else if (hit.collider.transform.parent == patMarAction.transform)
-                {
-                    SelectBatiment(patMarAction, false);
+                    if(hit.collider.transform.parent == batiments[b].batimentAction.transform)
+                    {
+                        if(lastBatimentDirectlySelected == batiments[b])
+                        {
+                            if(timeSpendSinceLastDirectSelect < doubleSelectTime)
+                            {
+                                batiments[b].batimentMovement.destinationCard.Select();
+                            }
+                        }
+                        else
+                        {
+                            SelectBatiment(batiments[b], false);
+                        }
+                        lastBatimentDirectlySelected = batiments[b];
+                        timeSpendSinceLastDirectSelect = 0;
+                    }
                 }
             }
         }
     }
 
-    public void SelectBatiment(BatimentAction batiment, bool refocusCamera)
+    public void SelectBatiment(Batiment batiment, bool refocusCamera)
     {
-        BatimentAction previousBatimentSelected = batimentSelected;
+        Batiment previousBatimentSelected = batimentSelected;
         batimentSelected = batiment;
         if (refocusCamera)
         {
@@ -73,23 +93,19 @@ public class BatimentSelection : MonoBehaviour
 
         if(previousBatimentSelected != batimentSelected)
         {
-            if (batiment == fregateAction)
+            //Debug.Log("Select " + batiment.batimentAction.gameObject.name);
+            StartCoroutine(batiment.actionPanelAnim.anim.Play(batiment.actionPanelAnim.rectTransform, batiment.actionPanelAnim.canvasGroup));
+            StartCoroutine(batiment.selectButtonAnim.anim.Play(batiment.selectButtonAnim.rectTransform, null, batiment.selectButtonAnim.originalPos));
+            batiment.actionPanelAnim.canvasGroup.blocksRaycasts = true;
+
+            for (int b = 0; b < batiments.Count; b++)
             {
-                StartCoroutine(fregateActionPanelAnim.anim.Play(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup));
-                StartCoroutine(patMarActionPanelAnim.anim.PlayBackward(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup, true));
-                StartCoroutine(fregateSelectAnim.anim.Play(fregateSelectAnim.rectTransform, null));
-                StartCoroutine(patMarSelectAnim.anim.PlayBackward(patMarSelectAnim.rectTransform, null, true));
-                patMarActionPanelAnim.canvasGroup.blocksRaycasts = false;
-                fregateActionPanelAnim.canvasGroup.blocksRaycasts = true;
-            }
-            else if(batiment == patMarAction)
-            {
-                StartCoroutine(patMarActionPanelAnim.anim.Play(patMarActionPanelAnim.rectTransform, patMarActionPanelAnim.canvasGroup));
-                StartCoroutine(fregateActionPanelAnim.anim.PlayBackward(fregateActionPanelAnim.rectTransform, fregateActionPanelAnim.canvasGroup, true));
-                StartCoroutine(patMarSelectAnim.anim.Play(patMarSelectAnim.rectTransform, null));
-                StartCoroutine(fregateSelectAnim.anim.PlayBackward(fregateSelectAnim.rectTransform, null, true));
-                patMarActionPanelAnim.canvasGroup.blocksRaycasts = true;
-                fregateActionPanelAnim.canvasGroup.blocksRaycasts = false;
+                if(batiments[b] != batiment && batiments[b] == previousBatimentSelected)
+                {
+                    StartCoroutine(batiments[b].actionPanelAnim.anim.PlayBackward(batiments[b].actionPanelAnim.rectTransform, batiments[b].actionPanelAnim.canvasGroup, true));
+                    StartCoroutine(batiments[b].selectButtonAnim.anim.PlayBackward(batiments[b].selectButtonAnim.rectTransform, null, batiments[b].selectButtonAnim.originalPos, true));
+                    batiments[b].actionPanelAnim.canvasGroup.blocksRaycasts = true;
+                }
             }
         }
     }

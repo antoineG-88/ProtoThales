@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class PatMar : Batiment
+public class PatMar : OldBatiment
 {
     public float maxSpeed;
     public float slowMaxSpeed;

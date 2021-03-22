@@ -7,7 +7,7 @@ public class SubmarineCounterMeasures : MonoBehaviour
     public SubmarineVigilanceBehavior submarineVigilanceScript;
     public SubmarineMovementBehavior submarineMovementScript;
     public MadBehavior madScript;
-    [HideInInspector] public bool submarineDetectByDAM;
+    
     private bool cantUseCounterMeasure;
 
     [Header("Silence Radio")]
@@ -30,6 +30,30 @@ public class SubmarineCounterMeasures : MonoBehaviour
     private int randomDirection;
     public bool usingLeurre;
     [HideInInspector] public bool decoyAreMoving;
+    private bool isIdentified;
+    private float identifiedTimeRemaining;
+
+    [Header("Contournement de Bouée")]
+    public float timeBeforeLauchCB;
+    //public float durationCB;
+    public float cooldownTimeCB;
+    public float vigilanceValueCostCB;
+    public bool usingContournementBouee;
+    [HideInInspector] public bool submarineDetectSonobuoy;
+    RaycastHit hit;
+    public float raycastLenght = 4;
+    public LayerMask boueeLayerMask;
+    [HideInInspector] public bool raycastTouchObstacle; 
+
+    [Header("Changement de Cap")]
+    public float timeBeforeLauchCC;
+    //public float durationCC;
+    public float cooldownTimeCC;
+    public float vigilanceValueCostCC;
+    public bool usingChangementDeCap;
+    public LayerMask fregateLayerMask;
+    [HideInInspector] public bool submarineDetectFregate;
+    [HideInInspector] public bool canAvoidFregate;
 
     private void Start()
     {
@@ -42,15 +66,42 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             SilenceRadio();
             Leurre();
+            //ContournementDeBouee();
+            ChangementDeCap();
         }
 
+        UpdateIdentified();
+
         LureMovement();
+
+        if(usingChangementDeCap)
+        {
+            SubmarineMovementAroundObstacle(fregateLayerMask);
+        }
+        else
+        {
+            SubmarineMovementAroundObstacle(0);
+        }
+    }
+
+    private void UpdateIdentified()
+    {
+        if (identifiedTimeRemaining > 0)
+        {
+            isIdentified = true;
+            identifiedTimeRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            isIdentified = false;
+        }
     }
 
     private void SilenceRadio()
     {
         if (submarineVigilanceScript.vigilanceValue >= 100 && !usingSilenceRadio)
         {
+            Debug.Log("Le sous marin se rend invisible");
             usingSilenceRadio = true;
             cantUseCounterMeasure = true;
             StartCoroutine(SubmarineIsInvisible());
@@ -59,11 +110,31 @@ public class SubmarineCounterMeasures : MonoBehaviour
 
     private void Leurre()
     {
-        if (submarineDetectByDAM && !usingLeurre)
+        if (isIdentified && !usingLeurre && submarineVigilanceScript.vigilanceValue > vigilanceValueCostL)
         {
+            Debug.Log("Le sous marin utilise un leurre");
             usingLeurre = true;
             cantUseCounterMeasure = true;
             StartCoroutine(SubmarineCreateDecoy());
+        }
+    }
+
+    private void ContournementDeBouee()
+    {
+        if (submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique && submarineDetectSonobuoy && !usingContournementBouee && submarineVigilanceScript.vigilanceValue > vigilanceValueCostCB)
+        {
+            usingContournementBouee = true;
+        }
+    }
+
+    private void ChangementDeCap()
+    {
+        if ((submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Inquiet || submarineVigilanceScript.submarineState == SubmarineVigilanceBehavior.VigilanceState.Panique) && submarineDetectFregate && !usingChangementDeCap && submarineVigilanceScript.vigilanceValue > vigilanceValueCostCC)
+        {
+            Debug.Log("Le sous marin change de cap");
+            usingChangementDeCap = true;
+            cantUseCounterMeasure = true;
+            StartCoroutine(SubmarineChangeTargetWaypoint());
         }
     }
 
@@ -73,15 +144,38 @@ public class SubmarineCounterMeasures : MonoBehaviour
         {
             if (randomDirection == 0)
             {
-                transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
+                lure.transform.position += Quaternion.Euler(0, lureAngle, 0) * SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
             }
             else if (randomDirection == 1)
             {
-                transform.position += Quaternion.Euler(0, lureAngle, 0) * submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
-                lure.transform.position += submarineMovementScript.currentDirection * Time.deltaTime * submarineSpeed;
+                transform.position += Quaternion.Euler(0, lureAngle, 0) * SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
+                lure.transform.position += SeaCoord.GetFlatCoord(submarineMovementScript.currentDirection) * Time.deltaTime * submarineSpeed;
             }
         }
+    }
+
+    private void SubmarineMovementAroundObstacle(LayerMask mask)
+    {
+        submarineMovementScript.avoidanceLayerMask = mask;
+        /*float raycastForward = RaySensor(transform.position, submarineMovementScript.dirtyCurrentDirection, 4f, mask);
+        float raycastDiagonalRight = RaySensor(transform.position, Quaternion.Euler(0, 45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
+        float raycastDiagonalLeft = RaySensor(transform.position, Quaternion.Euler(0, -45, 0) * submarineMovementScript.dirtyCurrentDirection, 3f, mask);
+
+        if (raycastDiagonalRight > 0)
+        {
+            transform.position += Quaternion.Euler(0, -90, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+            raycastTouchObstacle = true;
+        }
+        else if (raycastDiagonalLeft > 0)
+        {
+            transform.position += Quaternion.Euler(0, 90, 0) * submarineMovementScript.dirtyCurrentDirection * Time.deltaTime * submarineSpeed;
+            raycastTouchObstacle = true;
+        }
+        else
+        {
+            raycastTouchObstacle = false;
+        }*/
     }
 
     IEnumerator SubmarineIsInvisible()
@@ -139,5 +233,25 @@ public class SubmarineCounterMeasures : MonoBehaviour
         yield return new WaitForSeconds(cooldownTimeL);
 
         usingLeurre = false;
+    }
+
+    IEnumerator SubmarineChangeTargetWaypoint()
+    {
+        yield return new WaitForSeconds(timeBeforeLauchCC);
+
+        submarineMovementScript.PickRandomWaypoint();
+        canAvoidFregate = true;
+
+        submarineVigilanceScript.vigilanceValue -= vigilanceValueCostCC;
+        cantUseCounterMeasure = false;
+
+        yield return new WaitForSeconds(cooldownTimeCC);
+
+        usingChangementDeCap = false;
+    }
+
+    public void RefreshIdentified()
+    {
+        identifiedTimeRemaining = 1;
     }
 }

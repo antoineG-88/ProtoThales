@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Mad
+  - Bio
+  - Submarine
+  - ShipWreck
+  - Lure
   layers:
   - Default
   - TransparentFX
@@ -13,11 +18,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - SeaSurface
+  - Elements
+  - UnderWaterElements
+  - Sonobuoy
+  - Fregate
   - 
   - 
   - 
@@ -40,4 +45,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Sonar
+    uniqueID: 1173069747
     locked: 0

@@ -67,7 +67,7 @@ public class PatMarHandler : MonoBehaviour
         if (InputDuo.tapDown && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             startTouchPos = InputDuo.touch.position;
-            touchHit = InputDuo.SeaRaycast(surfaceMask, true);
+            touchHit = InputDuo.SeaRaycast(surfaceMask, !GameManager.useMouseControl);
         }
         else
         {

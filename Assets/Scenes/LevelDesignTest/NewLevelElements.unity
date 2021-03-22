@@ -778,7 +778,7 @@ Transform:
   - {fileID: 1951652411}
   - {fileID: 398909529}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &83937606
 GameObject:
@@ -1440,7 +1440,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &165316353
 GameObject:
@@ -2621,7 +2621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e451494ae7b134fb861b47cb869bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hackingTime: 25
+  hackingTime: 30
   hackingDistance: 5
 --- !u!1 &310675005
 GameObject:
@@ -5523,7 +5523,7 @@ PrefabInstance:
     - target: {fileID: 7189612822178515424, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515424, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
@@ -5568,7 +5568,7 @@ PrefabInstance:
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: timeBeforeLauchSL
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
@@ -5578,7 +5578,7 @@ PrefabInstance:
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: timeBeforeLauchCC
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
@@ -5598,12 +5598,32 @@ PrefabInstance:
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: cooldownTimeL
-      value: 40
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: cooldownTimeCC
-      value: 15
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: durationSL
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: durationL
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: lureAngle
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515429, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: vigilanceValueCostCC
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515430, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
@@ -5708,6 +5728,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 4bf35df24953da147b751f8c890cd9ed,
         type: 3}
+    - target: {fileID: 7189612822178515430, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: sonobuoyVigiIncr
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515430, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: fregateMoveVigiIncr
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189612822178515430, guid: c7c8b4732adab5948964b6078a9ee78d,
+        type: 3}
+      propertyPath: fregateStationaryVigiIncr
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515431, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: allWaypoints.Array.size
@@ -5771,12 +5806,12 @@ PrefabInstance:
     - target: {fileID: 7189612822178515431, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: turnSpeed
-      value: 80
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515431, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: submarineSpeedCoast
-      value: 0.8
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7189612822178515431, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
@@ -5821,7 +5856,7 @@ PrefabInstance:
     - target: {fileID: 7189612822178515431, guid: c7c8b4732adab5948964b6078a9ee78d,
         type: 3}
       propertyPath: submarineSpeed
-      value: 1.1
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7c8b4732adab5948964b6078a9ee78d, type: 3}
@@ -6862,7 +6897,7 @@ MonoBehaviour:
     rectTransform: {fileID: 1749194902}
     canvasGroup: {fileID: 0}
     originalPos: {x: 0, y: 0}
-  debugOnPc: 0
+  debugOnPc: 1
   _winPanel: {fileID: 1720879021}
   _cameraController: {fileID: 1899627876}
   _submarineCounterMeasures: {fileID: 1356548096}
@@ -8633,7 +8668,7 @@ Transform:
   - {fileID: 302146106}
   - {fileID: 1561618791}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &929037351
 GameObject:
@@ -10527,7 +10562,7 @@ RectTransform:
   - {fileID: 1349990543}
   - {fileID: 476676624}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11503,7 +11538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e451494ae7b134fb861b47cb869bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hackingTime: 20
+  hackingTime: 25
   hackingDistance: 2
 --- !u!1 &1213120322
 GameObject:
@@ -13648,105 +13683,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &1466764977
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 286054874003111400, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_Name
-      value: CaptasPing
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.3185754
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.23
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.6300511
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.21099
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.21099
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455076751726508870, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.21099
-      objectReference: {fileID: 0}
-    - target: {fileID: 4982384646528624278, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4982384646528624278, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4982384646528624278, guid: ead45d9312c55da478745f5ff79d4ab5,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.76493406
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ead45d9312c55da478745f5ff79d4ab5, type: 3}
 --- !u!1 &1467371688
 GameObject:
   m_ObjectHideFlags: 0
@@ -19420,7 +19356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e451494ae7b134fb861b47cb869bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hackingTime: 15
+  hackingTime: 18
   hackingDistance: 2
 --- !u!1 &1539301399
 GameObject:
@@ -20658,12 +20594,12 @@ MonoBehaviour:
   upPropeller: {fileID: 1231368983}
   sidePropeller: {fileID: 1977189462}
   spinSpeed: 1000
-  focusZoom: 0.1
-  prepareTime: 10
-  maxActiveTime: 30
-  flashChargeTime: 3
+  focusZoom: 0.2
+  prepareTime: 18
+  maxActiveTime: 50
+  flashChargeTime: 4
   timeTresholdBeforeStartFlashCharge: 0.5
-  flashCooldown: 8
+  flashCooldown: 13
   flashRange: 2
   flashEffect: {fileID: 1162450015439955525, guid: 2ba186591d9b37e41b31f8876472144f,
     type: 3}
@@ -20695,7 +20631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destPreview: {fileID: 21177743}
-  distanceToStop: 1
+  distanceToStop: 0.4
   seaMask:
     serializedVersion: 2
     m_Bits: 256
@@ -20707,9 +20643,9 @@ MonoBehaviour:
   reachedDest: 0
   canChangeDestination: 0
   currentZone: {fileID: 0}
-  maxSpeed: 2
-  accelerationForce: 4
-  turnSpeed: 200
+  maxSpeed: 1.25
+  accelerationForce: 2.5
+  turnSpeed: 125
   isControllable: 0
 --- !u!4 &1658402483
 Transform:
@@ -20725,7 +20661,7 @@ Transform:
   - {fileID: 68990708}
   - {fileID: 1517383871}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &1658402484
 LineRenderer:
@@ -21117,7 +21053,7 @@ MonoBehaviour:
   sonobuoyPrefab: {fileID: 1648340259875508546, guid: 42f5b06c70768e0429b34b026be63dbc,
     type: 3}
   sonobuoyMaxCharge: 3
-  sonobuoyRechargeTime: 20
+  sonobuoyRechargeTime: 35
   sonobuoyRechargeFill: {fileID: 353820148}
   currentSonobuoyChargeText: {fileID: 2075686735}
   sonobuoyCard: {fileID: 1626833994}
@@ -21145,7 +21081,7 @@ Transform:
   - {fileID: 575451762}
   - {fileID: 310675006}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &1698774021
 LineRenderer:
@@ -21278,11 +21214,11 @@ MonoBehaviour:
   reachedDest: 0
   canChangeDestination: 0
   currentZone: {fileID: 0}
-  maxSpeed: 4
-  slowMaxSpeed: 2.5
-  accelerationForce: 3
+  maxSpeed: 2.5
+  slowMaxSpeed: 2
+  accelerationForce: 2
   patrolRange: 3
-  turnSpeed: 80
+  turnSpeed: 50
   speedWindIncreaseRatio: 0.5
   sideWindIgnorance: 1
   canFly: 0
@@ -22256,7 +22192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e451494ae7b134fb861b47cb869bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hackingTime: 10
+  hackingTime: 12
   hackingDistance: 3
 --- !u!1 &1768740752
 GameObject:
@@ -22922,7 +22858,7 @@ PrefabInstance:
     - target: {fileID: 7003991111947384126, guid: 6444f25ceaa5a244887acde70e06360b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7003991111947384126, guid: 6444f25ceaa5a244887acde70e06360b,
         type: 3}
@@ -25471,7 +25407,7 @@ Transform:
   - {fileID: 1964906251}
   - {fileID: 1598155190}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -44.63, z: 0}
 --- !u!114 &2117067378
 MonoBehaviour:
@@ -25490,7 +25426,7 @@ MonoBehaviour:
   doingActionFlag: 0
   captasMaxRange: 150
   captasDetectionSpeed: 5
-  captasCooldown: 40
+  captasCooldown: 60
   landBetweenStepsLength: 1
   pingPrefab: {fileID: 5451640751961465880, guid: ead45d9312c55da478745f5ff79d4ab5,
     type: 3}
@@ -25625,7 +25561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destPreview: {fileID: 1716651880}
-  distanceToStop: 2
+  distanceToStop: 0.6
   seaMask:
     serializedVersion: 2
     m_Bits: 256
@@ -25637,9 +25573,9 @@ MonoBehaviour:
   reachedDest: 0
   canChangeDestination: 0
   currentZone: {fileID: 0}
-  movementSpeed: 1
-  accelerationForce: 0.4
-  turnSpeed: 40
+  movementSpeed: 0.625
+  accelerationForce: 0.25
+  turnSpeed: 37.5
   thrustParticle: {fileID: 1516163390}
   zoneDetectionDistance: 3
   isMoving: 0

@@ -14,6 +14,9 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     private float currentRange;
     private bool reachInquietState;
     public float vigilanceIncreaseRatioInFlat;
+    public float sonobuoyVigiIncr;
+    public float fregateMoveVigiIncr;
+    public float fregateStationaryVigiIncr;
 
     [Header("Objects")]
     public FregateMovement fregateMovementScript;
@@ -108,11 +111,11 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
             if (fregateMovementScript.isMoving)
             {
-                IncreaseVigilance(2);
+                IncreaseVigilance(fregateMoveVigiIncr);
             }
             else
             {
-                IncreaseVigilance(0.5f);
+                IncreaseVigilance(fregateStationaryVigiIncr);
             }
         }
         else
@@ -136,7 +139,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
 
             if(sonobuoysDistance[x] < currentRange)
             {
-                IncreaseVigilance(2);
+                IncreaseVigilance(sonobuoyVigiIncr);
             }
         }
     }
@@ -162,7 +165,7 @@ public class SubmarineVigilanceBehavior : MonoBehaviour
     {
         if (Input.touchCount > 4)
         {
-            Touch touch = Input.GetTouch(5);
+            Touch touch = Input.GetTouch(0);
 
             if (touch.phase == TouchPhase.Began)
             {

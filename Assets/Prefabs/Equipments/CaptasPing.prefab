@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b0dbc83eb43f147a76b8b3dd1a0714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disappearTimerMax: 4
+  disappearTimerMax: 10
   color: {r: 1, g: 0.9294118, b: 0.6666667, a: 1}
   identificationDistance: 8
   identitySpriteRenderer: {fileID: 5739971038714947203}

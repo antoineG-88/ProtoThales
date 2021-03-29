@@ -101,19 +101,19 @@ public class SonobuoyBehavior : MonoBehaviour
             {
                 if(objectsCanBeDetected[i].tag == "Submarine")
                 {
-                    if(GameManager.submarineCounterMeasures.submarineIsInvisible)
+                    if(GameManager.submarineActionHandler.submarineIsInvisible)
                     {
                         //Do no detect submarine
                     }
                     else
                     {
-                        GameManager.submarineCounterMeasures.submarineDetectSonobuoy = true;
+                        GameManager.submarineActionHandler.submarineDetectSonobuoy = true;
 
                         float distanceFromMad = Vector2.Distance(SeaCoord.Planify(madScript.transform.position), SeaCoord.Planify(transform.position));
 
                         if (distanceFromMad < actualSonobuoyRange)
                         {
-                            objectsCanBeDetected[i].GetComponent<SubmarineCounterMeasures>().RefreshIdentified();
+                            GameManager.submarineActionHandler.RefreshIdentified();
                         }
 
                         atLeastOneObjectDetected = true;

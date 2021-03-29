@@ -53,7 +53,7 @@ public class SonarPing : MonoBehaviour
             identitySpriteRenderer.gameObject.SetActive(true);
             if(type == UnderWaterType.Submarine)
             {
-                GameManager.submarineCounterMeasures.RefreshIdentified();
+                GameManager.submarineActionHandler.RefreshIdentified();
             }
         }
         else

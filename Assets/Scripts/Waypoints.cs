@@ -6,4 +6,7 @@ public class Waypoints : MonoBehaviour
 {
     public float hackingTime;
     public float hackingDistance;
+
+    [HideInInspector] public float currentHackedTime;
+    [HideInInspector] public bool isHacked;
 }

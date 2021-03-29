@@ -9,27 +9,27 @@ public class SubmarineHackingBehavior : MonoBehaviour
     public Image lifeBar;
     public GameObject losePanel;
     private int numberOfWaypoints;
-    private int currentWaypointsHacked;
+    [HideInInspector] public int currentWaypointsHacked;
 
-    public SubmarineMovementBehavior submarineMovementScript;
+    public SubmarineMoveHandler submarineMoveHandler;
 
     private void Start()
     {
-        numberOfWaypoints = submarineMovementScript.submarineWaypoints;
+        numberOfWaypoints = submarineMoveHandler.allWaypoints.Count;
         lifeBar.fillAmount = 0;
     }
 
     private void Update()
     {
-        if (submarineMovementScript.waypointHacked)
-        {
-            currentWaypointsHacked++;
-            lifeBar.fillAmount += 1f / numberOfWaypoints;
-        }
-
-        if(currentWaypointsHacked == submarineMovementScript.submarineWaypoints)
+        if(currentWaypointsHacked == submarineMoveHandler.allWaypoints.Count)
         {
             losePanel.SetActive(true);
         }
+    }
+
+    public void FinishHack()
+    {
+        currentWaypointsHacked++;
+        lifeBar.fillAmount += 1f / numberOfWaypoints;
     }
 }

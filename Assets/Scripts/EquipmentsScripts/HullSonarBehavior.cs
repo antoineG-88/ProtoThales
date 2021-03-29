@@ -70,7 +70,7 @@ public class HullSonarBehavior : MonoBehaviour
                 switch (raycastHit.collider.transform.parent.gameObject.tag)
                 {
                     case "Submarine":
-                        if (GameManager.submarineCounterMeasures.submarineIsInvisible)
+                        if (GameManager.submarineActionHandler.submarineIsInvisible)
                         {
                             //Do no detect submarine
                         }

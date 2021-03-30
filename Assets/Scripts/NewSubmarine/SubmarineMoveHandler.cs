@@ -169,49 +169,42 @@ public class SubmarineMoveHandler : MonoBehaviour
         for (int i = 0; i < subZone12Subdivision; i++)
         {
             SubZone newSubZone = new SubZone();
-            newSubZone.minAngle = startAngle + i * subZoneAngleWidth12;
-            newSubZone.maxAngle = startAngle + (i + 1) * subZoneAngleWidth12;
+            newSubZone.minAngle = GetNormAngle(startAngle + i * subZoneAngleWidth12);
+            newSubZone.maxAngle = GetNormAngle(startAngle + (i + 1) * subZoneAngleWidth12);
             newSubZone.minRange = minRange;
             newSubZone.maxRange = submarineActionHandler.detectionRangeCalme;
             newSubZone.weight = -1000;
             newSubZone.sliceIndex = i;
             allSubZones.Add(newSubZone);
             if (isSubmarineDisplayed)
-                Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme), Color.green);
-        }
+                Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition),
+                    SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme),
+                    Color.green);
 
-        if (isSubmarineDisplayed)
-            circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeCalme, Color.green));
-
-        if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet
+            if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet
         || submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
-        {
-            for (int i = 0; i < subZone12Subdivision; i++)
             {
-                SubZone newSubZone = new SubZone();
-                newSubZone.minAngle = startAngle + i * subZoneAngleWidth12;
-                newSubZone.maxAngle = startAngle + (i + 1) * subZoneAngleWidth12;
+                newSubZone = new SubZone();
+                newSubZone.minAngle = GetNormAngle(startAngle + i * subZoneAngleWidth12);
+                newSubZone.maxAngle = GetNormAngle(startAngle + (i + 1) * subZoneAngleWidth12);
                 newSubZone.minRange = submarineActionHandler.detectionRangeCalme;
                 newSubZone.maxRange = submarineActionHandler.detectionRangeInquiet;
                 newSubZone.weight = -1000;
                 newSubZone.sliceIndex = i;
                 allSubZones.Add(newSubZone);
                 if (isSubmarineDisplayed)
-                    Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition + SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * (submarineActionHandler.detectionRangeInquiet - submarineActionHandler.detectionRangeCalme)), Color.cyan);
-            }
-            if (isSubmarineDisplayed)
-                circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeInquiet, Color.cyan));
+                    Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition + SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme),
+                        SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * (submarineActionHandler.detectionRangeInquiet - submarineActionHandler.detectionRangeCalme)),
+                        Color.cyan);
 
 
-            if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
-            {
-                for (int i = 0; i < subZone12Subdivision; i++)
+                if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
                 {
                     for (int y = 0; y < subZone3SubSubdivision; y++)
                     {
-                        SubZone newSubZone = new SubZone();
-                        newSubZone.minAngle = startAngle + i * subZoneAngleWidth12 + y * subZoneAngleWidth3;
-                        newSubZone.maxAngle = startAngle + i * subZoneAngleWidth12 + (y + 1) * subZoneAngleWidth3;
+                        newSubZone = new SubZone();
+                        newSubZone.minAngle = GetNormAngle(startAngle + i * subZoneAngleWidth12 + y * subZoneAngleWidth3);
+                        newSubZone.maxAngle = GetNormAngle(startAngle + i * subZoneAngleWidth12 + (y + 1) * subZoneAngleWidth3);
                         newSubZone.minRange = submarineActionHandler.detectionRangeInquiet;
                         newSubZone.maxRange = submarineActionHandler.detectionRangePanique;
                         newSubZone.weight = -1000;
@@ -221,11 +214,24 @@ public class SubmarineMoveHandler : MonoBehaviour
                             Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition + SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeInquiet), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * (submarineActionHandler.detectionRangePanique - submarineActionHandler.detectionRangeInquiet)), Color.red);
                     }
                 }
+            }
+            if (isSubmarineDisplayed)
+                circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeCalme, Color.green));
+
+            if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet
+            || submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
+            {
                 if (isSubmarineDisplayed)
-                    circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangePanique, Color.red));
+                    circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeInquiet, Color.cyan));
+
+
+                if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
+                {
+                    if (isSubmarineDisplayed)
+                        circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangePanique, Color.red));
+                }
             }
         }
-
         SubZone bestSubZone = allSubZones[0];
 
         for (int i = 0; i < allSubZones.Count; i++)
@@ -236,50 +242,16 @@ public class SubmarineMoveHandler : MonoBehaviour
             {
                 for (int y = 0; y < allSubZones.Count; y++)
                 {
-                    if(allSubZones[i].sliceIndex == allSubZones[y].sliceIndex)
+                    if (allSubZones[y].sliceIndex == allSubZones[i].sliceIndex)
                     {
-                        allSubZones[y].weight = -1000;
-                        Debug.Log("ee + " + Time.time);
-                    }
-
-                    if(allSubZones[i].sliceIndex + 1 < subZone12Subdivision)
-                    {
-                        if (allSubZones[i].sliceIndex + 1 == allSubZones[y].sliceIndex)
-                        {
-                            allSubZones[y].weight = -1000;
-                            Debug.Log("ee1 + " + Time.time);
-                        }
-                    }
-                    else
-                    {
-                        if (0 == allSubZones[y].sliceIndex)
-                        {
-                            allSubZones[y].weight = -1000;
-                            Debug.Log("ee1 + " + Time.time);
-                        }
-                    }
-
-
-                    if (allSubZones[i].sliceIndex - 1 >= 0)
-                    {
-                        if (allSubZones[i].sliceIndex - 1 == allSubZones[y].sliceIndex)
-                        {
-                            allSubZones[y].weight = -1000;
-                            Debug.Log("ee2 + " + Time.time);
-                        }
-                    }
-                    else
-                    {
-                        if (subZone12Subdivision - 1 == allSubZones[y].sliceIndex)
-                        {
-                            allSubZones[y].weight = -1000;
-                            Debug.Log("ee2 + " + Time.time);
-                        }
+                        Debug.Log(allSubZones[y].weight);
+                        allSubZones[y].weight = -30;
+                        sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                     }
                 }
             }
 
-            sphereGizmos.Add(new SphereGizmo(allSubZones[i].zoneCenterPos, 0.2f, Color.Lerp(Color.red, Color.yellow, (allSubZones[i].weight + 15) / 20)));
+            sphereGizmos.Add(new SphereGizmo(allSubZones[i].zoneCenterPos, 0.2f, Color.Lerp(Color.red, Color.white, (allSubZones[i].weight + 15) / 20)));
 
             if (bestSubZone == null || allSubZones[i].weight > bestSubZone.weight)
             {
@@ -343,10 +315,26 @@ public class SubmarineMoveHandler : MonoBehaviour
         return weight;
     }
 
+    private float GetNormAngle(float angle)
+    {
+        float newAngle = angle;
+
+        if(angle > 180)
+        {
+            newAngle = angle - 360;
+        }
+
+        if(angle < -180)
+        {
+            newAngle = angle + 360;
+        }
+        return newAngle;
+    }
+
     private bool IsBetweenAngle(float angle, float mininmumAngle, float maximumAngle)
     {
         bool isBetween = false;
-        if(Mathf.DeltaAngle(mininmumAngle, maximumAngle) > subZoneAngleWidth12)
+        if (Mathf.DeltaAngle(mininmumAngle, maximumAngle) > subZoneAngleWidth12)
         {
             if(angle <= mininmumAngle && angle > maximumAngle)
             {

@@ -16,9 +16,16 @@ public class SubmarineMoveHandler : MonoBehaviour
     public float angleDetectionStep;
     public float turnSpeed;
     [Header("Submarine Path Behavior")]
+    public float minRange;
+    public float distanceToChangeIntermediatePosition;
     public int subZone12Subdivision;
-    public int subZone3Subdivision;
+    public int subZone3SubSubdivision;
     public float subZoneDetectionPointDistance;
+    public List<Transform> beneficialPointFactors;
+    public float benefPointFactorWeightWhileCalme, benefPointFactorWeightWhileInquiet, benefPointFactorWeightWhilePanique;
+    public float distanceFactorWeightWhileCalme, distanceFactorWeightWhileInquiet, distanceFactorWeightWhilePanique;
+    float subZoneAngleWidth12;
+    float subZoneAngleWidth3;
 
     [Space]
     public List<Waypoints> allWaypoints;
@@ -52,9 +59,13 @@ public class SubmarineMoveHandler : MonoBehaviour
 
     void Start()
     {
+        DisplaySubmarine(false);
         PickRandomWaypoint();
         currentPosition = SeaCoord.Planify(spawnPoints[Random.Range(0, spawnPoints.Count)].position);
+        nextIntermediatePosition = currentPosition;
         currentSpeed = submarineSpeed;
+        subZoneAngleWidth12 = 360 / subZone12Subdivision;
+        subZoneAngleWidth3 = 360 / (subZone12Subdivision * subZone3SubSubdivision);
     }
 
     void Update()
@@ -87,6 +98,7 @@ public class SubmarineMoveHandler : MonoBehaviour
     {
         if (submarineHackingBehavior.currentWaypointsHacked < allWaypoints.Count && nextWaypoint != null)
         {
+            FindNextIntermediatePosition();
             destinationDirection = SeaCoord.Planify(nextWaypoint.transform.position) - currentPosition;
             destinationDirection.Normalize();
             if (Vector2.Distance(SeaCoord.Planify(transform.position), SeaCoord.Planify(nextWaypoint.transform.position)) < nextWaypoint.hackingDistance && !isAvoidingFregate)
@@ -117,13 +129,12 @@ public class SubmarineMoveHandler : MonoBehaviour
                 else
                 {
                     isAvoidingFregate = false;
-                    currentDestDirection = destinationDirection;
+                    //currentDestDirection = destinationDirection;
 
-                    if((currentPosition - nextIntermediatePosition).magnitude < 0.1f)
+                    if((currentPosition - nextIntermediatePosition).magnitude < distanceToChangeIntermediatePosition)
                     {
                         nextIntermediatePosition = FindNextIntermediatePosition();
                     }
-                    FindNextIntermediatePosition(); // juste pour debug
                     intermediateDirection = nextIntermediatePosition - currentPosition;
                     intermediateDirection.Normalize();
 
@@ -149,35 +160,224 @@ public class SubmarineMoveHandler : MonoBehaviour
         }
     }
 
+    private List<SubZone> allSubZones = new List<SubZone>();
+
     private Vector2 FindNextIntermediatePosition()
     {
+        allSubZones.Clear();
+        float startAngle = Vector2.SignedAngle(Vector2.right, destinationDirection) - (360 / (subZone12Subdivision * subZone3SubSubdivision));
+        for (int i = 0; i < subZone12Subdivision; i++)
+        {
+            SubZone newSubZone = new SubZone();
+            newSubZone.minAngle = startAngle + i * subZoneAngleWidth12;
+            newSubZone.maxAngle = startAngle + (i + 1) * subZoneAngleWidth12;
+            newSubZone.minRange = minRange;
+            newSubZone.maxRange = submarineActionHandler.detectionRangeCalme;
+            newSubZone.weight = -1000;
+            newSubZone.sliceIndex = i;
+            allSubZones.Add(newSubZone);
+            if (isSubmarineDisplayed)
+                Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme), Color.green);
+        }
+
+        if (isSubmarineDisplayed)
+            circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeCalme, Color.green));
+
+        if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet
+        || submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
+        {
+            for (int i = 0; i < subZone12Subdivision; i++)
+            {
+                SubZone newSubZone = new SubZone();
+                newSubZone.minAngle = startAngle + i * subZoneAngleWidth12;
+                newSubZone.maxAngle = startAngle + (i + 1) * subZoneAngleWidth12;
+                newSubZone.minRange = submarineActionHandler.detectionRangeCalme;
+                newSubZone.maxRange = submarineActionHandler.detectionRangeInquiet;
+                newSubZone.weight = -1000;
+                newSubZone.sliceIndex = i;
+                allSubZones.Add(newSubZone);
+                if (isSubmarineDisplayed)
+                    Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition + SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeCalme), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * (submarineActionHandler.detectionRangeInquiet - submarineActionHandler.detectionRangeCalme)), Color.cyan);
+            }
+            if (isSubmarineDisplayed)
+                circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeInquiet, Color.cyan));
 
 
+            if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
+            {
+                for (int i = 0; i < subZone12Subdivision; i++)
+                {
+                    for (int y = 0; y < subZone3SubSubdivision; y++)
+                    {
+                        SubZone newSubZone = new SubZone();
+                        newSubZone.minAngle = startAngle + i * subZoneAngleWidth12 + y * subZoneAngleWidth3;
+                        newSubZone.maxAngle = startAngle + i * subZoneAngleWidth12 + (y + 1) * subZoneAngleWidth3;
+                        newSubZone.minRange = submarineActionHandler.detectionRangeInquiet;
+                        newSubZone.maxRange = submarineActionHandler.detectionRangePanique;
+                        newSubZone.weight = -1000;
+                        newSubZone.sliceIndex = i;
+                        allSubZones.Add(newSubZone);
+                        if (isSubmarineDisplayed)
+                            Debug.DrawRay(SeaCoord.GetFlatCoord(currentPosition + SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * submarineActionHandler.detectionRangeInquiet), SeaCoord.GetFlatCoord(SeaCoord.GetDirectionFromAngle(newSubZone.minAngle) * (submarineActionHandler.detectionRangePanique - submarineActionHandler.detectionRangeInquiet)), Color.red);
+                    }
+                }
+                if (isSubmarineDisplayed)
+                    circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangePanique, Color.red));
+            }
+        }
 
-        return new Vector2();
+        SubZone bestSubZone = allSubZones[0];
+
+        for (int i = 0; i < allSubZones.Count; i++)
+        {
+            allSubZones[i].weight = GetSubZoneWeight(allSubZones[i]);
+
+            if(allSubZones[i].needToBeAvoided)
+            {
+                for (int y = 0; y < allSubZones.Count; y++)
+                {
+                    if(allSubZones[i].sliceIndex == allSubZones[y].sliceIndex)
+                    {
+                        allSubZones[y].weight = -1000;
+                        Debug.Log("ee + " + Time.time);
+                    }
+
+                    if(allSubZones[i].sliceIndex + 1 < subZone12Subdivision)
+                    {
+                        if (allSubZones[i].sliceIndex + 1 == allSubZones[y].sliceIndex)
+                        {
+                            allSubZones[y].weight = -1000;
+                            Debug.Log("ee1 + " + Time.time);
+                        }
+                    }
+                    else
+                    {
+                        if (0 == allSubZones[y].sliceIndex)
+                        {
+                            allSubZones[y].weight = -1000;
+                            Debug.Log("ee1 + " + Time.time);
+                        }
+                    }
+
+
+                    if (allSubZones[i].sliceIndex - 1 >= 0)
+                    {
+                        if (allSubZones[i].sliceIndex - 1 == allSubZones[y].sliceIndex)
+                        {
+                            allSubZones[y].weight = -1000;
+                            Debug.Log("ee2 + " + Time.time);
+                        }
+                    }
+                    else
+                    {
+                        if (subZone12Subdivision - 1 == allSubZones[y].sliceIndex)
+                        {
+                            allSubZones[y].weight = -1000;
+                            Debug.Log("ee2 + " + Time.time);
+                        }
+                    }
+                }
+            }
+
+            sphereGizmos.Add(new SphereGizmo(allSubZones[i].zoneCenterPos, 0.2f, Color.Lerp(Color.red, Color.yellow, (allSubZones[i].weight + 15) / 20)));
+
+            if (bestSubZone == null || allSubZones[i].weight > bestSubZone.weight)
+            {
+                bestSubZone = allSubZones[i];
+            }
+        }
+
+        return bestSubZone.zoneCenterPos;
     }
 
-    private float GetSubZoneWeight(float minAngle, float maxAngle, float minRange, float maxRange)
+    float pointDistance;
+    float pointRelativeAngle;
+    Vector2 subZoneDirection;
+    private float GetSubZoneWeight(SubZone subZone)
     {
-        return 0;
+        float weight = 0;
+        subZone.zoneCenterPos = currentPosition + SeaCoord.GetDirectionFromAngle((subZone.maxAngle + subZone.minAngle) * 0.5f) * (subZone.maxRange + subZone.minRange) * 0.5f;
+
+        subZoneDirection = SeaCoord.GetDirectionFromAngle((subZone.maxAngle + subZone.minAngle) * 0.5f);
+
+        for (int o = 0; o < beneficialPointFactors.Count; o++)
+        {
+            pointDistance = Vector2.Distance(SeaCoord.Planify(beneficialPointFactors[o].position), currentPosition);
+            pointRelativeAngle = Vector2.SignedAngle(Vector2.right, SeaCoord.Planify(beneficialPointFactors[o].position) - currentPosition);
+            if (pointDistance < subZone.maxRange && pointDistance >= subZone.minRange && IsBetweenAngle(pointRelativeAngle, subZone.minAngle, subZone.maxAngle))
+            {
+                weight += submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Calme ? benefPointFactorWeightWhileCalme : 0;
+                weight += submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet ? benefPointFactorWeightWhileInquiet : 0;
+                weight += submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique ? benefPointFactorWeightWhilePanique : 0;
+            }
+        }
+
+        switch (submarineActionHandler.currentState)
+        {
+            case SubmarineActionHandler.VigilanceState.Calme:
+                weight += Mathf.Cos(Mathf.Deg2Rad * Vector2.Angle(destinationDirection, subZoneDirection)) * distanceFactorWeightWhileCalme;
+                break;
+
+            case SubmarineActionHandler.VigilanceState.Inquiet:
+                weight += Mathf.Cos(Mathf.Deg2Rad * Vector2.Angle(destinationDirection, subZoneDirection)) * distanceFactorWeightWhileInquiet;
+                break;
+
+            case SubmarineActionHandler.VigilanceState.Panique:
+                weight += Mathf.Cos(Mathf.Deg2Rad * Vector2.Angle(destinationDirection, subZoneDirection)) * distanceFactorWeightWhilePanique;
+                break;
+        }
+
+        if (TerrainZoneHandler.GetCurrentZone(subZone.zoneCenterPos, null) != null && TerrainZoneHandler.GetCurrentZone(subZone.zoneCenterPos, null).relief == TerrainZone.Relief.Land)
+        {
+            weight -= 1000;
+        }
+
+        pointDistance = Vector2.Distance(fregateMovement.currentPosition, currentPosition);
+        pointRelativeAngle = Vector2.SignedAngle(Vector2.right, fregateMovement.currentPosition - currentPosition);
+        if (pointDistance < subZone.maxRange && pointDistance >= subZone.minRange && IsBetweenAngle(pointRelativeAngle, subZone.minAngle, subZone.maxAngle))
+        {
+            weight = -1000;
+            subZone.needToBeAvoided = true;
+        }
+
+        return weight;
+    }
+
+    private bool IsBetweenAngle(float angle, float mininmumAngle, float maximumAngle)
+    {
+        bool isBetween = false;
+        if(Mathf.DeltaAngle(mininmumAngle, maximumAngle) > subZoneAngleWidth12)
+        {
+            if(angle <= mininmumAngle && angle > maximumAngle)
+            {
+                isBetween = true;
+            }
+        }
+        else
+        {
+            if (angle >= mininmumAngle && angle < maximumAngle)
+            {
+                isBetween = true;
+            }
+        }
+        return isBetween;
     }
 
     public void PickRandomWaypoint()
     {
         bool[] hackedWaypoint = new bool[allWaypoints.Count];
         int numberOfWaypointsHacked = 0;
-        int rand;
         bool chosenWaypointIsAlreadyHacked;
         do
         {
             chosenWaypointIsAlreadyHacked = false;
-            rand = Random.Range(0, allWaypoints.Count);
-            if (allWaypoints[rand].isHacked)
+            random = Random.Range(0, allWaypoints.Count);
+            if (allWaypoints[random].isHacked)
             {
                 chosenWaypointIsAlreadyHacked = true;
-                if(!hackedWaypoint[rand])
+                if(!hackedWaypoint[random])
                 {
-                    hackedWaypoint[rand] = true;
+                    hackedWaypoint[random] = true;
                     numberOfWaypointsHacked++;
                 }
             }
@@ -186,7 +386,7 @@ public class SubmarineMoveHandler : MonoBehaviour
 
         if(numberOfWaypointsHacked < allWaypoints.Count)
         {
-            nextWaypoint = allWaypoints[rand];
+            nextWaypoint = allWaypoints[random];
         }
         else
         {
@@ -254,6 +454,7 @@ public class SubmarineMoveHandler : MonoBehaviour
             {
                 wasLandOnLeft = false;
                 wasLandOnRight = false;
+                nextIntermediatePosition = FindNextIntermediatePosition();
             }
         }
     }
@@ -280,5 +481,68 @@ public class SubmarineMoveHandler : MonoBehaviour
     {
         isSubmarineDisplayed = selected;
         submarineActionHandler.rangeDisplay.SetActive(isSubmarineDisplayed);
+    }
+
+    public class SubZone
+    {
+        public Vector2 zoneCenterPos;
+        public float minAngle, maxAngle;
+        public float minRange, maxRange;
+        public float weight;
+        public int sliceIndex;
+        public bool needToBeAvoided;
+    }
+
+    private List<CircleGizmo> circleGismos = new List<CircleGizmo>();
+    private List<SphereGizmo> sphereGizmos = new List<SphereGizmo>();
+    private void OnDrawGizmos()
+    {
+        if(isSubmarineDisplayed)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(SeaCoord.GetFlatCoord(nextIntermediatePosition), 0.2f);
+
+            for (int i = 0; i < circleGismos.Count; i++)
+            {
+                Gizmos.color = circleGismos[i].color;
+                Gizmos.DrawWireSphere(SeaCoord.GetFlatCoord(circleGismos[i].seaPosition), circleGismos[i].range);
+            }
+
+            for (int i = 0; i < sphereGizmos.Count; i++)
+            {
+                Gizmos.color = sphereGizmos[i].color;
+                Gizmos.DrawSphere(SeaCoord.GetFlatCoord(sphereGizmos[i].seaPosition), sphereGizmos[i].radius);
+            }
+
+            circleGismos.Clear();
+            sphereGizmos.Clear();
+        }
+    }
+
+    public class CircleGizmo
+    {
+        public float range;
+        public Vector2 seaPosition;
+        public Color color;
+
+        public CircleGizmo(Vector2 pos, float radius, Color _color)
+        {
+            seaPosition = pos;
+            color = _color;
+            range = radius;
+        }
+    }
+    public class SphereGizmo
+    {
+        public float radius;
+        public Vector2 seaPosition;
+        public Color color;
+
+        public SphereGizmo(Vector2 pos, float _radius, Color _color)
+        {
+            seaPosition = pos;
+            color = _color;
+            radius = _radius;
+        }
     }
 }

@@ -13,9 +13,9 @@ public class SubmarineActionHandler : MonoBehaviour
     [HideInInspector] public List<float> sonobuoysDistance;
 
 
-    private float currentVigilance = 0f;
+    public float currentVigilance = 0f;
     public enum VigilanceState { Calme, Inquiet, Panique };
-    public VigilanceState submarineState;
+    public VigilanceState currentState;
     public Sprite calmeSprite, inquietSprite, paniqueSprite;
     public Image vigilanceStateImage;
     public float detectionRangeCalme, detectionRangeInquiet, detectionRangePanique;
@@ -73,9 +73,9 @@ public class SubmarineActionHandler : MonoBehaviour
 
         if (!cantUseCounterMeasure)
         {
-            SilenceRadio();
-            Leurre();
-            ChangementDeCap();
+            //SilenceRadio();
+            //Leurre();
+            //ChangementDeCap();
         }
 
         UpdateIdentified();
@@ -86,18 +86,18 @@ public class SubmarineActionHandler : MonoBehaviour
     {
         if (currentVigilance >= 0 && currentVigilance < 40 && !reachInquietState)
         {
-            submarineState = VigilanceState.Calme;
+            currentState = VigilanceState.Calme;
             vigilanceStateImage.sprite = calmeSprite;
         }
         else if ((currentVigilance >= 40 && currentVigilance < 80) || (currentVigilance >= 0 && currentVigilance < 40 && reachInquietState))
         {
-            submarineState = VigilanceState.Inquiet;
+            currentState = VigilanceState.Inquiet;
             vigilanceStateImage.sprite = inquietSprite;
             reachInquietState = true;
         }
         else if (currentVigilance >= 80 && currentVigilance <= 100)
         {
-            submarineState = VigilanceState.Panique;
+            currentState = VigilanceState.Panique;
             vigilanceStateImage.sprite = paniqueSprite;
         }
 
@@ -114,17 +114,17 @@ public class SubmarineActionHandler : MonoBehaviour
 
     private void UpdateSubmarineRange()
     {
-        if (submarineState == VigilanceState.Calme)
+        if (currentState == VigilanceState.Calme)
         {
             rangeDisplay.transform.localScale = new Vector3(detectionRangeCalme * 2, detectionRangeCalme * 2, 1);
             currentRange = detectionRangeCalme;
         }
-        else if (submarineState == VigilanceState.Inquiet)
+        else if (currentState == VigilanceState.Inquiet)
         {
             rangeDisplay.transform.localScale = new Vector3(detectionRangeInquiet * 2, detectionRangeInquiet * 2, 1);
             currentRange = detectionRangeInquiet;
         }
-        else if (submarineState == VigilanceState.Panique)
+        else if (currentState == VigilanceState.Panique)
         {
             rangeDisplay.transform.localScale = new Vector3(detectionRangePanique * 2, detectionRangePanique * 2, 1);
             currentRange = detectionRangePanique;
@@ -219,7 +219,7 @@ public class SubmarineActionHandler : MonoBehaviour
 
     private void ChangementDeCap()
     {
-        if ((submarineState == VigilanceState.Inquiet || submarineState == VigilanceState.Panique) && submarineDetectFregate && !usingChangementDeCap)
+        if ((currentState == VigilanceState.Inquiet || currentState == VigilanceState.Panique) && submarineDetectFregate && !usingChangementDeCap)
         {
             Debug.Log("Le sous marin change de cap");
             usingChangementDeCap = true;

@@ -20673,7 +20673,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1642931041
 GameObject:
   m_ObjectHideFlags: 0
@@ -26390,14 +26390,15 @@ MonoBehaviour:
   madBehavior: {fileID: 1698774023}
   sonobuoys: []
   sonobuoysDistance: []
-  submarineState: 0
+  currentVigilance: 0
+  currentState: 0
   calmeSprite: {fileID: 21300000, guid: 4bf35df24953da147b751f8c890cd9ed, type: 3}
   inquietSprite: {fileID: 21300000, guid: 4ff6820b83bfcc14caa47458616dcb3a, type: 3}
   paniqueSprite: {fileID: 21300000, guid: 93477a3cf44bfaa49ba441f1e1335686, type: 3}
   vigilanceStateImage: {fileID: 1613017206}
-  detectionRangeCalme: 3
-  detectionRangeInquiet: 3.5
-  detectionRangePanique: 4
+  detectionRangeCalme: 3.5
+  detectionRangeInquiet: 5
+  detectionRangePanique: 8
   rangeDisplay: {fileID: 5550632933132151376}
   sonobuoyVigiIncr: 2
   fregateMoveVigiIncr: 3
@@ -26473,9 +26474,13 @@ MonoBehaviour:
   deviationAngle: 10
   angleDetectionStep: 5
   turnSpeed: 40
-  subZone12Subdivision: 0
-  subZone3Subdivision: 0
-  subZoneDetectionPointDistance: 0
+  subZone12Subdivision: 6
+  subZone3SubSubdivision: 2
+  subZoneDetectionPointDistance: 3
+  beneficialPointFactors: []
+  benefPointFactorWeightWhileCalme: 0
+  benefPointFactorWeightWhileInquiet: 0
+  benefPointFactorWeightWhilePanique: 0
   allWaypoints:
   - {fileID: 1764099649}
   - {fileID: 1538923195}

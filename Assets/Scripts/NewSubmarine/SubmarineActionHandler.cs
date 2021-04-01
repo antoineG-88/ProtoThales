@@ -116,17 +116,17 @@ public class SubmarineActionHandler : MonoBehaviour
     {
         if (currentState == VigilanceState.Calme)
         {
-            rangeDisplay.transform.localScale = new Vector3(detectionRangeCalme * 2, detectionRangeCalme * 2, 1);
+            //rangeDisplay.transform.localScale = new Vector3(detectionRangeCalme * 2, detectionRangeCalme * 2, 1);
             currentRange = detectionRangeCalme;
         }
         else if (currentState == VigilanceState.Inquiet)
         {
-            rangeDisplay.transform.localScale = new Vector3(detectionRangeInquiet * 2, detectionRangeInquiet * 2, 1);
+            //rangeDisplay.transform.localScale = new Vector3(detectionRangeInquiet * 2, detectionRangeInquiet * 2, 1);
             currentRange = detectionRangeInquiet;
         }
         else if (currentState == VigilanceState.Panique)
         {
-            rangeDisplay.transform.localScale = new Vector3(detectionRangePanique * 2, detectionRangePanique * 2, 1);
+            //rangeDisplay.transform.localScale = new Vector3(detectionRangePanique * 2, detectionRangePanique * 2, 1);
             currentRange = detectionRangePanique;
         }
     }

@@ -179,7 +179,7 @@ Transform:
   m_GameObject: {fileID: 10619510}
   m_LocalRotation: {x: 0.6532815, y: 0.27059805, z: -0.27059805, w: 0.6532815}
   m_LocalPosition: {x: 0, y: 0.11, z: 0}
-  m_LocalScale: {x: 0.43609378, y: 0.43609378, z: 0.43609378}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 1042535953}
   m_Father: {fileID: 1560981472}
@@ -4841,10 +4841,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 25
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -9703,27 +9703,27 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -1.095
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.38268343
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
@@ -9748,17 +9748,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.4901844
+      value: 0.6498602
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.4901843
+      value: 0.6498601
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.4901841
+      value: 0.6498601
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 0e8e8214c10021c4f8edc14d9dc28a3c,
         type: 3}
@@ -20613,7 +20613,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 143, y: -50.580017}
+  m_AnchoredPosition: {x: 143, y: -50.579956}
   m_SizeDelta: {x: 266.8431, y: 66.234985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635248605
@@ -23041,7 +23041,7 @@ Transform:
   m_GameObject: {fileID: 1812989208}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.043037806, y: 0.071176454, z: 0.12911342}
+  m_LocalScale: {x: 0.09715784, y: 0.16068085, z: 0.29147354}
   m_Children:
   - {fileID: 1453516164}
   m_Father: {fileID: 5550632933132151378}
@@ -23951,7 +23951,7 @@ Transform:
   m_GameObject: {fileID: 1938074138}
   m_LocalRotation: {x: 0.6532815, y: 0.27059805, z: -0.27059805, w: 0.6532815}
   m_LocalPosition: {x: 0, y: 0.11, z: 0}
-  m_LocalScale: {x: 0.43609378, y: 0.43609378, z: 0.43609378}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 1681276380}
   m_Father: {fileID: 1716651881}
@@ -26396,9 +26396,9 @@ MonoBehaviour:
   inquietSprite: {fileID: 21300000, guid: 4ff6820b83bfcc14caa47458616dcb3a, type: 3}
   paniqueSprite: {fileID: 21300000, guid: 93477a3cf44bfaa49ba441f1e1335686, type: 3}
   vigilanceStateImage: {fileID: 1613017206}
-  detectionRangeCalme: 5
-  detectionRangeInquiet: 7
-  detectionRangePanique: 9
+  detectionRangeCalme: 4
+  detectionRangeInquiet: 6
+  detectionRangePanique: 8
   rangeDisplay: {fileID: 5550632933132151376}
   sonobuoyVigiIncr: 2
   fregateMoveVigiIncr: 3
@@ -26475,7 +26475,6 @@ MonoBehaviour:
   angleDetectionStep: 5
   turnSpeed: 60
   minRange: 0.5
-  distanceToChangeIntermediatePosition: 1
   subZone12Subdivision: 12
   subZone3SubSubdivision: 2
   subZoneDetectionPointDistance: 3
@@ -26487,9 +26486,12 @@ MonoBehaviour:
   - {fileID: 2027526857}
   - {fileID: 2121050879}
   - {fileID: 380650737}
-  benefPointFactorWeightWhileCalme: 15
-  benefPointFactorWeightWhileInquiet: 15
-  benefPointFactorWeightWhilePanique: 15
+  avoidEffectSliceReach: 3
+  intermediatePosRefreshRate: 3
+  distanceToRefrehIntemediatePos: 1
+  benefPointFactorWeightWhileCalme: 2
+  benefPointFactorWeightWhileInquiet: 2
+  benefPointFactorWeightWhilePanique: 2
   distanceFactorWeightWhileCalme: 7
   distanceFactorWeightWhileInquiet: 5
   distanceFactorWeightWhilePanique: 3
@@ -26499,6 +26501,8 @@ MonoBehaviour:
   - {fileID: 305484457}
   - {fileID: 1204835460}
   spawnPoints:
+  - {fileID: 1110170683}
+  - {fileID: 944795240}
   - {fileID: 1073057263}
   nextWaypoint: {fileID: 0}
   currentDirection: {x: 0, y: 0}

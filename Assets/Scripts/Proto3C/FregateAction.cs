@@ -45,12 +45,12 @@ public class FregateAction : BatimentAction
         if (hullSonarCard.isHovered && !hullSonarDescriptionOpened)
         {
             hullSonarDescriptionOpened = true;
-            StartCoroutine(hullSonarDescriptionAnim.anim.Play(hullSonarDescriptionAnim.rectTransform, hullSonarDescriptionAnim.canvasGroup));
+            StartCoroutine(hullSonarDescriptionAnim.anim.Play(hullSonarDescriptionAnim));
         }
         else if (!hullSonarCard.isHovered && hullSonarDescriptionOpened)
         {
             hullSonarDescriptionOpened = false;
-            StartCoroutine(hullSonarDescriptionAnim.anim.PlayBackward(hullSonarDescriptionAnim.rectTransform, hullSonarDescriptionAnim.canvasGroup, true));
+            StartCoroutine(hullSonarDescriptionAnim.anim.PlayBackward(hullSonarDescriptionAnim, true));
         }
     }
 

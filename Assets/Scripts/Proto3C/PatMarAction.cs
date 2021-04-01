@@ -46,12 +46,12 @@ public class PatMarAction : BatimentAction
         if(madCard.isHovered && !madDescriptionOpened)
         {
             madDescriptionOpened = true;
-            StartCoroutine(madDescriptionAnim.anim.Play(madDescriptionAnim.rectTransform, madDescriptionAnim.canvasGroup));
+            StartCoroutine(madDescriptionAnim.anim.Play(madDescriptionAnim));
         }
         else if(!madCard.isHovered && madDescriptionOpened)
         {
             madDescriptionOpened = false;
-            StartCoroutine(madDescriptionAnim.anim.PlayBackward(madDescriptionAnim.rectTransform, madDescriptionAnim.canvasGroup, true));
+            StartCoroutine(madDescriptionAnim.anim.PlayBackward(madDescriptionAnim, true));
         }
     }
 

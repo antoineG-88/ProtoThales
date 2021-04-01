@@ -19,7 +19,7 @@ public class MissionSelect : MonoBehaviour
     private void Start()
     {
 
-        StartCoroutine(missionAnim.anim.PlayBackward(missionAnim.rectTransform, null, true));
+        StartCoroutine(missionAnim.anim.PlayBackward(missionAnim, true));
     }
 
     void Update()
@@ -33,7 +33,7 @@ public class MissionSelect : MonoBehaviour
                 if(mission != null)
                 {
                     globeScript.canTurn = false;
-                    StartCoroutine(missionAnim.anim.Play(missionAnim.rectTransform, null));
+                    StartCoroutine(missionAnim.anim.Play(missionAnim));
                     missionTitleText.text = mission.title;
                     missionDescriptionText.text = mission.description;
                 }
@@ -44,7 +44,7 @@ public class MissionSelect : MonoBehaviour
     public void CloseMission()
     {
         globeScript.canTurn = true;
-        StartCoroutine(missionAnim.anim.PlayBackward(missionAnim.rectTransform, null, true));
+        StartCoroutine(missionAnim.anim.PlayBackward(missionAnim, true));
     }
 
     public void LoasScene(int sceneIndex)

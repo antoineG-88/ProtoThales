@@ -94,16 +94,16 @@ public class BatimentSelection : MonoBehaviour
         if(previousBatimentSelected != batimentSelected)
         {
             //Debug.Log("Select " + batiment.batimentAction.gameObject.name);
-            StartCoroutine(batiment.actionPanelAnim.anim.Play(batiment.actionPanelAnim.rectTransform, batiment.actionPanelAnim.canvasGroup));
-            StartCoroutine(batiment.selectButtonAnim.anim.Play(batiment.selectButtonAnim.rectTransform, null, batiment.selectButtonAnim.originalPos));
+            StartCoroutine(batiment.actionPanelAnim.anim.Play(batiment.actionPanelAnim));
+            StartCoroutine(batiment.selectButtonAnim.anim.Play(batiment.selectButtonAnim, batiment.selectButtonAnim.originalPos));
             batiment.actionPanelAnim.canvasGroup.blocksRaycasts = true;
 
             for (int b = 0; b < batiments.Count; b++)
             {
                 if(batiments[b] != batiment && batiments[b] == previousBatimentSelected)
                 {
-                    StartCoroutine(batiments[b].actionPanelAnim.anim.PlayBackward(batiments[b].actionPanelAnim.rectTransform, batiments[b].actionPanelAnim.canvasGroup, true));
-                    StartCoroutine(batiments[b].selectButtonAnim.anim.PlayBackward(batiments[b].selectButtonAnim.rectTransform, null, batiments[b].selectButtonAnim.originalPos, true));
+                    StartCoroutine(batiments[b].actionPanelAnim.anim.PlayBackward(batiments[b].actionPanelAnim, true));
+                    StartCoroutine(batiments[b].selectButtonAnim.anim.PlayBackward(batiments[b].selectButtonAnim, batiments[b].selectButtonAnim.originalPos, true));
                     batiments[b].actionPanelAnim.canvasGroup.blocksRaycasts = true;
                 }
             }

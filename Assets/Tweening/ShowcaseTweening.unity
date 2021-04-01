@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -415,17 +415,19 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  isImage: 1
+  useColorChange: 0
   animationStartPos: {x: -246, y: 1066}
   animationEndPos: {x: -0.000030517578, y: 659.6}
   animationStartScale: {x: 0.40043, y: 0.40043, z: 0.40043}
   animationEndScale: {x: 1, y: 1, z: 1}
   animationStartRot: 10.030388
   animationEndRot: 0
+  movementRelativeToOriginalPos: 0
   testTweenAnimator:
-    anim: {fileID: 11400000, guid: 0c05b996a52809548a376b33a9dd034a, type: 2}
+    anim: {fileID: 0}
     rectTransform: {fileID: 1226146425}
     canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
 --- !u!114 &1226146427
 MonoBehaviour:
   m_ObjectHideFlags: 0

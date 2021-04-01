@@ -133,10 +133,10 @@ public class UICard : MonoBehaviour
             StopAllCoroutines();
 
             if(darkenBackWhileHold)
-                StartCoroutine(darkBackAnim.anim.Play(darkBackAnim.rectTransform, darkBackAnim.canvasGroup));
+                StartCoroutine(darkBackAnim.anim.Play(darkBackAnim));
 
             if (holdAnim.rectTransform != null)
-                StartCoroutine(holdAnim.anim.Play(holdAnim.rectTransform, null));
+                StartCoroutine(holdAnim.anim.Play(holdAnim));
         }
 
         if(holdTime <= 0 && descriptionOpened)
@@ -144,17 +144,17 @@ public class UICard : MonoBehaviour
             descriptionOpened = false;
 
             if (darkenBackWhileHold)
-                StartCoroutine(darkBackAnim.anim.PlayBackward(darkBackAnim.rectTransform, darkBackAnim.canvasGroup, true));
+                StartCoroutine(darkBackAnim.anim.PlayBackward(darkBackAnim, true));
 
             if (holdAnim.rectTransform != null)
-                StartCoroutine(holdAnim.anim.PlayBackward(holdAnim.rectTransform, null, true));
+                StartCoroutine(holdAnim.anim.PlayBackward(holdAnim, true));
         }
 
 
         if(dragFlag && isHovered && !descriptionOpened && !isSelected && isDragged)
         {
             if (dragAnim.rectTransform != null)
-                StartCoroutine(dragAnim.anim.Play(dragAnim.rectTransform, null));
+                StartCoroutine(dragAnim.anim.Play(dragAnim));
             dragFlag = false;
         }
     }
@@ -163,7 +163,7 @@ public class UICard : MonoBehaviour
     {
         isSelected = true;
         if (selectedAnim.rectTransform != null)
-            StartCoroutine(selectedAnim.anim.Play(selectedAnim.rectTransform, null));
+            StartCoroutine(selectedAnim.anim.Play(selectedAnim));
     }
 
     public void Deselect()
@@ -172,7 +172,7 @@ public class UICard : MonoBehaviour
         {
             isSelected = false;
             if (selectedAnim.rectTransform != null)
-                StartCoroutine(selectedAnim.anim.PlayBackward(selectedAnim.rectTransform, null, true));
+                StartCoroutine(selectedAnim.anim.PlayBackward(selectedAnim, true));
         }
     }
 
@@ -225,7 +225,7 @@ public class UICard : MonoBehaviour
             if(!descriptionOpened)
             {
                 if (dragAnim.rectTransform != null)
-                    StartCoroutine(dragAnim.anim.PlayBackward(dragAnim.rectTransform, null, true));
+                    StartCoroutine(dragAnim.anim.PlayBackward(dragAnim, true));
             }
         }
     }
@@ -242,7 +242,7 @@ public class UICard : MonoBehaviour
         {
             dragFlag = true;
             if (dragAnim.rectTransform != null && !isSelected)
-                StartCoroutine(dragAnim.anim.PlayBackward(dragAnim.rectTransform, null, true));
+                StartCoroutine(dragAnim.anim.PlayBackward(dragAnim, true));
         }
         dropCount = 2;
     }

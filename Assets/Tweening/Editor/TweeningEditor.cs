@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 [CustomEditor(typeof(TweeningAnimCreator))]
 public class TweeningEditor : Editor
@@ -51,7 +52,7 @@ public class TweeningEditor : Editor
         }
 
         tweeningAnimCreator.colorAnimation = EditorGUILayout.GradientField("Color Animation", tweeningAnimCreator.colorAnimation);
-        tweeningAnimCreator.isImage = EditorGUILayout.Toggle("Modify color on Image ?", tweeningAnimCreator.isImage);
+        tweeningAnimCreator.useColorChange = EditorGUILayout.Toggle("Use Color Change", tweeningAnimCreator.useColorChange);
 
         GUILayout.Space(15);
 
@@ -86,11 +87,33 @@ public class TweeningEditor : Editor
 
         if (GUILayout.Button("CREATE"))
         {
-            tweeningAnimCreator.CreateAnimation();
+            CreateAnimInAssets(tweeningAnimCreator.GetAnim());
         }
 
         GUILayout.Space(25);
 
         base.OnInspectorGUI();
+    }
+
+    public static void CreateAnimInAssets(TweeningAnim newAnim)
+    {
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID());
+        if (path == "")
+        {
+            path = "Assets";
+        }
+        else if (Path.GetExtension(path) != "")
+        {
+            path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeContext)), "");
+        }
+
+        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/New " + typeof(TweeningAnim).ToString() + ".asset");
+
+        AssetDatabase.CreateAsset(newAnim, assetPathAndName);
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = newAnim;
     }
 }

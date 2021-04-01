@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using System.IO;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class TweeningAnimCreator : MonoBehaviour
 {
@@ -14,7 +9,7 @@ public class TweeningAnimCreator : MonoBehaviour
     [HideInInspector] public bool customRotCurve;
     [HideInInspector] public bool customScaleCurve;
     [HideInInspector] public Gradient colorAnimation;
-    [HideInInspector] public bool isImage;
+    [HideInInspector] public bool useColorChange;
     [HideInInspector] public Vector2 animationStartPos;
     [HideInInspector] public Vector2 animationEndPos;
     [HideInInspector] public Vector3 animationStartScale;
@@ -23,7 +18,7 @@ public class TweeningAnimCreator : MonoBehaviour
     [HideInInspector] public float animationEndRot;
     [HideInInspector] public bool movementRelativeToOriginalPos;
 
-    [Header("Test Animation > Press \"T\" at runtime to preview")]
+    [Header("Test Animation > Press \"T\" and \"U\" at runtime to preview")]
     public TweeningAnimator testTweenAnimator;
 
     private RectTransform rectTransform;
@@ -32,7 +27,7 @@ public class TweeningAnimCreator : MonoBehaviour
     {
         if(testTweenAnimator.rectTransform != null)
         {
-            testTweenAnimator.canvasGroup = testTweenAnimator.rectTransform.GetComponent<CanvasGroup>();
+            testTweenAnimator.GetCanvasGroup();
         }
     }
 
@@ -52,7 +47,7 @@ public class TweeningAnimCreator : MonoBehaviour
         animationEndScale = rectTransform.localScale;
     }
 
-    public void CreateAnimation()
+    public TweeningAnim GetAnim()
     {
         TweeningAnim anim = ScriptableObject.CreateInstance<TweeningAnim>();
         anim.animationCurve = animationCurve;
@@ -60,7 +55,7 @@ public class TweeningAnimCreator : MonoBehaviour
         anim.animationStartPos = animationStartPos;
         anim.animationEndPos = animationEndPos;
         anim.colorAnimation = colorAnimation;
-        anim.isImage = isImage;
+        anim.useColorChange = useColorChange;
         anim.animationEndRot = animationEndRot;
         anim.animationStartRot = animationStartRot;
         anim.animationStartScale = animationStartScale;
@@ -71,24 +66,7 @@ public class TweeningAnimCreator : MonoBehaviour
         anim.rotAnimationCurve = customRotCurve ? rotAnimationCurve : animationCurve;
         anim.movementRelativeToOriginalPos = movementRelativeToOriginalPos;
 
-        string path = AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID());
-        if (path == "")
-        {
-            path = "Assets";
-        }
-        else if (Path.GetExtension(path) != "")
-        {
-            path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeContext)), "");
-        }
-
-        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/New " + typeof(TweeningAnim).ToString() + ".asset");
-
-        AssetDatabase.CreateAsset(anim, assetPathAndName);
-
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        EditorUtility.FocusProjectWindow();
-        Selection.activeObject = anim;
+        return anim;
     }
 
     private void Update()
@@ -97,11 +75,11 @@ public class TweeningAnimCreator : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                StartCoroutine(testTweenAnimator.anim.Play(testTweenAnimator.rectTransform, testTweenAnimator.canvasGroup));
+                StartCoroutine(testTweenAnimator.anim.Play(testTweenAnimator));
             }
             if (Input.GetKeyDown(KeyCode.U))
             {
-                StartCoroutine(testTweenAnimator.anim.PlayBackward(testTweenAnimator.rectTransform, testTweenAnimator.canvasGroup, true));
+                StartCoroutine(testTweenAnimator.anim.PlayBackward(testTweenAnimator, true));
             }
         }
 

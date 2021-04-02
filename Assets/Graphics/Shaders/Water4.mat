@@ -102,8 +102,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BigNoiseScale: 5
-    - BigWavesInt: 0.37
-    - GeneralScale: 3.5
+    - BigWavesInt: 0.1
+    - GeneralScale: 19.67
     - SmallWavesIntensity: 0.06
     - Vector1_11D57534: 0.75
     - Vector1_1F932668: 7.8
@@ -150,7 +150,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - BigRemapNoise: {r: 0, g: 0.58, b: 0, a: 0}
+    - BigRemapNoise: {r: 0, g: 0.1, b: 0, a: 0}
     - Color_23896FE2: {r: 0.56376827, g: 0.9083378, b: 0.9716981, a: 1}
     - Color_3DC5E6B9: {r: 1, g: 1, b: 1, a: 0}
     - Color_48961D15: {r: 0.81844074, g: 0.8300418, b: 0.8301887, a: 1}

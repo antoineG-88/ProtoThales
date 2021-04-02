@@ -212,28 +212,32 @@ public class SubmarineMoveHandler : MonoBehaviour
                     }
                 }
             }
-            if (isSubmarineDisplayed)
-                circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeCalme, Color.green));
+            /*if (isSubmarineDisplayed)
+                circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeCalme, Color.green));*/
 
             if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Inquiet
             || submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
             {
-                if (isSubmarineDisplayed)
-                    circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeInquiet, Color.cyan));
+                /*if (isSubmarineDisplayed)
+                    circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangeInquiet, Color.cyan));*/
 
 
                 if (submarineActionHandler.currentState == SubmarineActionHandler.VigilanceState.Panique)
                 {
-                    if (isSubmarineDisplayed)
-                        circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangePanique, Color.red));
+                    /*if (isSubmarineDisplayed)
+                        circleGismos.Add(new CircleGizmo(currentPosition, submarineActionHandler.detectionRangePanique, Color.red));*/
                 }
             }
         }
         SubZone bestSubZone = allSubZones[0];
-        
+
         for (int i = 0; i < allSubZones.Count; i++)
         {
             allSubZones[i].weight = GetSubZoneWeight(allSubZones[i]);
+        }
+
+        for (int i = 0; i < allSubZones.Count; i++)
+        {
             if(allSubZones[i].needToBeAvoided && avoidEffectSliceReach > 0)
             {
                 for (int y = 0; y < allSubZones.Count; y++)
@@ -241,7 +245,7 @@ public class SubmarineMoveHandler : MonoBehaviour
                     if (allSubZones[y].sliceIndex == allSubZones[i].sliceIndex)
                     {
                         allSubZones[y].weight = -1000;
-                        sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
+                        //sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                     }
 
                     for (int s = 1; s < avoidEffectSliceReach; s++)
@@ -251,7 +255,7 @@ public class SubmarineMoveHandler : MonoBehaviour
                             if (allSubZones[y].sliceIndex == (allSubZones[i].sliceIndex + s))
                             {
                                 allSubZones[y].weight = -1000;
-                                sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
+                                //sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                             }
                         }
                         else
@@ -259,7 +263,7 @@ public class SubmarineMoveHandler : MonoBehaviour
                             if (allSubZones[y].sliceIndex == s - (subZone12Subdivision - allSubZones[i].sliceIndex))
                             {
                                 allSubZones[y].weight = -1000;
-                                sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
+                                //sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                             }
                         }
 
@@ -269,7 +273,7 @@ public class SubmarineMoveHandler : MonoBehaviour
                             if (allSubZones[y].sliceIndex == (allSubZones[i].sliceIndex - s))
                             {
                                 allSubZones[y].weight = -1000;
-                                sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
+                                //sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                             }
                         }
                         else
@@ -277,14 +281,17 @@ public class SubmarineMoveHandler : MonoBehaviour
                             if (allSubZones[y].sliceIndex == (subZone12Subdivision - (s - allSubZones[i].sliceIndex)))
                             {
                                 allSubZones[y].weight = -1000;
-                                sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
+                                //sphereGizmos.Add(new SphereGizmo(allSubZones[y].zoneCenterPos, 0.4f, Color.black));
                             }
                         }
                     }
                 }
             }
+        }
 
-            sphereGizmos.Add(new SphereGizmo(allSubZones[i].zoneCenterPos, 0.2f, Color.Lerp(Color.red, Color.yellow, (allSubZones[i].weight + 15) / 20)));
+        for (int i = 0; i < allSubZones.Count; i++)
+        {
+            //sphereGizmos.Add(new SphereGizmo(allSubZones[i].zoneCenterPos, 0.2f, Color.Lerp(Color.red, Color.yellow, (allSubZones[i].weight + 15) / 20)));
 
             if (bestSubZone == null || allSubZones[i].weight > bestSubZone.weight)
             {
@@ -301,9 +308,8 @@ public class SubmarineMoveHandler : MonoBehaviour
     private float GetSubZoneWeight(SubZone subZone)
     {
         float weight = 0;
-        subZone.zoneCenterPos = currentPosition + SeaCoord.GetDirectionFromAngle(GetNormAngle(subZone.minAngle + Mathf.DeltaAngle(subZone.minAngle, subZone.maxAngle) * 0.5f)) * (subZone.maxRange + subZone.minRange) * 0.5f;
 
-        subZoneDirection = SeaCoord.GetDirectionFromAngle((subZone.maxAngle + subZone.minAngle) * 0.5f);
+        subZoneDirection = SeaCoord.GetDirectionFromAngle(GetNormAngle(subZone.minAngle + Mathf.DeltaAngle(subZone.minAngle, subZone.maxAngle) * 0.5f));
 
         for (int o = 0; o < beneficialPointFactors.Count; o++)
         {
@@ -354,14 +360,6 @@ public class SubmarineMoveHandler : MonoBehaviour
                 weight = -1000;
                 subZone.needToBeAvoided = true;
             }
-        }
-
-        pointDistance = Vector2.Distance(fregateMovement.currentPosition, currentPosition);
-        pointRelativeAngle = Vector2.SignedAngle(Vector2.right, fregateMovement.currentPosition - currentPosition);
-        if (pointDistance < subZone.maxRange && pointDistance >= subZone.minRange && IsBetweenAngle(pointRelativeAngle, subZone.minAngle, subZone.maxAngle))
-        {
-            weight = -1000;
-            subZone.needToBeAvoided = true;
         }
 
         return weight;
@@ -550,8 +548,8 @@ public class SubmarineMoveHandler : MonoBehaviour
         }
     }
 
-    private List<CircleGizmo> circleGismos = new List<CircleGizmo>();
-    private List<SphereGizmo> sphereGizmos = new List<SphereGizmo>();
+    /*private List<CircleGizmo> circleGismos = new List<CircleGizmo>();
+    //private List<SphereGizmo> sphereGizmos = new List<SphereGizmo>();
     private void OnDrawGizmos()
     {
         if(isSubmarineDisplayed)
@@ -601,5 +599,5 @@ public class SubmarineMoveHandler : MonoBehaviour
             color = _color;
             radius = _radius;
         }
-    }
+    }*/
 }

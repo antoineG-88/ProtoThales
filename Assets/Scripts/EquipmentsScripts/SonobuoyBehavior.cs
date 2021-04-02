@@ -113,7 +113,7 @@ public class SonobuoyBehavior : MonoBehaviour
 
                         if (distanceFromMad < actualSonobuoyRange)
                         {
-                            GameManager.submarineActionHandler.RefreshIdentified();
+                            //GameManager.submarineActionHandler.RefreshIdentified();
                         }
 
                         atLeastOneObjectDetected = true;

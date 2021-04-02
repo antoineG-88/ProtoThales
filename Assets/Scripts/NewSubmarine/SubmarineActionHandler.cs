@@ -73,9 +73,9 @@ public class SubmarineActionHandler : MonoBehaviour
 
         if (!cantUseCounterMeasure)
         {
-            //SilenceRadio();
-            //Leurre();
-            //ChangementDeCap();
+            SilenceRadio();
+            Leurre();
+            ChangementDeCap();
         }
 
         UpdateIdentified();

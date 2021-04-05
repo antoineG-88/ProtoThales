@@ -15,6 +15,9 @@ public class FregateAction : BatimentAction
     public float captasEffectProgressionEnd;
     public GameObject captasEffectDisplay;
     public Image captasCooldownFill;
+    public AudioClip captasNotAvailableSound;
+    public AudioClip useCaptasSound;
+    public AudioClip showInfoSound;
 
     public UICard captasCard;
     public UICard hullSonarCard;
@@ -46,6 +49,7 @@ public class FregateAction : BatimentAction
         {
             hullSonarDescriptionOpened = true;
             StartCoroutine(hullSonarDescriptionAnim.anim.Play(hullSonarDescriptionAnim.rectTransform, hullSonarDescriptionAnim.canvasGroup));
+            BatimentSelection.PlaySound(showInfoSound);
         }
         else if (!hullSonarCard.isHovered && hullSonarDescriptionOpened)
         {
@@ -56,9 +60,17 @@ public class FregateAction : BatimentAction
 
     public void CaptasUpdate()
     {
-        if((captasCard.isClicked || captasCard.isDropped) && captasCooldownRemaining <= 0)
+        if(captasCard.isClicked || captasCard.isDropped)
         {
-            StartCoroutine(UseCaptas());
+            if(captasCooldownRemaining <= 0)
+            {
+                BatimentSelection.PlaySound(useCaptasSound);
+                StartCoroutine(UseCaptas());
+            }
+            else
+            {
+                BatimentSelection.PlaySound(captasNotAvailableSound);
+            }
         }
 
         if(captasCooldownRemaining > 0)
@@ -81,7 +93,7 @@ public class FregateAction : BatimentAction
         Vector2 fregateOriginalPos = fregateMovement.currentPosition;
         List<GameObject> allMapImmergedObjects = new List<GameObject>();
         float distance;
-        float ratio = 0;
+        float ratio;
         captasEffectDisplay.SetActive(true);
         captasEffectDisplay.transform.position = SeaCoord.GetFlatCoord(fregateOriginalPos) + Vector3.up * 0.1f;
         Collider[] colliders = Physics.OverlapSphere(SeaCoord.GetFlatCoord(fregateOriginalPos), 100);

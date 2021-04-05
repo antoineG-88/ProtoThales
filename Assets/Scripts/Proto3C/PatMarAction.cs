@@ -15,6 +15,9 @@ public class PatMarAction : BatimentAction
     public TweeningAnimator madDescriptionAnim;
     public GameObject dropPosPreview;
     public LayerMask seaMask;
+    public AudioClip noChargeSound;
+    public AudioClip selectSonobuoySound;
+    public AudioClip showInfoSound;
 
     private PatMarMovement patMarMovement;
     private MadBehavior madBehavior;
@@ -24,6 +27,7 @@ public class PatMarAction : BatimentAction
     private bool isChoosingDropPos;
     private int currentSonobuoyCharge;
     private float timeBeforeNextSonobuoy;
+    private bool sonoSelectedFlag;
 
     public override void Start()
     {
@@ -33,6 +37,7 @@ public class PatMarAction : BatimentAction
         madDescriptionAnim.canvasGroup = madDescriptionAnim.rectTransform.GetComponent<CanvasGroup>();
         currentSonobuoyCharge = sonobuoyMaxCharge;
         timeBeforeNextSonobuoy = 0;
+        sonoSelectedFlag = true;
     }
 
     public override void Update()
@@ -47,6 +52,7 @@ public class PatMarAction : BatimentAction
         {
             madDescriptionOpened = true;
             StartCoroutine(madDescriptionAnim.anim.Play(madDescriptionAnim.rectTransform, madDescriptionAnim.canvasGroup));
+            BatimentSelection.PlaySound(showInfoSound);
         }
         else if(!madCard.isHovered && madDescriptionOpened)
         {
@@ -97,6 +103,19 @@ public class PatMarAction : BatimentAction
 
         if(currentSonobuoyCharge > 0)
         {
+            if(sonobuoyCard.isSelected || sonobuoyCard.isDragged)
+            {
+                if(sonoSelectedFlag)
+                {
+                    sonoSelectedFlag = false;
+                    BatimentSelection.PlaySound(selectSonobuoySound);
+                }
+            }
+            else
+            {
+                sonoSelectedFlag = true;
+            }
+
             sonobuoyCard.canBeSelected = true;
             if (((sonobuoyCard.isSelected && InputDuo.tapHold) || ((sonobuoyCard.isDragged && !sonobuoyCard.isHovered) || sonobuoyCard.isDropped)) && !sonobuoyCard.descriptionOpened)
             {
@@ -112,6 +131,10 @@ public class PatMarAction : BatimentAction
         }
         else
         {
+            if (sonobuoyCard.isClicked || sonobuoyCard.isDropped)
+            {
+                BatimentSelection.PlaySound(noChargeSound);
+            }
             sonobuoyCard.canBeSelected = false;
             isChoosingDropPos = false;
             dropPosPreview.SetActive(false);

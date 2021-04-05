@@ -22,6 +22,7 @@ public class BatimentMovement : MonoBehaviour
 
     [HideInInspector] public bool canChangeDestination;
     [HideInInspector] public TerrainZone currentZone;
+    public BatimentSelection batimentSelection;
 
     public virtual void Start()
     {
@@ -63,10 +64,15 @@ public class BatimentMovement : MonoBehaviour
             {
                 currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(seaMask, !GameManager.useMouseControl).point);
                 GameManager.cameraController.MoveCameraWithEdge();
+                if(destinationCard.isDropped)
+                {
+                    BatimentSelection.PlaySound(batimentSelection.destinationSound);
+                }
             }
 
             if (destinationCard.isFocused && InputDuo.tapUp && destinationCard.isSelected)
             {
+                BatimentSelection.PlaySound(batimentSelection.destinationSound);
                 destinationCard.Deselect();
             }
 

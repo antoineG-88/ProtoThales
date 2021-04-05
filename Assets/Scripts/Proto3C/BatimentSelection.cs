@@ -7,9 +7,12 @@ public class BatimentSelection : MonoBehaviour
     public List<Batiment> batiments;
 
     public static Batiment batimentSelected;
+    public static AudioSource source;
     public CameraController cameraController;
     public Transform selectionDisplay;
     public float doubleSelectTime;
+    public AudioClip selectionSound;
+    public AudioClip destinationSound;
 
     public LayerMask batimentMask;
     private HelicoController helicoController;
@@ -17,6 +20,7 @@ public class BatimentSelection : MonoBehaviour
     private Batiment lastBatimentDirectlySelected;
     private void Start()
     {
+        source = GetComponent<AudioSource>();
         helicoController = (HelicoController)batiments[2].batimentAction;
         for (int b = 0; b < batiments.Count; b++)
         {
@@ -94,6 +98,7 @@ public class BatimentSelection : MonoBehaviour
         if(previousBatimentSelected != batimentSelected)
         {
             //Debug.Log("Select " + batiment.batimentAction.gameObject.name);
+            PlaySound(selectionSound);
             StartCoroutine(batiment.actionPanelAnim.anim.Play(batiment.actionPanelAnim.rectTransform, batiment.actionPanelAnim.canvasGroup));
             StartCoroutine(batiment.selectButtonAnim.anim.Play(batiment.selectButtonAnim.rectTransform, null, batiment.selectButtonAnim.originalPos));
             batiment.actionPanelAnim.canvasGroup.blocksRaycasts = true;
@@ -108,5 +113,10 @@ public class BatimentSelection : MonoBehaviour
                 }
             }
         }
+    }
+
+    public static void PlaySound(AudioClip clip)
+    {
+        source.PlayOneShot(clip);
     }
 }

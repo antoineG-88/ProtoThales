@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class SubmarineMoveHandler : MonoBehaviour
 {
@@ -60,6 +61,16 @@ public class SubmarineMoveHandler : MonoBehaviour
     private bool isAvoidingFregate;
     private bool isSubmarineDisplayed;
 
+    public Seeker seeker;
+    public float pathUpdatingFrequency;
+    private Path path;
+    private int currentWaypoint;
+    private float timeBeforeNextPathUpdate;
+    private bool pathEndReached;
+    private Vector2 pathDirection;
+    public float nextWaypointDistance;
+    public int waypointAhead;
+
     void Start()
     {
         DisplaySubmarine(false);
@@ -89,12 +100,60 @@ public class SubmarineMoveHandler : MonoBehaviour
                 PickRandomWaypoint();
             }
         }
+        UpdatePath();
         MoveSubmarine();
     }
 
     private void UpdateZone()
     {
         submarineZone = TerrainZoneHandler.GetCurrentZone(currentPosition, submarineZone);
+    }
+
+    public void CalculatePath()
+    {
+        seeker.StartPath(SeaCoord.GetFlatCoord(currentPosition), SeaCoord.GetFlatCoord(nextWaypoint.transform.position), OnPathComplete);
+    }
+
+    private void OnPathComplete(Path p)
+    {
+        if (!p.error)
+        {
+            path = p;
+            currentWaypoint = 0;
+        }
+    }
+    private void UpdatePath()
+    {
+        if (timeBeforeNextPathUpdate <= 0)
+        {
+            timeBeforeNextPathUpdate = pathUpdatingFrequency;
+
+            CalculatePath();
+
+            if (path != null)
+            {
+                if (currentWaypoint >= path.vectorPath.Count)
+                {
+                    pathEndReached = true;
+                }
+                else
+                {
+                    pathEndReached = false;
+
+                    while (Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance && path.vectorPath.Count > currentWaypoint + 1)
+                    {
+                        currentWaypoint++;
+                    }
+
+                    pathDirection = (SeaCoord.Planify(path.vectorPath[currentWaypoint + (((currentWaypoint + waypointAhead) < path.vectorPath.Count) ? waypointAhead : 0)] - transform.position)).normalized;
+                }
+            }
+        }
+
+        if (timeBeforeNextPathUpdate > 0)
+        {
+            timeBeforeNextPathUpdate -= Time.deltaTime;
+        }
     }
 
     private void MoveSubmarine()
@@ -117,7 +176,8 @@ public class SubmarineMoveHandler : MonoBehaviour
             }
 
             FindNextIntermediatePosition();
-            destinationDirection = SeaCoord.Planify(nextWaypoint.transform.position) - currentPosition;
+            //destinationDirection = SeaCoord.Planify(nextWaypoint.transform.position) - currentPosition;
+            destinationDirection = pathDirection;
             destinationDirection.Normalize();
             if (Vector2.Distance(SeaCoord.Planify(transform.position), SeaCoord.Planify(nextWaypoint.transform.position)) < nextWaypoint.hackingDistance && !isAvoidingFregate)
             {

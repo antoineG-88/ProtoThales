@@ -7050,7 +7050,7 @@ MonoBehaviour:
     rectTransform: {fileID: 1749194902}
     canvasGroup: {fileID: 0}
     originalPos: {x: 0, y: 0}
-  debugOnPc: 1
+  debugOnPc: 0
   _winPanel: {fileID: 1720879021}
   _cameraController: {fileID: 1985481889}
   _submarineActionHandler: {fileID: 5550632935121792689}
@@ -21322,6 +21322,7 @@ GameObject:
   - component: {fileID: 1600855431}
   - component: {fileID: 1600855433}
   - component: {fileID: 1600855432}
+  - component: {fileID: 1600855434}
   m_Layer: 5
   m_Name: Flash
   m_TagString: Untagged
@@ -21386,6 +21387,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600855430}
   m_CullTransparentMesh: 0
+--- !u!114 &1600855434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600855430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3592dbd2dd77548b2334e57ed62964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  holdAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  selectedAnim:
+    anim: {fileID: 0}
+    rectTransform: {fileID: 0}
+    canvasGroup: {fileID: 0}
+    originalPos: {x: 0, y: 0}
+  darkenBackWhileHold: 0
+  canBeSelected: 0
+  isDragged: 0
+  isDropped: 0
+  isHovered: 0
+  isCursorOn: 0
+  isFocused: 0
+  isClicked: 0
+  isSelected: 0
+  descriptionOpened: 0
 --- !u!1 &1601326711
 GameObject:
   m_ObjectHideFlags: 0
@@ -22102,6 +22140,7 @@ MonoBehaviour:
   focusZoom: 0.2
   prepareTime: 18
   maxActiveTime: 50
+  flashCard: {fileID: 1600855434}
   flashChargeTime: 4
   timeTresholdBeforeStartFlashCharge: 0.5
   flashCooldown: 13
@@ -27837,7 +27876,7 @@ MonoBehaviour:
   submarineActionHandler: {fileID: 5550632935121792689}
   submarineHackingBehavior: {fileID: 5550632935121792691}
   fregateMovement: {fileID: 2117067380}
-  submarineSpeed: 0.75
+  submarineSpeed: 0.55
   zoneDetectionDistance: 2
   zoneDetectionSteps: 5
   deviationAngle: 10

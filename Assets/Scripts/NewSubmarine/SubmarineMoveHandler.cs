@@ -174,8 +174,6 @@ public class SubmarineMoveHandler : MonoBehaviour
                 RefreshIntermediatePosition();
                 timeBeforeNextRefresh = intermediatePosRefreshRate;
             }
-
-            FindNextIntermediatePosition();
             //destinationDirection = SeaCoord.Planify(nextWaypoint.transform.position) - currentPosition;
             destinationDirection = pathDirection;
             destinationDirection.Normalize();

@@ -11,6 +11,7 @@ public class HelicoController : BatimentAction
     public float focusZoom;
     public float prepareTime;
     public float maxActiveTime;
+    public UICard flashCard;
     public float flashChargeTime;
     public float timeTresholdBeforeStartFlashCharge;
     public float flashCooldown;
@@ -44,6 +45,9 @@ public class HelicoController : BatimentAction
     private float currentFlashCooldownRemaining;
     private Camera mainCamera;
     private Vector3 viewPortPos;
+    private bool isReleasingFlash;
+    private bool isHoldingFlash;
+
     public override void Start()
     {
         base.Start();
@@ -112,7 +116,10 @@ public class HelicoController : BatimentAction
                     isHelicoOnFregate = false;
                     cameraController.MoveCameraWithEdge();
                     isDoingAction = true;
-                    helicoMovement.currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(helicoMovement.seaMask, !GameManager.useMouseControl).point);
+                    if(!UICard.pointerOverAnyUICard)
+                    {
+                        helicoMovement.currentDestination = SeaCoord.Planify(InputDuo.SeaRaycast(helicoMovement.seaMask, !GameManager.useMouseControl).point);
+                    }
 
                     if(currentFlashCooldownRemaining <= 0)
                     {
@@ -121,38 +128,61 @@ public class HelicoController : BatimentAction
                             timeImmobile += Time.deltaTime;
                             if (timeImmobile > timeTresholdBeforeStartFlashCharge)
                             {
-                                releaseFlashPreview.gameObject.SetActive(true);
-                                viewPortPos = mainCamera.WorldToViewportPoint(SeaCoord.GetFlatCoord(helicoMovement.currentPosition));
-                                releaseFlashPreview.anchoredPosition = new Vector2((viewPortPos.x - 0.5f) * releaseFlashPanel.sizeDelta.x,
-                                       (viewPortPos.y - 0.5f) * releaseFlashPanel.sizeDelta.y);
-                                releaseFlashPreview.anchoredPosition += releaseFlashDisplayOffset;
-
-                                currentFlashCharge += Time.deltaTime;
-                                releaseFlashChargeDisplay.fillAmount = currentFlashCharge / flashChargeTime;
-
-                                if (currentFlashCharge > flashChargeTime)
-                                {
-                                    currentFlashCooldownRemaining = flashCooldown;
-                                    DropFlashSonic();
-                                }
+                                isHoldingFlash = true;
                             }
                         }
                         else
                         {
-                            releaseFlashPreview.gameObject.SetActive(false);
+                            isHoldingFlash = false;
                             timeImmobile = 0;
                             currentFlashCharge = 0;
                         }
                     }
                     else
                     {
-                        releaseFlashPreview.gameObject.SetActive(false);
+                        isHoldingFlash = false;
+                    }
+                }
+                else
+                {
+                    isHoldingFlash = false;
+                    isDoingAction = false;
+                }
+
+                if(isReleasingFlash || isHoldingFlash)
+                {
+                    releaseFlashPreview.gameObject.SetActive(true);
+                    viewPortPos = mainCamera.WorldToViewportPoint(SeaCoord.GetFlatCoord(helicoMovement.currentPosition));
+                    releaseFlashPreview.anchoredPosition = new Vector2((viewPortPos.x - 0.5f) * releaseFlashPanel.sizeDelta.x,
+                           (viewPortPos.y - 0.5f) * releaseFlashPanel.sizeDelta.y);
+                    releaseFlashPreview.anchoredPosition += releaseFlashDisplayOffset;
+
+                    currentFlashCharge += Time.deltaTime;
+                    releaseFlashChargeDisplay.fillAmount = currentFlashCharge / flashChargeTime;
+
+                    if (currentFlashCharge > flashChargeTime)
+                    {
+                        currentFlashCooldownRemaining = flashCooldown;
+                        isReleasingFlash = false;
+                        DropFlashSonic();
                     }
                 }
                 else
                 {
                     releaseFlashPreview.gameObject.SetActive(false);
-                    isDoingAction = false;
+                    currentFlashCharge = 0;
+                }
+
+                if(helicoMovement.reachedDest)
+                {
+                    if(flashCard.isClicked)
+                    {
+                        isReleasingFlash = true;
+                    }
+                }
+                else
+                {
+                    isReleasingFlash = false;
                 }
             }
             else

@@ -9,6 +9,8 @@ public class HullSonarBehavior : MonoBehaviour
     public float slowSweepSpeed;
     public float sonarDistanceDetection;
     public LayerMask underWaterElements;
+    public AudioSource source;
+    public List<AudioClip> pingAppearSounds;
 
     [Space]
     public GameObject sonarDisplay;
@@ -106,6 +108,7 @@ public class HullSonarBehavior : MonoBehaviour
             newPing.identitySpriteRenderer.sprite = identitySprite;
             newPing.madBehavior = madBehavior;
             newPing.type = type;
+            //BatimentSelection.PlaySound(pingAppearSounds[Random.Range(0, pingAppearSounds.Count)]);
         }
     }
 }

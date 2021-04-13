@@ -31,6 +31,11 @@ public class HelicoController : BatimentAction
     public CameraController cameraController;
     public FregateMovement fregateMovement;
     public Transform submarine;
+    public AudioSource source;
+    public AudioClip stationnarySound;
+    public AudioClip movingSound;
+    public AudioClip landSound;
+    public AudioClip takeOffSound;
 
     [HideInInspector] public bool isSelected;
     private float currentCharge;
@@ -39,6 +44,7 @@ public class HelicoController : BatimentAction
     private float previousZoom;
     private bool isActive;
     private bool isHelicoOnFregate;
+    private bool helicoLandedFlag;
     private HelicoMovement helicoMovement;
     private float currentFlashCharge;
     private float timeImmobile;
@@ -47,6 +53,7 @@ public class HelicoController : BatimentAction
     private Vector3 viewPortPos;
     private bool isReleasingFlash;
     private bool isHoldingFlash;
+    private bool movingFlag;
 
     public override void Start()
     {
@@ -54,6 +61,8 @@ public class HelicoController : BatimentAction
         mainCamera = Camera.main;
         helicoMovement = GetComponent<HelicoMovement>();
         isHelicoOnFregate = true;
+        helicoLandedFlag = true;
+
         releaseFlashPreview.gameObject.SetActive(false);
         bigActiveFill.fillAmount = 0;
         activeFill.fillAmount = 0;
@@ -82,6 +91,39 @@ public class HelicoController : BatimentAction
         {
             helicoMovement.currentPosition = fregateMovement.currentPosition;
         }
+
+        if(isHelicoOnFregate && !helicoLandedFlag)
+        {
+            source.Stop();
+            source.PlayOneShot(landSound);
+            helicoLandedFlag = true;
+        }
+
+        if(!isHelicoOnFregate && helicoLandedFlag)
+        {
+            source.clip = movingSound;
+            movingFlag = true;
+            source.PlayOneShot(takeOffSound);
+            source.Play();
+            helicoLandedFlag = false;
+        }
+
+        if(!isHelicoOnFregate)
+        {
+            if(!helicoMovement.reachedDest && !movingFlag)
+            {
+                source.clip = movingSound;
+                source.Play();
+                movingFlag = true;
+            }
+
+            if (helicoMovement.reachedDest && movingFlag)
+            {
+                source.clip = stationnarySound;
+                source.Play();
+                movingFlag = false;
+            }
+        }
     }
 
     void SpinPropellers()
@@ -89,8 +131,6 @@ public class HelicoController : BatimentAction
         upPropeller.rotation = Quaternion.Euler(upPropeller.rotation.eulerAngles.x, upPropeller.rotation.eulerAngles.y + spinSpeed * Time.deltaTime, upPropeller.rotation.eulerAngles.z);
         sidePropeller.rotation *= Quaternion.AngleAxis(spinSpeed * Time.deltaTime, Vector3.up);
     }
-
-
 
     void Behavior()
     {

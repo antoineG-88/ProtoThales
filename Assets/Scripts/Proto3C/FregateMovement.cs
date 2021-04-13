@@ -9,12 +9,16 @@ public class FregateMovement : BatimentMovement
     public float turnSpeed;
     public ParticleSystem thrustParticle;
     public float zoneDetectionDistance;
+    public AudioSource source;
+    public AudioClip waitingSound;
+    public AudioClip movingSound;
 
     private int currentTurnSide;
     private float currentMaxSpeed;
     private FregateHandler fregateHandler;
 
     public bool isMoving;
+    private bool movingFlag;
 
     public override void Start()
     {
@@ -27,6 +31,19 @@ public class FregateMovement : BatimentMovement
     public override void Update()
     {
         base.Update();
+
+        if(isMoving && ! movingFlag)
+        {
+            movingFlag = true;
+            source.clip = movingSound;
+            source.Play();
+        }
+        else if(!isMoving && movingFlag)
+        {
+            movingFlag = false;
+            source.clip = waitingSound;
+            source.Play();
+        }
     }
 
     private void FixedUpdate()

@@ -12,6 +12,10 @@ public class PatMarMovement : BatimentMovement
 
     public float speedWindIncreaseRatio;
     public float sideWindIgnorance;
+    public AudioSource source;
+    public AudioClip flyingSound;
+    public float pitchRatioForSpeed;
+    public float maxSpeedPitch;
 
     private int currentTurnSide;
 
@@ -100,6 +104,8 @@ public class PatMarMovement : BatimentMovement
                     currentSpeed = currentMaxSpeed;
                 }
             }
+
+            source.pitch = maxSpeedPitch + (currentSpeed - maxSpeed) * pitchRatioForSpeed;
 
             if (Vector2.Angle(currentDirection, currentDestDirection) > Time.fixedDeltaTime * turnSpeed)
             {

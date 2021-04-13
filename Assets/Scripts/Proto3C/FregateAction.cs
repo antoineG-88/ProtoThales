@@ -18,6 +18,8 @@ public class FregateAction : BatimentAction
     public AudioClip captasNotAvailableSound;
     public AudioClip useCaptasSound;
     public AudioClip showInfoSound;
+    public AudioClip captasSound;
+    public AudioSource source;
 
     public UICard captasCard;
     public UICard hullSonarCard;
@@ -60,11 +62,11 @@ public class FregateAction : BatimentAction
 
     public void CaptasUpdate()
     {
-        if(captasCard.isClicked || captasCard.isDropped)
+        if(captasCard.isClicked)
         {
             if(captasCooldownRemaining <= 0)
             {
-                BatimentSelection.PlaySound(useCaptasSound);
+                //BatimentSelection.PlaySound(useCaptasSound);
                 StartCoroutine(UseCaptas());
             }
             else
@@ -97,7 +99,7 @@ public class FregateAction : BatimentAction
         captasEffectDisplay.SetActive(true);
         captasEffectDisplay.transform.position = SeaCoord.GetFlatCoord(fregateOriginalPos) + Vector3.up * 0.1f;
         Collider[] colliders = Physics.OverlapSphere(SeaCoord.GetFlatCoord(fregateOriginalPos), 100);
-
+        source.PlayOneShot(captasSound);
         for (int i = 0; i < colliders.Length; i++)
         {
             allMapImmergedObjects.Add(colliders[i].gameObject);

@@ -9,6 +9,9 @@ public class SonobuoyBehavior : MonoBehaviour
     public GameObject warnScanEffectPrefab;
     public SpriteRenderer identifyImage;
     public float effectFrequency;
+    public AudioSource source;
+    public AudioClip detectionSound;
+    public AudioClip identificationSound;
     private float timerBeforeEffect;
 
     [Header("Sonobuoy")]
@@ -37,7 +40,8 @@ public class SonobuoyBehavior : MonoBehaviour
     private bool flagObjectInsideRange;
     private bool madIsAboveSonobuoy;
     private float actualSonobuoyRange;
-
+    private bool detectFlag;
+    private bool madAboveFlag;
     public MadBehavior madScript;
 
     private void Start()
@@ -199,12 +203,24 @@ public class SonobuoyBehavior : MonoBehaviour
 
         if (atLeastOneObjectDetected)
         {
+            if(!detectFlag)
+            {
+                detectFlag = true;
+                source.PlayOneShot(detectionSound);
+            }
+
             elementDetectedEffect.ApplyToMat(ownMat);
             //rangeSprite.color = sonobuoyElementDetect;
 
             MadAbove();
             if (madIsAboveSonobuoy)
             {
+                if(!madAboveFlag)
+                {
+                    madAboveFlag = true;
+                    source.PlayOneShot(identificationSound);
+                }
+
                 //If many objects inside : show only submarine icon
                 if (objectInsideRange.Contains(objectsCanBeDetected[0]))
                 {
@@ -224,11 +240,21 @@ public class SonobuoyBehavior : MonoBehaviour
             }
             else
             {
+                if (madAboveFlag)
+                {
+                    madAboveFlag = false;
+                }
+
                 identifyImage.sprite = null;
             }
         }
         else
         {
+            if (detectFlag)
+            {
+                madAboveFlag = false;
+                detectFlag = false;
+            }
             identifyImage.sprite = null;
             noElementEffect.ApplyToMat(ownMat);
             //rangeSprite.color = sonobuoyNoElement;

@@ -19,6 +19,7 @@ public class UICard : MonoBehaviour
 
     public TweeningAnimator dragAnim;
     public TweeningAnimator holdAnim;
+    public AudioClip showInfoSound;
     public TweeningAnimator selectedAnim;
     public bool darkenBackWhileHold;
     public bool canBeSelected;
@@ -117,7 +118,8 @@ public class UICard : MonoBehaviour
         {
             holdTime += Time.deltaTime;
         }
-        if(Input.touchCount == 0)
+
+        if(GameManager.useMouseControl ? !Input.GetButton("LeftClick") : Input.touchCount == 0)
         {
             holdTime = 0;
         }
@@ -137,6 +139,8 @@ public class UICard : MonoBehaviour
 
             if (holdAnim.rectTransform != null)
                 StartCoroutine(holdAnim.anim.Play(holdAnim.rectTransform, null));
+
+            BatimentSelection.PlaySound(showInfoSound);
         }
 
         if(holdTime <= 0 && descriptionOpened)

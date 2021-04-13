@@ -10,8 +10,11 @@ public class SubmarineHackingBehavior : MonoBehaviour
     public GameObject losePanel;
     private int numberOfWaypoints;
     [HideInInspector] public int currentWaypointsHacked;
+    public AudioClip progressHackSound;
+    public AudioClip defeatSound;
 
     public SubmarineMoveHandler submarineMoveHandler;
+    private bool looseFlag;
 
     private void Start()
     {
@@ -21,9 +24,11 @@ public class SubmarineHackingBehavior : MonoBehaviour
 
     private void Update()
     {
-        if(currentWaypointsHacked == submarineMoveHandler.allWaypoints.Count)
+        if(currentWaypointsHacked == submarineMoveHandler.allWaypoints.Count && !looseFlag)
         {
+            looseFlag = false;
             losePanel.SetActive(true);
+            BatimentSelection.PlaySound(defeatSound);
         }
     }
 
@@ -31,5 +36,6 @@ public class SubmarineHackingBehavior : MonoBehaviour
     {
         currentWaypointsHacked++;
         lifeBar.fillAmount += 1f / numberOfWaypoints;
+        BatimentSelection.PlaySound(progressHackSound);
     }
 }

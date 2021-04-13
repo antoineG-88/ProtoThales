@@ -15,11 +15,13 @@ public class SonarPing : MonoBehaviour
     public enum UnderWaterType { Bio, Submarine, ShipWreck, Lure};
     public UnderWaterType type;
     public bool isIdentifiable;
-
-    private bool isMadAbove;
+    private bool identifiedFlag;
+    private AudioSource source;
+    public AudioClip identificationSound;
 
     private void Awake()
     {
+        source = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         disappearTimer = 0;
     }
@@ -50,6 +52,12 @@ public class SonarPing : MonoBehaviour
         distance = Vector2.Distance(SeaCoord.Planify(transform.position), SeaCoord.Planify(madBehavior.transform.position));
         if(distance < identificationDistance)
         {
+            if (!identifiedFlag)
+            {
+                identifiedFlag = true;
+                source.PlayOneShot(identificationSound);
+            }
+
             identitySpriteRenderer.gameObject.SetActive(true);
             if(type == UnderWaterType.Submarine)
             {
@@ -58,6 +66,7 @@ public class SonarPing : MonoBehaviour
         }
         else
         {
+            identifiedFlag = false;
             identitySpriteRenderer.gameObject.SetActive(false);
         }
     }

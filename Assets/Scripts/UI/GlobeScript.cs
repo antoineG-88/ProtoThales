@@ -22,7 +22,7 @@ public class GlobeScript : MonoBehaviour
         targetRotation = transform.rotation;
         targetEulerRotation = transform.rotation.eulerAngles;
         mainCamera = Camera.main;
-        mainCamera.transform.localPosition = new Vector3(cameraDistance, 0, 0);
+        mainCamera.transform.localPosition = new Vector3(0, 0, -cameraDistance);
         mainCamera.transform.LookAt(transform.position, Vector3.up);
     }
 

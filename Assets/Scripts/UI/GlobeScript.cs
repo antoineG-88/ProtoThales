@@ -4,39 +4,31 @@ using UnityEngine;
 
 public class GlobeScript : MonoBehaviour
 {
-    public float cameraDistance;
     public float rotateSpeed;
     public float smoothSpeed;
+    public Transform targetTransform;
 
     [HideInInspector] public bool canTurn;
 
-    private Camera mainCamera;
-    private Quaternion targetRotation;
-    private Vector3 targetEulerRotation;
     private Vector2 previousMousePosition;
     private bool inverseControl;
 
     void Start()
     {
         canTurn = true;
-        targetRotation = transform.rotation;
-        targetEulerRotation = transform.rotation.eulerAngles;
-        mainCamera = Camera.main;
-        mainCamera.transform.localPosition = new Vector3(0, 0, -cameraDistance);
-        mainCamera.transform.LookAt(transform.position, Vector3.up);
+        targetTransform.position = transform.position;
+        targetTransform.rotation = transform.rotation;
     }
 
     void Update()
     {
         GetMouseMovement();
-        MoveCamera();
+        MoveGlobe();
     }
 
-    private void MoveCamera()
+    private void MoveGlobe()
     {
-        //Vector3 currentRotation = Vector3.Lerp(transform.rotation.eulerAngles, targetEulerRotation, smoothSpeed);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetEulerRotation), smoothSpeed);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, smoothSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetTransform.rotation, smoothSpeed);
     }
 
     private void GetMouseMovement()
@@ -52,12 +44,30 @@ public class GlobeScript : MonoBehaviour
                 Vector2 mouseMovement = (Vector2)Input.mousePosition - previousMousePosition;
                 mouseMovement *= rotateSpeed;
 
-                targetRotation *= Quaternion.AngleAxis(-mouseMovement.x, Vector3.up);
+                targetTransform.Rotate(Vector3.up, -mouseMovement.x, Space.Self);
+                targetTransform.Rotate(Vector3.right, mouseMovement.y, Space.World);
 
-                targetEulerRotation.y += -mouseMovement.x;
-
+                //targetTransform.rotation = Quaternion.Euler(Mathf.Clamp(GetNormAngle(targetTransform.rotation.eulerAngles.x), -90, 90), targetTransform.rotation.eulerAngles.y, Mathf.Clamp(GetNormAngle(targetTransform.rotation.eulerAngles.z), -90, 90));
+                //targetTransform.LookAt(targetTransform.position + targetTransform.forward, Vector3.up);
                 previousMousePosition = Input.mousePosition;
             }
         }
+    }
+
+
+    private float GetNormAngle(float angle)
+    {
+        float newAngle = angle;
+
+        if (angle > 180)
+        {
+            newAngle = angle - 360;
+        }
+
+        if (angle <= -180)
+        {
+            newAngle = angle + 360;
+        }
+        return newAngle;
     }
 }
